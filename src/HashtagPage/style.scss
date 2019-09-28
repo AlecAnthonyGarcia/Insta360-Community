@@ -1,0 +1,25 @@
+.tag-info-header {
+	display: flex;
+	margin-bottom: 20px;
+}
+
+.tag-info-container {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	margin-left: 20px;
+
+	.tag-name {
+		font-size: 20px;
+		font-weight: bold;
+	}
+
+	.stats-row {
+		text-align: center;
+		margin: 10px 0px;
+	}
+}
+
+.popular-post-thumbnail {
+	width: 100%;
+}

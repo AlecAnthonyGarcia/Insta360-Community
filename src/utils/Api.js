@@ -52,6 +52,38 @@ async function getRecentPosts(postIdCursor) {
 	return data;
 }
 
+async function getTag(tag) {
+	const response = await fetch(`${SHARE_API}tag/info?tag=${tag}`, {
+		method: 'get'
+	});
+	const data = await response.json();
+	return data;
+}
+
+async function getTagPosts(tag, pageNumber) {
+	const pageSize = 20;
+	const response = await fetch(
+		`${SHARE_API}tag/posts/recent?page_number=${pageNumber}&page_size=${pageSize}&tag=${tag}`,
+		{
+			method: 'get'
+		}
+	);
+	const data = await response.json();
+	return data;
+}
+
+async function getTagPopularPosts(tag) {
+	const pageSize = 6;
+	const response = await fetch(
+		`${SHARE_API}tag/posts/popular?page_size=${pageSize}&tag=${tag}`,
+		{
+			method: 'get'
+		}
+	);
+	const data = await response.json();
+	return data;
+}
+
 async function getComments(postId, pageNumber) {
 	const pageSize = 20;
 	const response = await fetch(
@@ -70,6 +102,9 @@ const Api = {
 	getUserPopularPosts,
 	getPost,
 	getRecentPosts,
+	getTag,
+	getTagPosts,
+	getTagPopularPosts,
 	getComments
 };
 
