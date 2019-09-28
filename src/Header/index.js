@@ -1,14 +1,21 @@
 import React from 'react';
 import './style.scss';
 
+import { Link } from 'react-router-dom';
+
 import logo from '../static/img/logo.png';
 
-import { Link } from 'react-router-dom';
 import { Avatar, Col, Row, Tabs, Button } from 'antd';
+
+import SearchModal from '../SearchModal/index.js';
 
 const { TabPane } = Tabs;
 
 class Header extends React.Component {
+	state = {
+		isSearchModalOpen: false
+	};
+
 	onSearchButtonClick = () => {
 		this.setState({ isSearchModalOpen: true });
 	};
@@ -18,6 +25,8 @@ class Header extends React.Component {
 	};
 
 	render() {
+		const { isSearchModalOpen } = this.state;
+
 		return (
 			<div className="header">
 				<div className="header-content">
@@ -46,6 +55,10 @@ class Header extends React.Component {
 						</Col>
 					</Row>
 				</div>
+				<SearchModal
+					isOpen={isSearchModalOpen}
+					onClose={this.onSearchModalClose}
+				/>
 			</div>
 		);
 	}

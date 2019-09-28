@@ -96,6 +96,54 @@ async function getComments(postId, pageNumber) {
 	return data;
 }
 
+async function getRecommendedSearchTags() {
+	const size = 100;
+	const response = await fetch(
+		`${SHARE_API}tag/search/getRecommend?size=${size}`,
+		{
+			method: 'get'
+		}
+	);
+	const data = await response.json();
+	return data;
+}
+
+async function getRecommendedSearchUsers() {
+	const size = 100;
+	const response = await fetch(
+		`${ACCOUNT_API}search/getRecommend?size=${size}`,
+		{
+			method: 'get'
+		}
+	);
+	const data = await response.json();
+	return data;
+}
+
+async function searchTags(query) {
+	const size = 100;
+	const response = await fetch(
+		`${SHARE_API}tag/search?size=${size}&value=${query}`,
+		{
+			method: 'get'
+		}
+	);
+	const data = await response.json();
+	return data;
+}
+
+async function searchUsers(query) {
+	const size = 100;
+	const response = await fetch(
+		`${ACCOUNT_API}search?size=${size}&value=${query}`,
+		{
+			method: 'get'
+		}
+	);
+	const data = await response.json();
+	return data;
+}
+
 const Api = {
 	getUser,
 	getUserPosts,
@@ -105,7 +153,11 @@ const Api = {
 	getTag,
 	getTagPosts,
 	getTagPopularPosts,
-	getComments
+	getComments,
+	getRecommendedSearchTags,
+	getRecommendedSearchUsers,
+	searchTags,
+	searchUsers
 };
 
 export default Api;
