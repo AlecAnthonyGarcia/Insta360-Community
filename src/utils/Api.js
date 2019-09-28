@@ -31,6 +31,14 @@ async function getUserPopularPosts(userId) {
 	return data;
 }
 
+async function getPost(postId) {
+	const response = await fetch(`${SHARE_API}info/${postId}`, {
+		method: 'get'
+	});
+	const data = await response.json();
+	return data;
+}
+
 async function getRecentPosts(postIdCursor) {
 	const pageSize = 20;
 	let url = `${COMMUNITY_API}content/recent?page_size=${pageSize}`;
@@ -44,11 +52,25 @@ async function getRecentPosts(postIdCursor) {
 	return data;
 }
 
+async function getComments(postId, pageNumber) {
+	const pageSize = 20;
+	const response = await fetch(
+		`${SHARE_API}comment/getComments?page_number=${pageNumber}&page_size=${pageSize}&post_id=${postId}`,
+		{
+			method: 'get'
+		}
+	);
+	const data = await response.json();
+	return data;
+}
+
 const Api = {
 	getUser,
 	getUserPosts,
 	getUserPopularPosts,
-	getRecentPosts
+	getPost,
+	getRecentPosts,
+	getComments
 };
 
 export default Api;
