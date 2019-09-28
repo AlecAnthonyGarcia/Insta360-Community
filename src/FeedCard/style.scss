@@ -1,0 +1,50 @@
+.pano-360-icon {
+	position: absolute;
+	align-self: center;
+}
+
+.feed-card-media-container {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	cursor: pointer;
+}
+
+.feed-card {
+	margin: 30px 0px;
+
+	.ant-card-body {
+		padding: 0px;
+	}
+
+	.ant-list-item-meta-avatar {
+		align-self: center;
+	}
+
+	.timestamp {
+		float: right;
+	}
+
+	.share-source-icon {
+		height: 32px;
+	}
+}
+
+.feed-card-image,
+.feed-card-video {
+	width: 100%;
+}
+
+.feed-card-user-country-flag {
+	width: 16px;
+	margin-right: 5px;
+}
+
+.feed-card-body-container {
+	margin: 10px;
+}
+
+.play-button {
+	position: absolute;
+	align-self: center;
+}
