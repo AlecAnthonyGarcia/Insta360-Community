@@ -2,18 +2,22 @@ import React from 'react';
 import './style.scss';
 
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import logo from '../static/img/logo.png';
 
-import { Avatar, Col, Row, Tabs, Button } from 'antd';
+import { Avatar, Col, Row, Tabs, Button, Menu, Dropdown, Icon } from 'antd';
 
+import { logout } from '../LoginModal/loginActions';
+import LoginModal from '../LoginModal/index.js';
 import SearchModal from '../SearchModal/index.js';
 
 const { TabPane } = Tabs;
 
 class Header extends React.Component {
 	state = {
-		isSearchModalOpen: false
+		isSearchModalOpen: false,
+		isLoginModalOpen: false
 	};
 
 	onSearchButtonClick = () => {
@@ -24,8 +28,38 @@ class Header extends React.Component {
 		this.setState({ isSearchModalOpen: false });
 	};
 
+	onLoginButtonClick = () => {
+		this.setState({ isLoginModalOpen: true });
+	};
+
+	onLoginModalClose = () => {
+		this.setState({ isLoginModalOpen: false });
+	};
+
 	render() {
-		const { isSearchModalOpen } = this.state;
+		const { auth, user, logout } = this.props;
+		const { isSearchModalOpen, isLoginModalOpen } = this.state;
+		const { avatar } = user;
+
+		const headerMenu = (
+			<Menu>
+				<Menu.Item key="profile">
+					<Link to={`/user/${user.id}`}>
+						<Icon type="user" /> View Profile
+					</Link>
+				</Menu.Item>
+				<Menu.Item key="settings">
+					<Link to={`/settings`}>
+						<Icon type="setting" /> Settings
+					</Link>
+				</Menu.Item>
+				<Menu.Divider />
+				<Menu.Item key="logout" onClick={logout}>
+					<Icon type="logout" />
+					Logout
+				</Menu.Item>
+			</Menu>
+		);
 
 		return (
 			<div className="header">
@@ -51,17 +85,49 @@ class Header extends React.Component {
 								icon="search"
 								onClick={this.onSearchButtonClick}
 							/>
-							<Avatar className="header-avatar" icon="user" />
+
+							{auth ? (
+								<Dropdown overlay={headerMenu} trigger={['click']}>
+									<Avatar className="header-avatar" src={avatar} />
+								</Dropdown>
+							) : (
+								<Button
+									className="header-login-button"
+									onClick={this.onLoginButtonClick}
+								>
+									Login
+								</Button>
+							)}
 						</Col>
 					</Row>
 				</div>
+
 				<SearchModal
 					isOpen={isSearchModalOpen}
 					onClose={this.onSearchModalClose}
 				/>
+
+				{!auth && (
+					<LoginModal
+						isOpen={isLoginModalOpen}
+						onClose={this.onLoginModalClose}
+					/>
+				)}
 			</div>
 		);
 	}
 }
 
-export default Header;
+function mapStateToProps(state) {
+	const { loginReducer } = state;
+	const { isAuthenticated, user } = loginReducer;
+	return {
+		auth: isAuthenticated,
+		user
+	};
+}
+
+export default connect(
+	mapStateToProps,
+	{ logout }
+)(Header);

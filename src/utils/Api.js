@@ -1,5 +1,18 @@
 import { ACCOUNT_API, COMMUNITY_API, SHARE_API } from './Constants';
 
+async function login(email, password) {
+	const response = await fetch(`${ACCOUNT_API}signin`, {
+		method: 'post',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ username: email, password })
+	});
+	const data = await response.json();
+	return data;
+}
+
 async function getUser(userId) {
 	const response = await fetch(`${ACCOUNT_API}getProfile?user_id=${userId}`, {
 		method: 'get'
@@ -145,6 +158,7 @@ async function searchUsers(query) {
 }
 
 const Api = {
+	login,
 	getUser,
 	getUserPosts,
 	getUserPopularPosts,

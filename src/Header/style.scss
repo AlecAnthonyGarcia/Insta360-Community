@@ -38,8 +38,13 @@
 		align-items: center;
 		justify-content: center;
 
+		.header-login-button {
+			margin-left: 15px;
+		}
+
 		.header-avatar {
 			margin-left: 5px;
+			cursor: pointer;
 		}
 	}
 
