@@ -1,42 +1,71 @@
 import React from 'react';
 
-import Header from '../Header/index.js';
-import FeedCard from '../FeedCard/index.js';
+import { connect } from 'react-redux';
 
-import Api from '../utils/Api';
+import Header from '../Header/index.js';
+import TimelineFeed from '../feeds/TimelineFeed/index.js';
+import FeaturedFeed from '../feeds/FeaturedFeed/index.js';
+import RecentFeed from '../feeds/RecentFeed/index.js';
 
 class HomePage extends React.Component {
 	state = {
-		posts: []
+		currentFeedComponent: null
 	};
 
 	componentDidMount() {
-		this.getRecentPosts();
+		const { currentTabKey } = this.props;
+		this.updateFeedComponent(currentTabKey);
 	}
 
-	getRecentPosts = async () => {
-		const recentPosts = await Api.getRecentPosts();
-		const {
-			data: { shares }
-		} = recentPosts;
-		this.setState({ posts: shares });
+	componentDidUpdate(prevProps) {
+		const { currentTabKey } = this.props;
+		if (prevProps.currentTabKey !== currentTabKey) {
+			this.updateFeedComponent(currentTabKey);
+		}
+	}
+
+	updateFeedComponent = currentTabKey => {
+		switch (currentTabKey) {
+			case 'timeline':
+				this.setCurrentFeedComponent(<TimelineFeed />);
+				break;
+			case 'featured':
+				this.setCurrentFeedComponent(<FeaturedFeed />);
+				break;
+			case 'recent':
+				this.setCurrentFeedComponent(<RecentFeed />);
+				break;
+			default:
+		}
+	};
+
+	setCurrentFeedComponent = component => {
+		this.setState({ currentFeedComponent: component });
 	};
 
 	render() {
-		const { posts } = this.state;
+		const { currentFeedComponent } = this.state;
+
 		return (
 			<div>
 				<Header />
 				<div className="App-container">
-					<div className="App-content">
-						{posts.map(post => (
-							<FeedCard post={post} />
-						))}
-					</div>
+					<div className="App-content">{currentFeedComponent}</div>
 				</div>
 			</div>
 		);
 	}
 }
 
-export default HomePage;
+function mapStateToProps(state) {
+	const { homeReducer } = state;
+	const { currentTabKey } = homeReducer;
+	return {
+		currentTabKey
+	};
+}
+
+export default connect(
+	mapStateToProps,
+	null
+)(HomePage);

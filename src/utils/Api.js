@@ -1,4 +1,4 @@
-import { ACCOUNT_API, COMMUNITY_API, SHARE_API } from './Constants';
+import { BASE_API, ACCOUNT_API, COMMUNITY_API, SHARE_API } from './Constants';
 
 async function login(email, password) {
 	const response = await fetch(`${ACCOUNT_API}signin`, {
@@ -46,6 +46,32 @@ async function getUserPopularPosts(userId) {
 
 async function getPost(postId) {
 	const response = await fetch(`${SHARE_API}info/${postId}`, {
+		method: 'get'
+	});
+	const data = await response.json();
+	return data;
+}
+
+async function getTimelinePosts(postIdCursor) {
+	const pageSize = 20;
+	let url = `${COMMUNITY_API}timeline?page_size=${pageSize}`;
+	if (postIdCursor) {
+		url = `${url}?post_id=${postIdCursor}`;
+	}
+	const response = await fetch(url, {
+		method: 'get'
+	});
+	const data = await response.json();
+	return data;
+}
+
+async function getFeaturedPosts(postIdCursor) {
+	const pageSize = 20;
+	let url = `${BASE_API}community/content/feature?page_size=${pageSize}`;
+	if (postIdCursor) {
+		url = `${url}?post_id=${postIdCursor}`;
+	}
+	const response = await fetch(url, {
 		method: 'get'
 	});
 	const data = await response.json();
@@ -163,6 +189,8 @@ const Api = {
 	getUserPosts,
 	getUserPopularPosts,
 	getPost,
+	getTimelinePosts,
+	getFeaturedPosts,
 	getRecentPosts,
 	getTag,
 	getTagPosts,

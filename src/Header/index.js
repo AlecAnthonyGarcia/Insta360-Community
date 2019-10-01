@@ -8,6 +8,7 @@ import logo from '../static/img/logo.png';
 
 import { Avatar, Col, Row, Tabs, Button, Menu, Dropdown, Icon } from 'antd';
 
+import { setCurrentTabKey } from '../HomePage/homeActions';
 import { logout } from '../LoginModal/loginActions';
 import LoginModal from '../LoginModal/index.js';
 import SearchModal from '../SearchModal/index.js';
@@ -34,6 +35,11 @@ class Header extends React.Component {
 
 	onLoginModalClose = () => {
 		this.setState({ isLoginModalOpen: false });
+	};
+
+	onTabChange = activeTabKey => {
+		const { setCurrentTabKey } = this.props;
+		setCurrentTabKey(activeTabKey);
 	};
 
 	render() {
@@ -72,10 +78,10 @@ class Header extends React.Component {
 						</Col>
 
 						<Col span={8} className="header-tabs-container">
-							<Tabs defaultActiveKey="2">
-								<TabPane tab="Following" key="1"></TabPane>
-								<TabPane tab="Featured" key="2"></TabPane>
-								<TabPane tab="Recent" key="3"></TabPane>
+							<Tabs defaultActiveKey="featured" onChange={this.onTabChange}>
+								<TabPane tab="Following" key="timeline"></TabPane>
+								<TabPane tab="Featured" key="featured"></TabPane>
+								<TabPane tab="Recent" key="recent"></TabPane>
 							</Tabs>
 						</Col>
 
@@ -129,5 +135,5 @@ function mapStateToProps(state) {
 
 export default connect(
 	mapStateToProps,
-	{ logout }
+	{ logout, setCurrentTabKey }
 )(Header);
