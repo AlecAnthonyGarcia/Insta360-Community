@@ -1,7 +1,7 @@
 import React from 'react';
 import './style.scss';
 
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import logo from '../static/img/logo.png';
@@ -43,7 +43,8 @@ class Header extends React.Component {
 	};
 
 	render() {
-		const { auth, user, logout } = this.props;
+		const { location, auth, user, logout } = this.props;
+		const { pathname } = location;
 		const { isSearchModalOpen, isLoginModalOpen } = this.state;
 		const { avatar } = user;
 
@@ -78,11 +79,13 @@ class Header extends React.Component {
 						</Col>
 
 						<Col span={8} className="header-tabs-container">
-							<Tabs defaultActiveKey="featured" onChange={this.onTabChange}>
-								<TabPane tab="Following" key="timeline"></TabPane>
-								<TabPane tab="Featured" key="featured"></TabPane>
-								<TabPane tab="Recent" key="recent"></TabPane>
-							</Tabs>
+							{pathname === '/' && (
+								<Tabs defaultActiveKey="featured" onChange={this.onTabChange}>
+									<TabPane tab="Following" key="timeline"></TabPane>
+									<TabPane tab="Featured" key="featured"></TabPane>
+									<TabPane tab="Recent" key="recent"></TabPane>
+								</Tabs>
+							)}
 						</Col>
 
 						<Col span={8} className="header-actions-container">
@@ -133,7 +136,9 @@ function mapStateToProps(state) {
 	};
 }
 
-export default connect(
-	mapStateToProps,
-	{ logout, setCurrentTabKey }
-)(Header);
+export default withRouter(
+	connect(
+		mapStateToProps,
+		{ logout, setCurrentTabKey }
+	)(Header)
+);
