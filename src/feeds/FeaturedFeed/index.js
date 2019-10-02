@@ -32,7 +32,7 @@ class FeaturedFeed extends React.Component {
 			<div>
 				<Spin spinning={loading}>
 					{featuredPosts.map(post => (
-						<FeedCard post={post} />
+						<FeedCard key={post.id} post={post} />
 					))}
 				</Spin>
 			</div>

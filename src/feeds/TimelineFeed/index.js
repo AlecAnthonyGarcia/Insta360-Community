@@ -32,7 +32,7 @@ class TimelineFeed extends React.Component {
 			<div>
 				<Spin spinning={loading}>
 					{timelinePosts.map(post => (
-						<FeedCard post={post} />
+						<FeedCard id={post.id} post={post} />
 					))}
 				</Spin>
 			</div>

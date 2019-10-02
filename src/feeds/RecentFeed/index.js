@@ -32,7 +32,7 @@ class RecentFeed extends React.Component {
 			<div>
 				<Spin spinning={loading}>
 					{recentPosts.map(post => (
-						<FeedCard post={post} />
+						<FeedCard key={post.id} post={post} />
 					))}
 				</Spin>
 			</div>
