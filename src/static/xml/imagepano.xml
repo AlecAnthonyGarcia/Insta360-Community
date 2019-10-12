@@ -1,0 +1,7 @@
+<krpano>
+    <image>
+        <sphere url="%$imageurl%" />
+    </image>
+    <view hlookat="0" vlookat="-5" fov="100" distortion="0" />
+    <events name="scene" onloadcomplete="onLoadComplete()" />
+</krpano>

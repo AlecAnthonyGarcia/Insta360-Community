@@ -1,6 +1,7 @@
 .pano-360-icon {
 	position: absolute;
 	align-self: center;
+	z-index: 1;
 }
 
 .feed-card-media-container {
@@ -47,4 +48,5 @@
 .play-button {
 	position: absolute;
 	align-self: center;
+	z-index: 1;
 }

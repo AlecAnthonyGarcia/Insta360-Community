@@ -2,16 +2,21 @@ import React from 'react';
 import './style.scss';
 
 import PlayIcon from '../static/img/icon_play.png';
-import Pano360Icon from '../static/img/icon_360_pano.png';
+import Pano360ImageIcon from '../static/img/icon_360_pano_image.png';
+import Pano360VideoIcon from '../static/img/icon_360_pano_video.png';
 
 import { Link } from 'react-router-dom';
-import { Card, List, Avatar, Button, Divider } from 'antd';
+import { Card, List, Avatar, Button, Divider, Spin } from 'antd';
 import moment from 'moment';
+
+import PanoModal from '../PanoModal/index.js';
 
 import { is360Pano, isVideo } from '../utils/Utils.js';
 
 class FeedCard extends React.Component {
 	state = {
+		isPanoModalOpen: false,
+		isPanoLoading: false,
 		isVideoLoaded: false
 	};
 
@@ -19,8 +24,15 @@ class FeedCard extends React.Component {
 		const { post } = this.props;
 		const { type } = post;
 
-		if (isVideo(type)) {
-			this.setState({ isVideoLoaded: true });
+		if (is360Pano(type)) {
+			this.setState({
+				isPanoLoading: isVideo(type) ? false : true,
+				isPanoModalOpen: true
+			});
+		} else {
+			if (isVideo(type)) {
+				this.setState({ isVideoLoaded: true });
+			}
 		}
 	};
 
@@ -38,14 +50,23 @@ class FeedCard extends React.Component {
 		return { __html: '' };
 	}
 
+	onPanoLoadComplete = () => {
+		this.setState({ isPanoLoading: false });
+	};
+
+	onClosePanoModal = () => {
+		this.setState({ isPanoModalOpen: false });
+	};
+
 	render() {
-		const { isVideoLoaded } = this.state;
+		const { isPanoModalOpen, isPanoLoading, isVideoLoaded } = this.state;
 		const { post } = this.props || {};
 
 		const {
 			account,
 			location = {},
 			location_flag,
+			cover,
 			app_thumb,
 			comments,
 			comment_count,
@@ -84,14 +105,25 @@ class FeedCard extends React.Component {
 							}
 						/>
 					}
-					onClick={this.onPostClick}
 				>
-					<div className="feed-card-media-container">
-						{is360Pano(type) && (
-							<img alt="360 Pano" src={Pano360Icon} className="pano-360-icon" />
+					<div className="feed-card-media-container" onClick={this.onPostClick}>
+						{is360Pano(type) && !isVideo(type) && (
+							<img
+								alt="360 Pano"
+								src={Pano360ImageIcon}
+								className="pano-360-icon"
+							/>
 						)}
 
-						{isVideo(type) && !isVideoLoaded && (
+						{is360Pano(type) && isVideo(type) && (
+							<img
+								alt="360 Pano"
+								src={Pano360VideoIcon}
+								className="pano-360-icon"
+							/>
+						)}
+
+						{!is360Pano(type) && isVideo(type) && !isVideoLoaded && (
 							<img alt="Play Button" src={PlayIcon} className="play-button" />
 						)}
 
@@ -103,7 +135,13 @@ class FeedCard extends React.Component {
 								className="feed-card-video"
 							/>
 						) : (
-							<img alt="" src={app_thumb} className="feed-card-image" />
+							<Spin spinning={isPanoLoading}>
+								<img
+									alt=""
+									src={is360Pano(type) || isVideo(type) ? cover : app_thumb}
+									className="feed-card-image"
+								/>
+							</Spin>
 						)}
 					</div>
 
@@ -138,6 +176,13 @@ class FeedCard extends React.Component {
 							))}
 					</div>
 				</Card>
+				{isPanoModalOpen && (
+					<PanoModal
+						post={post}
+						onLoadComplete={this.onPanoLoadComplete}
+						onClose={this.onClosePanoModal}
+					/>
+				)}
 			</React.Fragment>
 		);
 	}

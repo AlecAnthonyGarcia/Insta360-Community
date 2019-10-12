@@ -1,0 +1,27 @@
+<krpano>
+    <action name="startup" autorun="onstart">
+		if(device.panovideosupport == false,
+			error('Sorry, but panoramic videos are not supported by your current browser!');
+			,
+			loadscene(videopano);
+		);
+	</action>
+    <scene name="videopano">
+        <!-- include the videoplayer plugin -->
+        <plugin name="video"
+			url.html5="https://static.insta360.com/assets/www/project/share/player/plugins/videoplayer.js"
+			url.flash="https://static.insta360.com/assets/www/project/share/player/plugins/videoplayer.swf"
+			videourl="%$videourl%"
+			posterurl="%$posterurl%"
+			loop="true"
+			volume="1.0"
+			pausedonstart="false"
+			/>
+        <!-- use the videoplayer plugin as panoramic image source -->
+        <image>
+			<sphere url="plugin:video" />
+        </image>
+        <!-- set the default view -->
+        <view hlookat="0" vlookat="0" fovtype="DFOV" fov="130" fovmin="75" fovmax="150" distortion="0.0" />
+    </scene>
+</krpano>
