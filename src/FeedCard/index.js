@@ -117,7 +117,13 @@ class FeedCard extends React.Component {
 						/>
 					}
 				>
-					<div className="feed-card-media-container" onClick={this.onPostClick}>
+					<div
+						className="feed-card-media-container"
+						onClick={this.onPostClick}
+						style={{
+							cursor: is360Pano(type) || isVideo(type) ? 'pointer' : 'default'
+						}}
+					>
 						{is360Pano(type) && !isVideo(type) && (
 							<img
 								alt="360 Pano"
