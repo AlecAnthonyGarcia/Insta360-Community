@@ -186,7 +186,7 @@ class FeedCard extends React.Component {
 						{comments &&
 							comments.length > 0 &&
 							comments.map(comment => (
-								<p>
+								<p key={comment.id}>
 									<span>{comment.account.nickname}</span> {comment.content}
 								</p>
 							))}
