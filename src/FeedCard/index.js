@@ -98,7 +98,11 @@ class FeedCard extends React.Component {
 					title={
 						<List.Item.Meta
 							avatar={
-								avatar && avatar.length > 0 ? <Avatar src={avatar} /> : null
+								avatar && avatar.length > 0 ? (
+									<Link to={`/user/${id}`}>
+										<Avatar src={avatar} />
+									</Link>
+								) : null
 							}
 							title={<Link to={`/user/${id}`}>{nickname}</Link>}
 							description={
