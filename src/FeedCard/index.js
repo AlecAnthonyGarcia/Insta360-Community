@@ -5,7 +5,10 @@ import PlayIcon from '../static/img/icon_play.png';
 import Pano360ImageIcon from '../static/img/icon_360_pano_image.png';
 import Pano360VideoIcon from '../static/img/icon_360_pano_video.png';
 
+import { likePost } from '../HomePage/homeActions';
+
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { Card, List, Avatar, Button, Divider, Spin } from 'antd';
 import moment from 'moment';
 
@@ -34,6 +37,13 @@ class FeedCard extends React.Component {
 				this.setState({ isVideoLoaded: true });
 			}
 		}
+	};
+
+	onLikeButtonClick = async () => {
+		const { post, parent, likePost } = this.props;
+		const { id } = post;
+
+		likePost(id, parent);
 	};
 
 	replaceHashtagsWithLinks = text => {
@@ -70,6 +80,7 @@ class FeedCard extends React.Component {
 			app_thumb,
 			comments,
 			comment_count,
+			like,
 			like_count,
 			type,
 			works = [],
@@ -147,7 +158,12 @@ class FeedCard extends React.Component {
 
 					<div className="feed-card-body-container">
 						<div className="feed-card-actions-container">
-							<Button shape="round" icon="like">
+							<Button
+								type={like ? 'primary' : 'default'}
+								shape="round"
+								icon="like"
+								onClick={this.onLikeButtonClick}
+							>
 								<span>{like_count}</span>
 							</Button>
 							<Link to={`/post/${postId}`}>
@@ -188,4 +204,7 @@ class FeedCard extends React.Component {
 	}
 }
 
-export default FeedCard;
+export default connect(
+	null,
+	{ likePost }
+)(FeedCard);

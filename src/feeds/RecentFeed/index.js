@@ -7,6 +7,8 @@ import { Spin } from 'antd';
 
 import FeedCard from '../../FeedCard/index.js';
 
+import { FEED_CARD_PARENTS } from '../../utils/Constants.js';
+
 class RecentFeed extends React.Component {
 	state = {
 		loading: true
@@ -32,7 +34,11 @@ class RecentFeed extends React.Component {
 			<div>
 				<Spin spinning={loading}>
 					{recentPosts.map(post => (
-						<FeedCard key={post.id} post={post} />
+						<FeedCard
+							key={post.id}
+							post={post}
+							parent={FEED_CARD_PARENTS.RECENT}
+						/>
 					))}
 				</Spin>
 			</div>

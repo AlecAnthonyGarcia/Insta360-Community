@@ -183,6 +183,23 @@ async function searchUsers(query) {
 	return data;
 }
 
+
+async function likePost(postId) {
+	const response = await fetch(`${SHARE_API}like/doLike/${postId}`, {
+		method: 'get'
+	});
+	const data = await response.json();
+	return data;
+}
+
+async function unlikePost(postId) {
+	const response = await fetch(`${SHARE_API}like/undoLike/${postId}`, {
+		method: 'get'
+	});
+	const data = await response.json();
+	return data;
+}
+
 const Api = {
 	login,
 	getUser,
@@ -200,6 +217,8 @@ const Api = {
 	getRecommendedSearchUsers,
 	searchTags,
 	searchUsers
+	likePost,
+	unlikePost
 };
 
 export default Api;

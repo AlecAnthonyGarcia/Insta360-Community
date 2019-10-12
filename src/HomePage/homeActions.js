@@ -4,6 +4,7 @@ export const SET_CURRENT_TAB_KEY = 'SET_CURRENT_TAB_KEY';
 export const SET_TIMELINE_POSTS = 'SET_TIMELINE_POSTS';
 export const SET_FEATURED_POSTS = 'SET_FEATURED_POSTS';
 export const SET_RECENT_POSTS = 'SET_RECENT_POSTS';
+export const SET_LIKE_COUNT = 'SET_LIKE_COUNT';
 
 export function getTimelinePosts() {
 	return async dispatch => {
@@ -47,6 +48,20 @@ export function getRecentPosts() {
 	};
 }
 
+export function likePost(postId, parent) {
+	return async dispatch => {
+		const response = await Api.likePost(postId);
+
+		const {
+			data: { count }
+		} = response;
+
+		dispatch(setLikeCount(postId, count, parent));
+
+		return response;
+	};
+}
+
 export function setCurrentTabKey(tabKey) {
 	return {
 		type: SET_CURRENT_TAB_KEY,
@@ -72,5 +87,16 @@ export function setRecentPosts(posts) {
 	return {
 		type: SET_RECENT_POSTS,
 		posts
+	};
+}
+
+export function setLikeCount(postId, count, parent) {
+	return {
+		type: SET_LIKE_COUNT,
+		payload: {
+			postId,
+			count,
+			parent
+		}
 	};
 }
