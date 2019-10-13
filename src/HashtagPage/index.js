@@ -1,6 +1,8 @@
 import React from 'react';
 import './style.scss';
 
+import { Link } from 'react-router-dom';
+
 import { Statistic, Row, Col, List } from 'antd';
 
 import Header from '../Header/index.js';
@@ -74,15 +76,21 @@ class HashtagPage extends React.Component {
 								xxl: 3
 							}}
 							dataSource={popularPosts}
-							renderItem={item => (
-								<List.Item>
-									<img
-										alt=""
-										src={item.app_thumb}
-										className="popular-post-thumbnail"
-									/>
-								</List.Item>
-							)}
+							renderItem={item => {
+								const { id: postId } = item;
+
+								return (
+									<List.Item>
+										<Link to={`/post/${postId}`}>
+											<img
+												alt=""
+												src={item.app_thumb}
+												className="popular-post-thumbnail"
+											/>
+										</Link>
+									</List.Item>
+								);
+							}}
 						/>
 
 						{posts.map(post => (
