@@ -3,7 +3,7 @@ import './style.scss';
 
 import { Link } from 'react-router-dom';
 
-import { Statistic, Row, Col, List } from 'antd';
+import { Statistic, Row, Col, List, Avatar, Divider } from 'antd';
 
 import Header from '../Header/index.js';
 import FeedCard from '../FeedCard/index.js';
@@ -13,6 +13,8 @@ import Api from '../utils/Api';
 class HashtagPage extends React.Component {
 	state = {
 		tag: {},
+		initiator: null,
+		campaignTag: null,
 		posts: [],
 		popularPosts: []
 	};
@@ -26,7 +28,10 @@ class HashtagPage extends React.Component {
 	getTag = async () => {
 		const { tag } = this.props.match.params;
 		const response = await Api.getTag(tag);
-		this.setState({ tag: response.data.tag });
+		const {
+			data: { tag: tagInfo, initiator, campaign_tag: campaignTag }
+		} = response;
+		this.setState({ tag: tagInfo, initiator, campaignTag });
 	};
 
 	getTagPosts = async () => {
@@ -42,8 +47,9 @@ class HashtagPage extends React.Component {
 	};
 
 	render() {
-		const { tag, posts, popularPosts } = this.state;
+		const { tag, posts, popularPosts, initiator, campaignTag } = this.state;
 		const { user_count, post_count } = tag;
+		const { content } = campaignTag || {};
 
 		return (
 			<div>
@@ -64,6 +70,34 @@ class HashtagPage extends React.Component {
 								</Row>
 							</div>
 						</div>
+
+						{campaignTag && (
+							<div>
+								<a
+									href={content.link}
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									<img
+										alt=""
+										className="campaign-tag-cover"
+										src={content.cover}
+									/>
+								</a>
+								<div className="campaign-info-container">
+									<Link to={`/user/${initiator.id}`}>
+										<Avatar src={initiator.avatar} />
+										<span className="campaign-tag-user-nickname">
+											{initiator.nickname}
+										</span>
+									</Link>
+									<p className="campaign-tag-description ">
+										{content.description}
+									</p>
+								</div>
+								<Divider />
+							</div>
+						)}
 
 						<List
 							grid={{

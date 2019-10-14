@@ -23,3 +23,21 @@
 .popular-post-thumbnail {
 	width: 100%;
 }
+
+.campaign-info-container {
+	margin: 15px 10px 0px 10px;
+
+	.campaign-tag-description {
+		margin-top: 10px;
+		font-size: 13px;
+	}
+
+	.campaign-tag-user-nickname {
+		margin-left: 10px;
+		color: black;
+	}
+}
+
+.campaign-tag-cover {
+	width: 100%;
+}
