@@ -1,6 +1,8 @@
 import React from 'react';
 import './style.scss';
 
+import defaultAvatar from '../static/img/icon_default_avatar.png';
+
 import { Link } from 'react-router-dom';
 
 import { Avatar, Statistic, Row, Col, List } from 'antd';
@@ -54,7 +56,11 @@ class UserPage extends React.Component {
 				<div className="App-container">
 					<div className="App-content">
 						<div className="user-info-header">
-							<Avatar size={64} src={avatar} className="user-avatar" />
+							<Avatar
+								size={64}
+								src={avatar !== '' ? avatar : defaultAvatar}
+								className="user-avatar"
+							/>
 							<div className="user-info-container">
 								<span className="user-nickname">{nickname}</span>
 								<Row gutter={16} className="stats-row">
