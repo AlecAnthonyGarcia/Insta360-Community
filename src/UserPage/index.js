@@ -1,14 +1,14 @@
 import React from 'react';
 import './style.scss';
 
-import defaultAvatar from '../static/img/icon_default_avatar.png';
-
 import { Link } from 'react-router-dom';
 
 import { Avatar, Statistic, Row, Col, List } from 'antd';
 
 import Header from '../Header/index.js';
+import UserAvatar from '../UserAvatar/index.js';
 import FeedCard from '../FeedCard/index.js';
+import UserListModal from '../UserListModal/index.js';
 
 import Api from '../utils/Api';
 
@@ -16,7 +16,9 @@ class UserPage extends React.Component {
 	state = {
 		user: {},
 		posts: [],
-		popularPosts: []
+		popularPosts: [],
+		isUserListModalOpen: false,
+		userListType: null
 	};
 
 	componentDidMount() {
@@ -43,10 +45,24 @@ class UserPage extends React.Component {
 		this.setState({ popularPosts: response.data.list });
 	};
 
+	showUserListModal = type => {
+		this.setState({ isUserListModalOpen: true, userListType: type });
+	};
+
+	closeUserListModal = () => {
+		this.setState({ isUserListModalOpen: false });
+	};
+
 	render() {
-		const { user, posts, popularPosts } = this.state;
+		const {
+			user,
+			posts,
+			popularPosts,
+			isUserListModalOpen,
+			userListType
+		} = this.state;
 		const { account = {}, counts = {} } = user;
-		const { avatar, nickname, description } = account;
+		const { id: userId, avatar, nickname, description } = account;
 		const { follower, follows, got_like, public_post } = counts;
 
 		return (
@@ -56,22 +72,33 @@ class UserPage extends React.Component {
 				<div className="App-container">
 					<div className="App-content">
 						<div className="user-info-header">
-							<Avatar
-								size={64}
-								src={avatar !== '' ? avatar : defaultAvatar}
-								className="user-avatar"
-							/>
+							<UserAvatar size={64} src={avatar} className="user-avatar" />
+
 							<div className="user-info-container">
 								<span className="user-nickname">{nickname}</span>
 								<Row gutter={16} className="stats-row">
 									<Col span={6}>
 										<Statistic title="Posts" value={public_post} />
 									</Col>
-									<Col span={6}>
-										<Statistic title="Following" value={follows} />
+									<Col
+										span={6}
+										onClick={() => this.showUserListModal('following')}
+									>
+										<Statistic
+											className="clickable"
+											title="Following"
+											value={follows}
+										/>
 									</Col>
-									<Col span={6}>
-										<Statistic title="Followers" value={follower} />
+									<Col
+										span={6}
+										onClick={() => this.showUserListModal('followers')}
+									>
+										<Statistic
+											className="clickable"
+											title="Followers"
+											value={follower}
+										/>
 									</Col>
 									<Col span={6}>
 										<Statistic title="Likes" value={got_like} />
@@ -94,13 +121,14 @@ class UserPage extends React.Component {
 							dataSource={popularPosts}
 							renderItem={item => {
 								const { id: postId } = item;
+								const { app_thumb } = item;
 
 								return (
 									<List.Item>
 										<Link to={`/post/${postId}`}>
 											<img
 												alt=""
-												src={item.app_thumb}
+												src={app_thumb}
 												className="popular-post-thumbnail"
 											/>
 										</Link>
@@ -114,6 +142,14 @@ class UserPage extends React.Component {
 						))}
 					</div>
 				</div>
+				{isUserListModalOpen && (
+					<UserListModal
+						title={userListType === 'followers' ? 'Followers' : 'Following'}
+						type={userListType}
+						userId={userId}
+						onClose={this.closeUserListModal}
+					/>
+				)}
 			</div>
 		);
 	}

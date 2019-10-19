@@ -1,4 +1,10 @@
-import { BASE_API, ACCOUNT_API, COMMUNITY_API, SHARE_API } from './Constants';
+import {
+	BASE_API,
+	ACCOUNT_API,
+	COMMUNITY_API,
+	FOLLOW_API,
+	SHARE_API
+} from './Constants';
 
 async function login(email, password) {
 	const response = await fetch(`${ACCOUNT_API}signin`, {
@@ -184,6 +190,30 @@ async function searchUsers(query) {
 }
 
 
+async function getFollowing(userId, pageNumber) {
+	const pageSize = 20;
+	const response = await fetch(
+		`${FOLLOW_API}getUserFollows?page_number=${pageNumber}&page_size=${pageSize}&user_id=${userId}`,
+		{
+			method: 'get'
+		}
+	);
+	const data = await response.json();
+	return data;
+}
+
+async function getFollowers(userId, pageNumber) {
+	const pageSize = 20;
+	const response = await fetch(
+		`${FOLLOW_API}getUserFollower?page_number=${pageNumber}&page_size=${pageSize}&user_id=${userId}`,
+		{
+			method: 'get'
+		}
+	);
+	const data = await response.json();
+	return data;
+}
+
 async function likePost(postId) {
 	const response = await fetch(`${SHARE_API}like/doLike/${postId}`, {
 		method: 'get'
@@ -217,6 +247,8 @@ const Api = {
 	getRecommendedSearchUsers,
 	searchTags,
 	searchUsers
+	getFollowing,
+	getFollowers,
 	likePost,
 	unlikePost
 };
