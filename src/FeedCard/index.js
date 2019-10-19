@@ -13,12 +13,14 @@ import { Card, List, Avatar, Button, Divider, Spin } from 'antd';
 import moment from 'moment';
 
 import FeedImage from './FeedImage.js';
+import CommentListModal from '../CommentListModal/index.js';
 import PanoModal from '../PanoModal/index.js';
 
 import { is360Pano, isVideo } from '../utils/Utils.js';
 
 class FeedCard extends React.Component {
 	state = {
+		isCommentListModalOpen: false,
 		isPanoModalOpen: false,
 		isPanoLoading: false,
 		isVideoLoaded: false
@@ -69,8 +71,21 @@ class FeedCard extends React.Component {
 		this.setState({ isPanoModalOpen: false });
 	};
 
+	showCommentListModal = () => {
+		this.setState({ isCommentListModalOpen: true });
+	};
+
+	closeCommentListModal = () => {
+		this.setState({ isCommentListModalOpen: false });
+	};
+
 	render() {
-		const { isPanoModalOpen, isPanoLoading, isVideoLoaded } = this.state;
+		const {
+			isPanoModalOpen,
+			isCommentListModalOpen,
+			isPanoLoading,
+			isVideoLoaded
+		} = this.state;
 		const { post } = this.props || {};
 
 		const {
@@ -174,11 +189,14 @@ class FeedCard extends React.Component {
 							>
 								<span>{like_count}</span>
 							</Button>
-							<Link to={`/post/${postId}`}>
-								<Button shape="round" icon="message">
-									<span>{comment_count}</span>
-								</Button>
-							</Link>
+
+							<Button
+								shape="round"
+								icon="message"
+								onClick={this.showCommentListModal}
+							>
+								<span>{comment_count}</span>
+							</Button>
 
 							<img
 								alt="Share Source"
@@ -191,20 +209,42 @@ class FeedCard extends React.Component {
 
 						<span dangerouslySetInnerHTML={this.renderCaption()} />
 
+						<Divider />
+
 						{comments &&
 							comments.length > 0 &&
 							comments.map(comment => (
 								<p key={comment.id}>
-									<span>{comment.account.nickname}</span> {comment.content}
+									<span>
+										<Link to={`/user/${id}`}>{comment.account.nickname}</Link>
+									</span>{' '}
+									<span>{comment.content}</span>
 								</p>
 							))}
+
+						<Button
+							className="view-more-comments-button"
+							type="link"
+							onClick={this.showCommentListModal}
+						>
+							View more comments
+						</Button>
 					</div>
 				</Card>
+
 				{isPanoModalOpen && (
 					<PanoModal
 						post={post}
 						onLoadComplete={this.onPanoLoadComplete}
 						onClose={this.onClosePanoModal}
+					/>
+				)}
+
+				{isCommentListModalOpen && (
+					<CommentListModal
+						title="Comments"
+						postId={postId}
+						onClose={this.closeCommentListModal}
 					/>
 				)}
 			</React.Fragment>

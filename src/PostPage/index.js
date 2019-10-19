@@ -7,25 +7,17 @@ import Api from '../utils/Api';
 
 class PostPage extends React.Component {
 	state = {
-		post: {},
-		comments: {}
+		post: {}
 	};
 
 	componentDidMount() {
 		this.getPost();
-		this.getComments();
 	}
 
 	getPost = async () => {
 		const { postId } = this.props.match.params;
 		const response = await Api.getPost(postId);
 		this.setState({ post: response.data.share });
-	};
-
-	getComments = async () => {
-		const { postId } = this.props.match.params;
-		const response = await Api.getComments(postId, 1);
-		this.setState({ comments: response.data.share });
 	};
 
 	render() {
