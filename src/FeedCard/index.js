@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import { Card, List, Avatar, Button, Divider, Spin } from 'antd';
 import moment from 'moment';
 
+import FeedImage from './FeedImage.js';
 import PanoModal from '../PanoModal/index.js';
 
 import { is360Pano, isVideo } from '../utils/Utils.js';
@@ -156,13 +157,10 @@ class FeedCard extends React.Component {
 								className="feed-card-video"
 							/>
 						) : (
-							<Spin spinning={isPanoLoading}>
-								<img
-									alt=""
-									src={is360Pano(type) || isVideo(type) ? cover : app_thumb}
-									className="feed-card-image"
-								/>
-							</Spin>
+							<FeedImage
+								isPanoLoading={isPanoLoading}
+								src={is360Pano(type) || isVideo(type) ? cover : app_thumb}
+							/>
 						)}
 					</div>
 
