@@ -2,7 +2,10 @@ import { applyMiddleware, compose, createStore } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 
 import rootReducer from './reducers';
-import { setCurrentUser } from './LoginModal/loginActions';
+import {
+	setCurrentUser,
+	setAuthorizationToken
+} from './LoginModal/loginActions';
 
 export default function configureStore(preloadedState) {
 	const middlewares = [thunkMiddleware];
@@ -13,10 +16,13 @@ export default function configureStore(preloadedState) {
 
 	const store = createStore(rootReducer, preloadedState, composedEnhancers);
 
-	if (localStorage.jwtToken) {
+	const { jwtToken, user } = localStorage;
+
+	if (jwtToken) {
+		setAuthorizationToken(jwtToken);
 		try {
-			const user = JSON.parse(localStorage.user);
-			store.dispatch(setCurrentUser(user));
+			const userObject = JSON.parse(user);
+			store.dispatch(setCurrentUser(userObject));
 		} catch (e) {
 			store.dispatch(setCurrentUser({}));
 		}
