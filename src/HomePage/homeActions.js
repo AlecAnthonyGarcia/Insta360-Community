@@ -5,6 +5,7 @@ export const SET_TIMELINE_POSTS = 'SET_TIMELINE_POSTS';
 export const SET_FEATURED_POSTS = 'SET_FEATURED_POSTS';
 export const SET_RECENT_POSTS = 'SET_RECENT_POSTS';
 export const SET_LIKE_COUNT = 'SET_LIKE_COUNT';
+export const SET_FOLLOWED = 'SET_FOLLOWED';
 
 export function getTimelinePosts() {
 	return async dispatch => {
@@ -62,6 +63,26 @@ export function likePost(postId, parent) {
 	};
 }
 
+export function followUser(userId, parent) {
+	return async dispatch => {
+		const response = await Api.followUser(userId);
+
+		dispatch(setFollowed(userId, true, parent));
+
+		return response;
+	};
+}
+
+export function unfollowUser(userId, parent) {
+	return async dispatch => {
+		const response = await Api.unfollowUser(userId);
+
+		dispatch(setFollowed(userId, false, parent));
+
+		return response;
+	};
+}
+
 export function setCurrentTabKey(tabKey) {
 	return {
 		type: SET_CURRENT_TAB_KEY,
@@ -96,6 +117,17 @@ export function setLikeCount(postId, count, parent) {
 		payload: {
 			postId,
 			count,
+			parent
+		}
+	};
+}
+
+export function setFollowed(userId, followed, parent) {
+	return {
+		type: SET_FOLLOWED,
+		payload: {
+			userId,
+			followed,
 			parent
 		}
 	};

@@ -5,7 +5,7 @@ import PlayIcon from '../static/img/icon_play.png';
 import Pano360ImageIcon from '../static/img/icon_360_pano_image.png';
 import Pano360VideoIcon from '../static/img/icon_360_pano_video.png';
 
-import { likePost } from '../HomePage/homeActions';
+import { followUser, unfollowUser, likePost } from '../HomePage/homeActions';
 
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -39,6 +39,18 @@ class FeedCard extends React.Component {
 			if (isVideo(type)) {
 				this.setState({ isVideoLoaded: true });
 			}
+		}
+	};
+
+	onFollowButtonClick = async userId => {
+		const { post, parent, followUser, unfollowUser } = this.props;
+		const { account } = post;
+		const { followed } = account;
+
+		if (followed) {
+			unfollowUser(userId, parent);
+		} else {
+			followUser(userId, parent);
 		}
 	};
 
@@ -105,7 +117,7 @@ class FeedCard extends React.Component {
 		} = post;
 
 		const { app_urls: { source } = {}, create_time } = works[0] || {};
-		const { id, avatar, nickname } = account || {};
+		const { id, avatar, followed, nickname } = account || {};
 
 		return (
 			<React.Fragment>
@@ -129,9 +141,16 @@ class FeedCard extends React.Component {
 										className="feed-card-user-country-flag"
 									/>
 									<span>{location.en}</span>
-									<span className="timestamp">
-										{moment(create_time).fromNow()}
-									</span>
+
+									<Button
+										className="follow-button"
+										type={followed ? 'link' : 'primary'}
+										shape="round"
+										icon={followed ? 'check-circle' : 'user-add'}
+										onClick={() => this.onFollowButtonClick(id)}
+									>
+										{followed ? 'Following' : 'Follow'}
+									</Button>
 								</span>
 							}
 						/>
@@ -182,6 +201,7 @@ class FeedCard extends React.Component {
 					<div className="feed-card-body-container">
 						<div className="feed-card-actions-container">
 							<Button
+								className="feed-card-action-button"
 								type={like ? 'primary' : 'default'}
 								shape="round"
 								icon="like"
@@ -191,12 +211,24 @@ class FeedCard extends React.Component {
 							</Button>
 
 							<Button
+								className="feed-card-action-button"
 								shape="round"
 								icon="message"
 								onClick={this.showCommentListModal}
 							>
 								<span>{comment_count}</span>
 							</Button>
+
+							<Link to={`/post/${postId}`}>
+								<Button
+									className="feed-card-action-button"
+									shape="round"
+									icon="share-alt"
+									onClick={this.showCommentListModal}
+								>
+									Share
+								</Button>
+							</Link>
 
 							<img
 								alt="Share Source"
@@ -205,30 +237,34 @@ class FeedCard extends React.Component {
 							/>
 						</div>
 
+						<div className="feed-card-caption-container">
+							<p className="timestamp">{moment(create_time).fromNow()}</p>
+
+							<span dangerouslySetInnerHTML={this.renderCaption()} />
+						</div>
+
 						<Divider />
 
-						<span dangerouslySetInnerHTML={this.renderCaption()} />
+						<div className="feed-card-comments-container">
+							{comments &&
+								comments.length > 0 &&
+								comments.map(comment => (
+									<p key={comment.id}>
+										<span>
+											<Link to={`/user/${id}`}>{comment.account.nickname}</Link>
+										</span>{' '}
+										<span>{comment.content}</span>
+									</p>
+								))}
 
-						<Divider />
-
-						{comments &&
-							comments.length > 0 &&
-							comments.map(comment => (
-								<p key={comment.id}>
-									<span>
-										<Link to={`/user/${id}`}>{comment.account.nickname}</Link>
-									</span>{' '}
-									<span>{comment.content}</span>
-								</p>
-							))}
-
-						<Button
-							className="view-more-comments-button"
-							type="link"
-							onClick={this.showCommentListModal}
-						>
-							View more comments
-						</Button>
+							<Button
+								className="view-more-comments-button"
+								type="link"
+								onClick={this.showCommentListModal}
+							>
+								View more comments
+							</Button>
+						</div>
 					</div>
 				</Card>
 
@@ -254,5 +290,5 @@ class FeedCard extends React.Component {
 
 export default connect(
 	null,
-	{ likePost }
+	{ followUser, unfollowUser, likePost }
 )(FeedCard);

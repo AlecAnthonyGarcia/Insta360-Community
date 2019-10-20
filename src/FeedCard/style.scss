@@ -21,12 +21,15 @@
 		align-self: center;
 	}
 
-	.timestamp {
+	.follow-button {
 		float: right;
+		margin-top: -20px;
 	}
 
 	.share-source-icon {
+		float: right;
 		height: 32px;
+		margin-top: -2px;
 	}
 }
 
@@ -52,4 +55,24 @@
 
 .view-more-comments-button {
 	padding-left: 0px;
+}
+
+.feed-card-action-button {
+	margin-right: 10px;
+}
+
+.feed-card-caption-container {
+	display: flex;
+	flex-direction: column;
+	margin-top: 15px;
+	margin-left: 5px;
+
+	.timestamp {
+		float: right;
+		font-size: 10px;
+	}
+}
+
+.feed-card-comments-container {
+	margin-left: 5px;
 }

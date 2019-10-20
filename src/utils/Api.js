@@ -155,6 +155,30 @@ async function searchUsers(query) {
 	return data;
 }
 
+async function followUser(userId) {
+	const response = await axios({
+		method: 'post',
+		url: `${FOLLOW_API}doFollow`,
+		data: {
+			user_id: userId
+		}
+	});
+	const { data } = response;
+	return data;
+}
+
+async function unfollowUser(userId) {
+	const response = await axios({
+		method: 'post',
+		url: `${FOLLOW_API}undoFollow`,
+		data: {
+			user_id: userId
+		}
+	});
+	const { data } = response;
+	return data;
+}
+
 async function getFollowing(userId, pageNumber) {
 	const pageSize = 20;
 	const response = await axios.get(
@@ -201,7 +225,9 @@ const Api = {
 	getRecommendedSearchTags,
 	getRecommendedSearchUsers,
 	searchTags,
-	searchUsers
+	searchUsers,
+	followUser,
+	unfollowUser,
 	getFollowing,
 	getFollowers,
 	likePost,
