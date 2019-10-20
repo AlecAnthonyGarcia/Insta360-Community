@@ -5,7 +5,12 @@ import PlayIcon from '../static/img/icon_play.png';
 import Pano360ImageIcon from '../static/img/icon_360_pano_image.png';
 import Pano360VideoIcon from '../static/img/icon_360_pano_video.png';
 
-import { followUser, unfollowUser, likePost } from '../HomePage/homeActions';
+import {
+	followUser,
+	unfollowUser,
+	likePost,
+	unlikePost
+} from '../HomePage/homeActions';
 
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -55,10 +60,14 @@ class FeedCard extends React.Component {
 	};
 
 	onLikeButtonClick = async () => {
-		const { post, parent, likePost } = this.props;
-		const { id } = post;
+		const { post, parent, likePost, unlikePost } = this.props;
+		const { id, like } = post;
 
-		likePost(id, parent);
+		if (like) {
+			unlikePost(id, parent);
+		} else {
+			likePost(id, parent);
+		}
 	};
 
 	replaceHashtagsWithLinks = text => {
@@ -290,5 +299,5 @@ class FeedCard extends React.Component {
 
 export default connect(
 	null,
-	{ followUser, unfollowUser, likePost }
+	{ followUser, unfollowUser, likePost, unlikePost }
 )(FeedCard);

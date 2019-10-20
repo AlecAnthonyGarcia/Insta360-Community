@@ -39,7 +39,7 @@ export default (state = DEFAULT_STATE, action) => {
 				recentPosts: action.posts
 			};
 		case SET_LIKE_COUNT: {
-			const { postId, count, parent } = action.payload;
+			const { postId, count, like, parent } = action.payload;
 
 			let posts;
 			let stateKey;
@@ -60,7 +60,7 @@ export default (state = DEFAULT_STATE, action) => {
 				...state,
 				[stateKey]: posts.map(post => {
 					if (post.id === postId) {
-						return { ...post, like_count: count, like: true };
+						return { ...post, like_count: count, like };
 					}
 					return post;
 				})

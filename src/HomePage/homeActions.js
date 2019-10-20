@@ -57,7 +57,21 @@ export function likePost(postId, parent) {
 			data: { count }
 		} = response;
 
-		dispatch(setLikeCount(postId, count, parent));
+		dispatch(setLikeCount(postId, count, true, parent));
+
+		return response;
+	};
+}
+
+export function unlikePost(postId, parent) {
+	return async dispatch => {
+		const response = await Api.unlikePost(postId);
+
+		const {
+			data: { count }
+		} = response;
+
+		dispatch(setLikeCount(postId, count, false, parent));
 
 		return response;
 	};
@@ -111,12 +125,13 @@ export function setRecentPosts(posts) {
 	};
 }
 
-export function setLikeCount(postId, count, parent) {
+export function setLikeCount(postId, count, like, parent) {
 	return {
 		type: SET_LIKE_COUNT,
 		payload: {
 			postId,
 			count,
+			like,
 			parent
 		}
 	};
