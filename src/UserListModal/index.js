@@ -67,6 +67,10 @@ class UserListModal extends React.Component {
 		}
 	};
 
+	onListItemClick = () => {
+		this.onCancel();
+	};
+
 	onCancel = () => {
 		const { onClose } = this.props;
 
@@ -104,7 +108,7 @@ class UserListModal extends React.Component {
 							const { avatar, nickname } = account;
 
 							return (
-								<Link to={`/user/${account.id}`}>
+								<Link to={`/user/${account.id}`} onClick={this.onListItemClick}>
 									<List.Item key={item.id}>
 										<List.Item.Meta
 											avatar={<UserAvatar src={avatar} />}

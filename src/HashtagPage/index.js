@@ -3,7 +3,7 @@ import './style.scss';
 
 import { Link } from 'react-router-dom';
 
-import { Statistic, Row, Col, List, Avatar, Divider } from 'antd';
+import { Spin, Statistic, Row, Col, List, Avatar, Divider } from 'antd';
 
 import Header from '../Header/index.js';
 import FeedCard from '../FeedCard/index.js';
@@ -13,6 +13,7 @@ import Api from '../utils/Api';
 class HashtagPage extends React.Component {
 	state = {
 		tag: {},
+		loading: true,
 		initiator: null,
 		campaignTag: null,
 		posts: [],
@@ -20,9 +21,22 @@ class HashtagPage extends React.Component {
 	};
 
 	componentDidMount() {
+		this.loadHashtagData();
+	}
+
+	loadHashtagData() {
+		this.setState({ loading: true });
 		this.getTag();
 		this.getTagPosts();
 		this.getTagPopularPosts();
+	}
+
+	componentDidUpdate(prevProps) {
+		const { tag } = this.props.match.params;
+		const { tag: previousTag } = prevProps.match.params;
+		if (tag !== previousTag) {
+			this.loadHashtagData();
+		}
 	}
 
 	getTag = async () => {
@@ -31,7 +45,7 @@ class HashtagPage extends React.Component {
 		const {
 			data: { tag: tagInfo, initiator, campaign_tag: campaignTag }
 		} = response;
-		this.setState({ tag: tagInfo, initiator, campaignTag });
+		this.setState({ loading: false, tag: tagInfo, initiator, campaignTag });
 	};
 
 	getTagPosts = async () => {
@@ -47,7 +61,14 @@ class HashtagPage extends React.Component {
 	};
 
 	render() {
-		const { tag, posts, popularPosts, initiator, campaignTag } = this.state;
+		const {
+			loading,
+			tag,
+			posts,
+			popularPosts,
+			initiator,
+			campaignTag
+		} = this.state;
 		const { user_count, post_count } = tag;
 		const { content } = campaignTag || {};
 
@@ -57,19 +78,21 @@ class HashtagPage extends React.Component {
 
 				<div className="App-container">
 					<div className="App-content">
-						<div className="tag-info-header">
-							<div className="tag-info-container">
-								<span className="tag-name">{tag.value}</span>
-								<Row gutter={16} className="stats-row">
-									<Col span={12}>
-										<Statistic title="Users" value={user_count} />
-									</Col>
-									<Col span={12}>
-										<Statistic title="Posts" value={post_count} />
-									</Col>
-								</Row>
+						<Spin spinning={loading}>
+							<div className="tag-info-header">
+								<div className="tag-info-container">
+									<span className="tag-name">{tag.value}</span>
+									<Row gutter={16} className="stats-row">
+										<Col span={12}>
+											<Statistic title="Users" value={user_count} />
+										</Col>
+										<Col span={12}>
+											<Statistic title="Posts" value={post_count} />
+										</Col>
+									</Row>
+								</div>
 							</div>
-						</div>
+						</Spin>
 
 						{campaignTag && (
 							<div>

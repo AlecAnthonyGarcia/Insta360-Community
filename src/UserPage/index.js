@@ -3,7 +3,7 @@ import './style.scss';
 
 import { Link } from 'react-router-dom';
 
-import { Avatar, Statistic, Row, Col, List } from 'antd';
+import { Spin, Statistic, Row, Col, List } from 'antd';
 
 import Header from '../Header/index.js';
 import UserAvatar from '../UserAvatar/index.js';
@@ -16,21 +16,35 @@ class UserPage extends React.Component {
 	state = {
 		user: {},
 		posts: [],
+		loading: true,
 		popularPosts: [],
 		isUserListModalOpen: false,
 		userListType: null
 	};
 
 	componentDidMount() {
+		this.loadUserData();
+	}
+
+	loadUserData() {
+		this.setState({ loading: true });
 		this.getUser();
 		this.getUserPosts();
 		this.getUserPopularPosts();
 	}
 
+	componentDidUpdate(prevProps) {
+		const { userId } = this.props.match.params;
+		const { userId: previousUserId } = prevProps.match.params;
+		if (userId !== previousUserId) {
+			this.loadUserData();
+		}
+	}
+
 	getUser = async () => {
 		const { userId } = this.props.match.params;
 		const response = await Api.getUser(userId);
-		this.setState({ user: response.data });
+		this.setState({ loading: false, user: response.data });
 	};
 
 	getUserPosts = async () => {
@@ -55,6 +69,7 @@ class UserPage extends React.Component {
 
 	render() {
 		const {
+			loading,
 			user,
 			posts,
 			popularPosts,
@@ -71,42 +86,44 @@ class UserPage extends React.Component {
 
 				<div className="App-container">
 					<div className="App-content">
-						<div className="user-info-header">
-							<UserAvatar size={64} src={avatar} className="user-avatar" />
+						<Spin spinning={loading}>
+							<div className="user-info-header">
+								<UserAvatar size={64} src={avatar} className="user-avatar" />
 
-							<div className="user-info-container">
-								<span className="user-nickname">{nickname}</span>
-								<Row gutter={16} className="stats-row">
-									<Col span={6}>
-										<Statistic title="Posts" value={public_post} />
-									</Col>
-									<Col
-										span={6}
-										onClick={() => this.showUserListModal('following')}
-									>
-										<Statistic
-											className="clickable"
-											title="Following"
-											value={follows}
-										/>
-									</Col>
-									<Col
-										span={6}
-										onClick={() => this.showUserListModal('followers')}
-									>
-										<Statistic
-											className="clickable"
-											title="Followers"
-											value={follower}
-										/>
-									</Col>
-									<Col span={6}>
-										<Statistic title="Likes" value={got_like} />
-									</Col>
-								</Row>
-								<p>{description}</p>
+								<div className="user-info-container">
+									<span className="user-nickname">{nickname}</span>
+									<Row gutter={16} className="stats-row">
+										<Col span={6}>
+											<Statistic title="Posts" value={public_post} />
+										</Col>
+										<Col
+											span={6}
+											onClick={() => this.showUserListModal('following')}
+										>
+											<Statistic
+												className="clickable"
+												title="Following"
+												value={follows}
+											/>
+										</Col>
+										<Col
+											span={6}
+											onClick={() => this.showUserListModal('followers')}
+										>
+											<Statistic
+												className="clickable"
+												title="Followers"
+												value={follower}
+											/>
+										</Col>
+										<Col span={6}>
+											<Statistic title="Likes" value={got_like} />
+										</Col>
+									</Row>
+									<p>{description}</p>
+								</div>
 							</div>
-						</div>
+						</Spin>
 
 						<List
 							grid={{

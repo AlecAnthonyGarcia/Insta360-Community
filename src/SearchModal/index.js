@@ -72,6 +72,10 @@ class SearchModal extends React.Component {
 		this.setState({ activeTabKey });
 	};
 
+	onListItemClick = () => {
+		this.onCancel();
+	};
+
 	onCancel = () => {
 		const { onClose } = this.props;
 
@@ -133,7 +137,7 @@ class SearchModal extends React.Component {
 							itemLayout="horizontal"
 							dataSource={tags}
 							renderItem={item => (
-								<Link to={`/tag/${item.value}`}>
+								<Link to={`/tag/${item.value}`} onClick={this.onListItemClick}>
 									<List.Item key={item.id}>
 										<List.Item.Meta
 											avatar={<Avatar icon="tag" />}
@@ -150,7 +154,7 @@ class SearchModal extends React.Component {
 							itemLayout="horizontal"
 							dataSource={users}
 							renderItem={item => (
-								<Link to={`/user/${item.id}`}>
+								<Link to={`/user/${item.id}`} onClick={this.onListItemClick}>
 									<List.Item key={item.id}>
 										<List.Item.Meta
 											avatar={<Avatar src={item.avatar} />}
