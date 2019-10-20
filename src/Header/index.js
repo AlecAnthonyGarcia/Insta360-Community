@@ -9,7 +9,7 @@ import logo from '../static/img/logo.png';
 import { Avatar, Col, Row, Tabs, Button, Menu, Dropdown, Icon } from 'antd';
 
 import { setCurrentTabKey } from '../HomePage/homeActions';
-import { logout } from '../LoginModal/loginActions';
+import { logout, setLoginModalVisibility } from '../LoginModal/loginActions';
 import LoginModal from '../LoginModal/index.js';
 import SearchModal from '../SearchModal/index.js';
 
@@ -17,8 +17,7 @@ const { TabPane } = Tabs;
 
 class Header extends React.Component {
 	state = {
-		isSearchModalOpen: false,
-		isLoginModalOpen: false
+		isSearchModalOpen: false
 	};
 
 	onSearchButtonClick = () => {
@@ -30,11 +29,13 @@ class Header extends React.Component {
 	};
 
 	onLoginButtonClick = () => {
-		this.setState({ isLoginModalOpen: true });
+		const { setLoginModalVisibility } = this.props;
+		setLoginModalVisibility(true);
 	};
 
 	onLoginModalClose = () => {
-		this.setState({ isLoginModalOpen: false });
+		const { setLoginModalVisibility } = this.props;
+		setLoginModalVisibility(false);
 	};
 
 	onTabChange = activeTabKey => {
@@ -43,9 +44,9 @@ class Header extends React.Component {
 	};
 
 	render() {
-		const { location, auth, user, logout } = this.props;
+		const { location, auth, user, logout, isLoginModalOpen } = this.props;
 		const { pathname } = location;
-		const { isSearchModalOpen, isLoginModalOpen } = this.state;
+		const { isSearchModalOpen } = this.state;
 		const { avatar } = user;
 
 		const headerMenu = (
@@ -129,16 +130,17 @@ class Header extends React.Component {
 
 function mapStateToProps(state) {
 	const { loginReducer } = state;
-	const { isAuthenticated, user } = loginReducer;
+	const { isAuthenticated, isLoginModalOpen, user } = loginReducer;
 	return {
 		auth: isAuthenticated,
-		user
+		user,
+		isLoginModalOpen
 	};
 }
 
 export default withRouter(
 	connect(
 		mapStateToProps,
-		{ logout, setCurrentTabKey }
+		{ logout, setCurrentTabKey, setLoginModalVisibility }
 	)(Header)
 );

@@ -4,6 +4,7 @@ import md5 from 'blueimp-md5';
 import Api from '../utils/Api';
 
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
+export const SET_LOGIN_MODAL_VISIBILITY = 'SET_LOGIN_MODAL_VISIBILITY';
 
 export function setAuthorizationToken(token) {
 	if (token) {
@@ -44,5 +45,12 @@ export function setCurrentUser(user) {
 	return {
 		type: SET_CURRENT_USER,
 		user
+	};
+}
+
+export function setLoginModalVisibility(visible) {
+	return {
+		type: SET_LOGIN_MODAL_VISIBILITY,
+		visible
 	};
 }

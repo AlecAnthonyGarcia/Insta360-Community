@@ -5,6 +5,7 @@ import PlayIcon from '../static/img/icon_play.png';
 import Pano360ImageIcon from '../static/img/icon_360_pano_image.png';
 import Pano360VideoIcon from '../static/img/icon_360_pano_video.png';
 
+import { setLoginModalVisibility } from '../LoginModal/loginActions';
 import {
 	followUser,
 	unfollowUser,
@@ -48,25 +49,47 @@ class FeedCard extends React.Component {
 	};
 
 	onFollowButtonClick = async userId => {
-		const { post, parent, followUser, unfollowUser } = this.props;
+		const {
+			auth,
+			post,
+			parent,
+			followUser,
+			unfollowUser,
+			setLoginModalVisibility
+		} = this.props;
 		const { account } = post;
 		const { followed } = account;
 
-		if (followed) {
-			unfollowUser(userId, parent);
+		if (auth) {
+			if (followed) {
+				unfollowUser(userId, parent);
+			} else {
+				followUser(userId, parent);
+			}
 		} else {
-			followUser(userId, parent);
+			setLoginModalVisibility(true);
 		}
 	};
 
 	onLikeButtonClick = async () => {
-		const { post, parent, likePost, unlikePost } = this.props;
+		const {
+			auth,
+			post,
+			parent,
+			likePost,
+			unlikePost,
+			setLoginModalVisibility
+		} = this.props;
 		const { id, like } = post;
 
-		if (like) {
-			unlikePost(id, parent);
+		if (auth) {
+			if (like) {
+				unlikePost(id, parent);
+			} else {
+				likePost(id, parent);
+			}
 		} else {
-			likePost(id, parent);
+			setLoginModalVisibility(true);
 		}
 	};
 
@@ -297,7 +320,15 @@ class FeedCard extends React.Component {
 	}
 }
 
+function mapStateToProps(state) {
+	const { loginReducer } = state;
+	const { isAuthenticated } = loginReducer;
+	return {
+		auth: isAuthenticated
+	};
+}
+
 export default connect(
-	null,
-	{ followUser, unfollowUser, likePost, unlikePost }
+	mapStateToProps,
+	{ followUser, unfollowUser, likePost, unlikePost, setLoginModalVisibility }
 )(FeedCard);
