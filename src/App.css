@@ -18,3 +18,10 @@
 .App-link {
 	color: #09d3ac;
 }
+
+.loading-container {
+	position: absolute;
+	bottom: 40px;
+	width: 100%;
+	text-align: center;
+}

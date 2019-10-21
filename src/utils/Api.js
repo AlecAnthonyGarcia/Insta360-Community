@@ -68,18 +68,21 @@ async function getFeaturedPosts(postIdCursor) {
 	const pageSize = 20;
 	let url = `${BASE_API}community/content/feature?page_size=${pageSize}`;
 	if (postIdCursor) {
-		url = `${url}?post_id=${postIdCursor}`;
+		url = `${url}&post_id=${postIdCursor}`;
 	}
 	const response = await axios.get(url);
 	const { data } = response;
 	return data;
 }
 
-async function getRecentPosts(postIdCursor) {
+async function getRecentPosts(postIdCursor, queue) {
 	const pageSize = 20;
+	const queueIndex = 1;
 	let url = `${COMMUNITY_API}content/recent?page_size=${pageSize}`;
 	if (postIdCursor) {
-		url = `${url}?post_id=${postIdCursor}`;
+		url = `${url}&post_id=${postIdCursor}&queue=${queue}`;
+	} else {
+		url = `${url}&queue_index=${queueIndex}`;
 	}
 	const response = await axios.get(url);
 	const { data } = response;

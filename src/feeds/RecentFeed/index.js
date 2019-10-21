@@ -3,7 +3,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { getRecentPosts } from '../../HomePage/homeActions.js';
-import { Spin } from 'antd';
+
+import { List, Spin } from 'antd';
+
+import InfiniteScroll from 'react-infinite-scroller';
 
 import FeedCard from '../../FeedCard/index.js';
 
@@ -11,36 +14,70 @@ import { FEED_CARD_PARENTS } from '../../utils/Constants.js';
 
 class RecentFeed extends React.Component {
 	state = {
-		loading: true
+		isFirstLoad: true,
+		loading: true,
+		hasMore: true
 	};
 
 	componentDidMount() {
-		const { getRecentPosts } = this.props;
-		getRecentPosts();
+		this.getRecentPosts();
+	}
+
+	getRecentPosts() {
+		const { getRecentPosts, recentPostsResponse } = this.props;
+		const { postIdCursor, queue } = recentPostsResponse;
+		getRecentPosts(postIdCursor, queue);
 	}
 
 	componentDidUpdate(prevProps) {
-		const { recentPosts } = this.props;
-		if (prevProps.recentPosts !== recentPosts) {
-			this.setState({ loading: false });
+		const { recentPostsResponse } = this.props;
+		if (prevProps.recentPostsResponse !== recentPostsResponse) {
+			const { shares: recentPosts } = recentPostsResponse;
+			this.setState({
+				loading: false,
+				isFirstLoad: false,
+				hasMore: recentPosts && recentPosts.length > 0
+			});
 		}
 	}
 
+	onLoadMore = () => {
+		this.setState({ loading: true });
+		this.getRecentPosts();
+	};
+
 	render() {
-		const { recentPosts } = this.props;
-		const { loading } = this.state;
+		const { recentPostsResponse } = this.props;
+		const { shares: recentPosts } = recentPostsResponse;
+		const { isFirstLoad, loading, hasMore } = this.state;
 
 		return (
 			<div>
-				<Spin spinning={loading}>
-					{recentPosts.map(post => (
-						<FeedCard
-							key={post.id}
-							post={post}
-							parent={FEED_CARD_PARENTS.RECENT}
-						/>
-					))}
-				</Spin>
+				<InfiniteScroll
+					initialLoad={false}
+					pageStart={0}
+					loadMore={this.onLoadMore}
+					hasMore={!loading && hasMore}
+					useWindow={true}
+				>
+					<List
+						dataSource={recentPosts}
+						loading={loading}
+						renderItem={item => (
+							<FeedCard
+								key={item.id}
+								post={item}
+								parent={FEED_CARD_PARENTS.RECENT}
+							/>
+						)}
+					>
+						{loading && !isFirstLoad && hasMore && (
+							<div className="loading-container">
+								<Spin />
+							</div>
+						)}
+					</List>
+				</InfiniteScroll>
 			</div>
 		);
 	}
@@ -48,9 +85,9 @@ class RecentFeed extends React.Component {
 
 function mapStateToProps(state) {
 	const { homeReducer } = state;
-	const { recentPosts } = homeReducer;
+	const { recentPostsResponse } = homeReducer;
 	return {
-		recentPosts
+		recentPostsResponse
 	};
 }
 

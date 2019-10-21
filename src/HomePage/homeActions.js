@@ -2,8 +2,8 @@ import Api from '../utils/Api';
 
 export const SET_CURRENT_TAB_KEY = 'SET_CURRENT_TAB_KEY';
 export const SET_TIMELINE_POSTS = 'SET_TIMELINE_POSTS';
-export const SET_FEATURED_POSTS = 'SET_FEATURED_POSTS';
-export const SET_RECENT_POSTS = 'SET_RECENT_POSTS';
+export const SET_FEATURED_POSTS_RESPONSE = 'SET_FEATURED_POSTS_RESPONSE';
+export const SET_RECENT_POSTS_RESPONSE = 'SET_RECENT_POSTS_RESPONSE';
 export const SET_LIKE_COUNT = 'SET_LIKE_COUNT';
 export const SET_FOLLOWED = 'SET_FOLLOWED';
 
@@ -21,29 +21,25 @@ export function getTimelinePosts() {
 	};
 }
 
-export function getFeaturedPosts() {
+export function getFeaturedPosts(postIdCursor) {
 	return async dispatch => {
-		const response = await Api.getFeaturedPosts();
+		const response = await Api.getFeaturedPosts(postIdCursor);
 
-		const {
-			data: { shares }
-		} = response;
+		const { data } = response;
 
-		dispatch(setFeaturedPosts(shares));
+		dispatch(setFeaturedPostsResponse(data));
 
 		return response;
 	};
 }
 
-export function getRecentPosts() {
+export function getRecentPosts(postIdCursor, queue) {
 	return async dispatch => {
-		const response = await Api.getRecentPosts();
+		const response = await Api.getRecentPosts(postIdCursor, queue);
 
-		const {
-			data: { shares }
-		} = response;
+		const { data } = response;
 
-		dispatch(setRecentPosts(shares));
+		dispatch(setRecentPostsResponse(data));
 
 		return response;
 	};
@@ -111,17 +107,17 @@ export function setTimelinePosts(posts) {
 	};
 }
 
-export function setFeaturedPosts(posts) {
+export function setFeaturedPostsResponse(response) {
 	return {
-		type: SET_FEATURED_POSTS,
-		posts
+		type: SET_FEATURED_POSTS_RESPONSE,
+		response
 	};
 }
 
-export function setRecentPosts(posts) {
+export function setRecentPostsResponse(response) {
 	return {
-		type: SET_RECENT_POSTS,
-		posts
+		type: SET_RECENT_POSTS_RESPONSE,
+		response
 	};
 }
 
