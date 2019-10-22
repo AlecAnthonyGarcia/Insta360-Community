@@ -1,9 +1,13 @@
-import { SET_CURRENT_USER } from './loginActions';
-import { SET_LOGIN_MODAL_VISIBILITY } from './loginActions';
+import { SET_CURRENT_USER } from './authActions';
+import {
+	SET_LOGIN_MODAL_VISIBILITY,
+	SET_SIGNUP_MODAL_VISIBILITY
+} from './authActions';
 
 const DEFAULT_STATE = {
 	isAuthenticated: false,
 	isLoginModalOpen: false,
+	isSignupModalOpen: false,
 	user: {}
 };
 
@@ -19,6 +23,11 @@ export default (state = DEFAULT_STATE, action) => {
 			return {
 				...state,
 				isLoginModalOpen: action.visible
+			};
+		case SET_SIGNUP_MODAL_VISIBILITY:
+			return {
+				...state,
+				isSignupModalOpen: action.visible
 			};
 		default:
 			return state;

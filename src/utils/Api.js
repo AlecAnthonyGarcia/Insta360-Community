@@ -22,6 +22,25 @@ async function login(email, password) {
 	return data;
 }
 
+async function signup(email, password) {
+	const response = await axios({
+		method: 'POST',
+		url: `${ACCOUNT_API}signup`,
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json'
+		},
+		data: JSON.stringify({
+			username: email,
+			password,
+			source: 'account_center',
+			subscribed: false
+		})
+	});
+	const { data } = response;
+	return data;
+}
+
 async function getUser(userId) {
 	const response = await axios.get(
 		`${ACCOUNT_API}getProfile?user_id=${userId}`
@@ -214,6 +233,7 @@ async function unlikePost(postId) {
 
 const Api = {
 	login,
+	signup,
 	getUser,
 	getUserPosts,
 	getUserPopularPosts,

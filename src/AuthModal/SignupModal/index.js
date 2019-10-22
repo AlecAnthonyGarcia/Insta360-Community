@@ -1,11 +1,11 @@
 import React from 'react';
 
 import { connect } from 'react-redux';
-import { login } from './loginActions';
+import { signup } from '../authActions';
 
 import { Modal, Form, Input, Button, Icon, Alert } from 'antd';
 
-class LoginModal extends React.Component {
+class SignupModal extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = this.getInitialState();
@@ -19,7 +19,7 @@ class LoginModal extends React.Component {
 	};
 
 	handleSubmit = e => {
-		const { form, login } = this.props;
+		const { form, signup } = this.props;
 
 		e.preventDefault();
 
@@ -27,7 +27,7 @@ class LoginModal extends React.Component {
 			if (!err) {
 				this.setState({ loading: true });
 
-				login(values).then(response => {
+				signup(values).then(response => {
 					const { error, code } = response;
 
 					if (!error) {
@@ -43,18 +43,9 @@ class LoginModal extends React.Component {
 
 	handleError = code => {
 		switch (code) {
-			case 1001:
+			case 1000:
 				this.setState({
-					errorMessageText: "The account doesn't exist."
-				});
-				break;
-			case 1002:
-				this.setState({ errorMessageText: 'Incorrect password' });
-				break;
-			case 1008:
-			case 1009:
-				this.setState({
-					errorMessageText: 'This account is already bound'
+					errorMessageText: 'The email was used.'
 				});
 				break;
 			default:
@@ -90,7 +81,7 @@ class LoginModal extends React.Component {
 		return (
 			<Modal
 				visible={isOpen}
-				title="Welcome"
+				title="Register"
 				centered
 				footer={null}
 				onCancel={this.onCancel}
@@ -152,12 +143,11 @@ class LoginModal extends React.Component {
 					<Form.Item style={{ textAlign: 'center' }}>
 						<Button
 							size="large"
-							className="next-button"
 							type="primary"
 							htmlType="submit"
 							loading={loading}
 						>
-							Login
+							Register
 						</Button>
 					</Form.Item>
 				</Form>
@@ -166,14 +156,9 @@ class LoginModal extends React.Component {
 	}
 }
 
-const WrappedForm = Form.create({ name: 'login' })(LoginModal);
+const WrappedForm = Form.create({ name: 'signup' })(SignupModal);
 
 export default connect(
 	null,
-	{ login }
+	{ signup }
 )(WrappedForm);
-
-// export default connect(
-// 	null,
-// 	{ login }
-// )(LoginModal);

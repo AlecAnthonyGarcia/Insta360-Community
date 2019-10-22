@@ -5,7 +5,7 @@ import PlayIcon from '../static/img/icon_play.png';
 import Pano360ImageIcon from '../static/img/icon_360_pano_image.png';
 import Pano360VideoIcon from '../static/img/icon_360_pano_video.png';
 
-import { setLoginModalVisibility } from '../LoginModal/loginActions';
+import { setLoginModalVisibility } from '../AuthModal/authActions';
 import {
 	followUser,
 	unfollowUser,
@@ -321,8 +321,8 @@ class FeedCard extends React.Component {
 }
 
 function mapStateToProps(state) {
-	const { loginReducer } = state;
-	const { isAuthenticated } = loginReducer;
+	const { authReducer } = state;
+	const { isAuthenticated } = authReducer;
 	return {
 		auth: isAuthenticated
 	};

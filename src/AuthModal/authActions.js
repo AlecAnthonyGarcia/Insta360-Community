@@ -5,6 +5,7 @@ import Api from '../utils/Api';
 
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 export const SET_LOGIN_MODAL_VISIBILITY = 'SET_LOGIN_MODAL_VISIBILITY';
+export const SET_SIGNUP_MODAL_VISIBILITY = 'SET_SIGNUP_MODAL_VISIBILITY';
 
 export function setAuthorizationToken(token) {
 	if (token) {
@@ -17,6 +18,24 @@ export function setAuthorizationToken(token) {
 export function login({ email, password }) {
 	return async dispatch => {
 		const response = await Api.login(email, md5(password));
+
+		const { data, error } = response;
+		const { token, account } = data || {};
+
+		if (!error) {
+			localStorage.setItem('user', JSON.stringify(account));
+			localStorage.setItem('jwtToken', token);
+			setAuthorizationToken(token);
+			dispatch(setCurrentUser(account));
+		}
+
+		return response;
+	};
+}
+
+export function signup({ email, password }) {
+	return async dispatch => {
+		const response = await Api.signup(email, md5(password));
 
 		const { data, error } = response;
 		const { token, account } = data || {};
@@ -51,6 +70,13 @@ export function setCurrentUser(user) {
 export function setLoginModalVisibility(visible) {
 	return {
 		type: SET_LOGIN_MODAL_VISIBILITY,
+		visible
+	};
+}
+
+export function setSignupModalVisibility(visible) {
+	return {
+		type: SET_SIGNUP_MODAL_VISIBILITY,
 		visible
 	};
 }
