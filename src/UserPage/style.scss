@@ -13,6 +13,11 @@
 	flex: 1;
 	margin-left: 20px;
 
+	.user-nickname-container {
+		display: flex;
+		justify-content: space-between;
+	}
+
 	.user-nickname {
 		font-size: 20px;
 		font-weight: bold;

@@ -1,10 +1,15 @@
 import React from 'react';
 import './style.scss';
 
+import { setFollowsMap } from '../HomePage/homeActions';
+
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+
 import { Modal, Input, Tabs, List, Avatar } from 'antd';
 
 import Api from '../utils/Api';
+import FollowButton from '../FollowButton';
 
 const { Search } = Input;
 const { TabPane } = Tabs;
@@ -52,7 +57,13 @@ class SearchModal extends React.Component {
 
 	searchUsers = async query => {
 		const response = await Api.searchUsers(query);
-		this.setState({ users: response.data.accounts });
+		const {
+			data: { accounts: users }
+		} = response;
+
+		setFollowsMap(users);
+
+		this.setState({ users });
 	};
 
 	onSearch = query => {
@@ -161,6 +172,8 @@ class SearchModal extends React.Component {
 											title={item.nickname}
 											description={`${item.counts.public_post} posts ${item.counts.follower} followers`}
 										/>
+
+										<FollowButton userId={item.id} />
 									</List.Item>
 								</Link>
 							)}
@@ -172,4 +185,7 @@ class SearchModal extends React.Component {
 	}
 }
 
-export default SearchModal;
+export default connect(
+	null,
+	{ setFollowsMap }
+)(SearchModal);

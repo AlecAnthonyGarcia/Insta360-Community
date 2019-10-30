@@ -23,6 +23,8 @@ import CommentListModal from '../CommentListModal/index.js';
 import PanoModal from '../PanoModal/index.js';
 
 import { is360Pano, isVideo } from '../utils/Utils.js';
+import { FEED_CARD_PARENTS } from '../utils/Constants.js';
+import FollowButton from '../FollowButton';
 
 class FeedCard extends React.Component {
 	state = {
@@ -45,29 +47,6 @@ class FeedCard extends React.Component {
 			if (isVideo(type)) {
 				this.setState({ isVideoLoaded: true });
 			}
-		}
-	};
-
-	onFollowButtonClick = async userId => {
-		const {
-			auth,
-			post,
-			parent,
-			followUser,
-			unfollowUser,
-			setLoginModalVisibility
-		} = this.props;
-		const { account } = post;
-		const { followed } = account;
-
-		if (auth) {
-			if (followed) {
-				unfollowUser(userId, parent);
-			} else {
-				followUser(userId, parent);
-			}
-		} else {
-			setLoginModalVisibility(true);
 		}
 	};
 
@@ -130,7 +109,7 @@ class FeedCard extends React.Component {
 			isPanoLoading,
 			isVideoLoaded
 		} = this.state;
-		const { post } = this.props || {};
+		const { post, parent, followsMap } = this.props || {};
 
 		const {
 			account,
@@ -149,7 +128,9 @@ class FeedCard extends React.Component {
 		} = post;
 
 		const { app_urls: { source } = {}, create_time } = works[0] || {};
-		const { id, avatar, followed, nickname } = account || {};
+		const { id: userId, avatar, nickname } = account || {};
+
+		const followed = followsMap[userId];
 
 		return (
 			<React.Fragment>
@@ -159,12 +140,12 @@ class FeedCard extends React.Component {
 						<List.Item.Meta
 							avatar={
 								avatar && avatar.length > 0 ? (
-									<Link to={`/user/${id}`}>
+									<Link to={`/user/${userId}`}>
 										<Avatar src={avatar} />
 									</Link>
 								) : null
 							}
-							title={<Link to={`/user/${id}`}>{nickname}</Link>}
+							title={<Link to={`/user/${userId}`}>{nickname}</Link>}
 							description={
 								<span>
 									<img
@@ -174,15 +155,9 @@ class FeedCard extends React.Component {
 									/>
 									<span>{location.en}</span>
 
-									<Button
-										className="follow-button"
-										type={followed ? 'link' : 'primary'}
-										shape="round"
-										icon={followed ? 'check-circle' : 'user-add'}
-										onClick={() => this.onFollowButtonClick(id)}
-									>
-										{followed ? 'Following' : 'Follow'}
-									</Button>
+									{parent !== FEED_CARD_PARENTS.TIMELINE && (
+										<FollowButton userId={userId} />
+									)}
 								</span>
 							}
 						/>
@@ -283,7 +258,9 @@ class FeedCard extends React.Component {
 								comments.map(comment => (
 									<p key={comment.id}>
 										<span>
-											<Link to={`/user/${id}`}>{comment.account.nickname}</Link>
+											<Link to={`/user/${comment.account.id}`}>
+												{comment.account.nickname}
+											</Link>
 										</span>{' '}
 										<span>{comment.content}</span>
 									</p>
@@ -321,10 +298,12 @@ class FeedCard extends React.Component {
 }
 
 function mapStateToProps(state) {
-	const { authReducer } = state;
+	const { authReducer, homeReducer } = state;
 	const { isAuthenticated } = authReducer;
+	const { followsMap } = homeReducer;
 	return {
-		auth: isAuthenticated
+		auth: isAuthenticated,
+		followsMap
 	};
 }
 

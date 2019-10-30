@@ -1,7 +1,14 @@
 import React from 'react';
 import './style.scss';
 
+import {
+	setFollowed,
+	setFollowsMap,
+	extractAccountsFromPosts
+} from '../HomePage/homeActions';
+
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import { Spin, Statistic, Row, Col, List } from 'antd';
 
@@ -11,6 +18,7 @@ import FeedCard from '../FeedCard/index.js';
 import UserListModal from '../UserListModal/index.js';
 
 import Api from '../utils/Api';
+import FollowButton from '../FollowButton';
 
 class UserPage extends React.Component {
 	state = {
@@ -42,21 +50,53 @@ class UserPage extends React.Component {
 	}
 
 	getUser = async () => {
-		const { userId } = this.props.match.params;
+		const {
+			match: { params },
+			setFollowed
+		} = this.props;
+		const { userId } = params;
+
 		const response = await Api.getUser(userId);
-		this.setState({ loading: false, user: response.data });
+
+		const { data: user } = response;
+		const { account } = user;
+		const { followed } = account;
+
+		setFollowed(userId, followed);
+
+		this.setState({ loading: false, user });
 	};
 
 	getUserPosts = async () => {
-		const { userId } = this.props.match.params;
+		const {
+			match: { params },
+			setFollowsMap
+		} = this.props;
+		const { userId } = params;
+
 		const response = await Api.getUserPosts(userId, 1);
-		this.setState({ posts: response.data.list });
+		const { data } = response;
+		const { list: posts } = data;
+
+		setFollowsMap(extractAccountsFromPosts(posts));
+
+		this.setState({ posts });
 	};
 
 	getUserPopularPosts = async () => {
-		const { userId } = this.props.match.params;
+		const {
+			match: { params },
+			setFollowsMap
+		} = this.props;
+		const { userId } = params;
+
 		const response = await Api.getUserPopularPosts(userId);
-		this.setState({ popularPosts: response.data.list });
+		const { data } = response;
+		const { list: popularPosts } = data;
+
+		setFollowsMap(extractAccountsFromPosts(popularPosts));
+
+		this.setState({ popularPosts });
 	};
 
 	showUserListModal = type => {
@@ -91,7 +131,11 @@ class UserPage extends React.Component {
 								<UserAvatar size={64} src={avatar} className="user-avatar" />
 
 								<div className="user-info-container">
-									<span className="user-nickname">{nickname}</span>
+									<div className="user-nickname-container">
+										<span className="user-nickname">{nickname}</span>
+										<FollowButton userId={userId} />
+									</div>
+
 									<Row gutter={16} className="stats-row">
 										<Col span={6}>
 											<Statistic title="Posts" value={public_post} />
@@ -172,4 +216,7 @@ class UserPage extends React.Component {
 	}
 }
 
-export default UserPage;
+export default connect(
+	null,
+	{ setFollowed, setFollowsMap, extractAccountsFromPosts }
+)(UserPage);
