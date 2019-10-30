@@ -4,7 +4,9 @@ import {
 	SET_FEATURED_POSTS_RESPONSE,
 	SET_RECENT_POSTS_RESPONSE,
 	SET_LIKE_COUNT,
-	SET_FOLLOWED
+	SET_FOLLOWED,
+	SET_FOLLOWS_MAP,
+	SET_LIKES_MAP
 } from './homeActions';
 
 import { FEED_CARD_PARENTS } from '../utils/Constants';
@@ -17,7 +19,9 @@ const DEFAULT_STATE = {
 	},
 	recentPostsResponse: {
 		shares: []
-	}
+	},
+	likesMap: {},
+	followsMap: {}
 };
 
 export default (state = DEFAULT_STATE, action) => {
@@ -68,62 +72,50 @@ export default (state = DEFAULT_STATE, action) => {
 			};
 		}
 		case SET_LIKE_COUNT: {
-			const { postId, count, like, parent } = action.payload;
-
-			let posts;
-			let stateKey;
-
-			switch (parent) {
-				case FEED_CARD_PARENTS.FEATURED:
-					stateKey = 'featuredPosts';
-					posts = state[stateKey];
-					break;
-				case FEED_CARD_PARENTS.RECENT:
-					stateKey = 'recentPosts';
-					posts = state[stateKey];
-					break;
-				default:
-			}
+			const { postId, count: likeCount, like } = action.payload;
 
 			return {
 				...state,
-				[stateKey]: posts.map(post => {
-					if (post.id === postId) {
-						return { ...post, like_count: count, like };
+				likesMap: {
+					[postId]: {
+						like,
+						likeCount
 					}
-					return post;
-				})
+				}
+			};
+		}
+		case SET_FOLLOWS_MAP: {
+			const { followsMap } = state;
+			const { followsMap: newFollowsMap } = action.payload;
+
+			return {
+				...state,
+				followsMap: {
+					...followsMap,
+					...newFollowsMap
+				}
 			};
 		}
 		case SET_FOLLOWED: {
-			const { userId, followed, parent } = action.payload;
-
-			let posts;
-			let stateKey;
-
-			switch (parent) {
-				case FEED_CARD_PARENTS.FEATURED:
-					stateKey = 'featuredPosts';
-					posts = state[stateKey];
-					break;
-				case FEED_CARD_PARENTS.RECENT:
-					stateKey = 'recentPosts';
-					posts = state[stateKey];
-					break;
-				default:
-			}
+			const { userId, followed } = action.payload;
 
 			return {
 				...state,
-				[stateKey]: posts.map(post => {
-					const { account } = post;
-					const { id } = account;
+				followsMap: {
+					[userId]: followed
+				}
+			};
+		}
+		case SET_LIKES_MAP: {
+			const { likesMap } = state;
+			const { likesMap: newLikesMap } = action.payload;
 
-					if (id === userId) {
-						return { ...post, account: { ...account, followed } };
-					}
-					return post;
-				})
+			return {
+				...state,
+				likesMap: {
+					...likesMap,
+					...newLikesMap
+				}
 			};
 		}
 		default:
