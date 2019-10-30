@@ -54,18 +54,20 @@ class FeedCard extends React.Component {
 		const {
 			auth,
 			post,
-			parent,
+			likesMap,
 			likePost,
 			unlikePost,
 			setLoginModalVisibility
 		} = this.props;
-		const { id, like } = post;
+		const { id: postId } = post;
+
+		const { like } = likesMap[postId] || {};
 
 		if (auth) {
 			if (like) {
-				unlikePost(id, parent);
+				unlikePost(postId);
 			} else {
-				likePost(id, parent);
+				likePost(postId);
 			}
 		} else {
 			setLoginModalVisibility(true);
@@ -109,7 +111,7 @@ class FeedCard extends React.Component {
 			isPanoLoading,
 			isVideoLoaded
 		} = this.state;
-		const { post, parent, followsMap } = this.props || {};
+		const { post, parent, followsMap, likesMap } = this.props || {};
 
 		const {
 			account,
@@ -119,8 +121,6 @@ class FeedCard extends React.Component {
 			app_thumb,
 			comments,
 			comment_count,
-			like,
-			like_count,
 			type,
 			works = [],
 			share_source_icon,
@@ -131,6 +131,7 @@ class FeedCard extends React.Component {
 		const { id: userId, avatar, nickname } = account || {};
 
 		const followed = followsMap[userId];
+		const { like, likeCount } = likesMap[postId] || {};
 
 		return (
 			<React.Fragment>
@@ -214,7 +215,7 @@ class FeedCard extends React.Component {
 								icon="like"
 								onClick={this.onLikeButtonClick}
 							>
-								<span>{like_count}</span>
+								<span>{likeCount}</span>
 							</Button>
 
 							<Button
@@ -300,10 +301,11 @@ class FeedCard extends React.Component {
 function mapStateToProps(state) {
 	const { authReducer, homeReducer } = state;
 	const { isAuthenticated } = authReducer;
-	const { followsMap } = homeReducer;
+	const { followsMap, likesMap } = homeReducer;
 	return {
 		auth: isAuthenticated,
-		followsMap
+		followsMap,
+		likesMap
 	};
 }
 
