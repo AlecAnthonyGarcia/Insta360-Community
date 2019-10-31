@@ -4,6 +4,7 @@ import './style.scss';
 import {
 	setFollowed,
 	setFollowsMap,
+	setLikesMap,
 	extractAccountsFromPosts
 } from '../HomePage/homeActions';
 
@@ -70,7 +71,8 @@ class UserPage extends React.Component {
 	getUserPosts = async () => {
 		const {
 			match: { params },
-			setFollowsMap
+			setFollowsMap,
+			setLikesMap
 		} = this.props;
 		const { userId } = params;
 
@@ -79,6 +81,7 @@ class UserPage extends React.Component {
 		const { list: posts } = data;
 
 		setFollowsMap(extractAccountsFromPosts(posts));
+		setLikesMap({ shares: posts });
 
 		this.setState({ posts });
 	};
@@ -218,5 +221,5 @@ class UserPage extends React.Component {
 
 export default connect(
 	null,
-	{ setFollowed, setFollowsMap, extractAccountsFromPosts }
+	{ setFollowed, setFollowsMap, setLikesMap, extractAccountsFromPosts }
 )(UserPage);
