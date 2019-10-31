@@ -5,7 +5,8 @@ import {
 	ACCOUNT_API,
 	COMMUNITY_API,
 	FOLLOW_API,
-	SHARE_API
+	SHARE_API,
+	NOTICE_API
 } from './Constants';
 
 async function login(email, password) {
@@ -231,6 +232,37 @@ async function unlikePost(postId) {
 	return data;
 }
 
+async function getNotifications(timestamp) {
+	const pageSize = 20;
+	let url = `${NOTICE_API}listUserNotice?page_size=${pageSize}`;
+	if (timestamp) {
+		url = `${url}&timestamp=${timestamp}`;
+	}
+	const response = await axios.get(url);
+	const { data } = response;
+	return data;
+}
+
+async function getUnreadNotificationsCount() {
+	const response = await axios.get(`${NOTICE_API}getUnreadCount`);
+	const { data } = response;
+	return data;
+}
+
+async function setNotificationsRead() {
+	const response = await axios({
+		method: 'POST',
+		url: `${NOTICE_API}setRead`,
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json'
+		},
+		data: JSON.stringify({ notice_ids: 'all' })
+	});
+	const { data } = response;
+	return data;
+}
+
 const Api = {
 	login,
 	signup,
@@ -254,7 +286,10 @@ const Api = {
 	getFollowing,
 	getFollowers,
 	likePost,
-	unlikePost
+	unlikePost,
+	getNotifications,
+	getUnreadNotificationsCount,
+	setNotificationsRead
 };
 
 export default Api;

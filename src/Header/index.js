@@ -6,7 +6,17 @@ import { connect } from 'react-redux';
 
 import logo from '../static/img/logo.png';
 
-import { Avatar, Col, Row, Tabs, Button, Menu, Dropdown, Icon } from 'antd';
+import {
+	Avatar,
+	Col,
+	Row,
+	Tabs,
+	Button,
+	Menu,
+	Dropdown,
+	Icon,
+	Badge
+} from 'antd';
 
 import { setCurrentTabKey } from '../HomePage/homeActions';
 import {
@@ -17,12 +27,28 @@ import {
 import LoginModal from '../AuthModal/LoginModal/index.js';
 import SearchModal from '../SearchModal/index.js';
 import SignupModal from '../AuthModal/SignupModal';
+import NotificationListModal from '../NotificationListModal';
+
+import Api from '../utils/Api';
 
 const { TabPane } = Tabs;
 
 class Header extends React.Component {
 	state = {
-		isSearchModalOpen: false
+		isSearchModalOpen: false,
+		isNotificationsModalOpen: false,
+		unreadNotificationsCount: 0
+	};
+
+	componentDidMount() {
+		this.getUnreadNotificationsCount();
+	}
+
+	getUnreadNotificationsCount = async () => {
+		const response = await Api.getUnreadNotificationsCount();
+		const { data } = response;
+		const { count: unreadNotificationsCount } = data;
+		this.setState({ unreadNotificationsCount });
 	};
 
 	onSearchButtonClick = () => {
@@ -31,6 +57,18 @@ class Header extends React.Component {
 
 	onSearchModalClose = () => {
 		this.setState({ isSearchModalOpen: false });
+	};
+
+	onNotificationsButtonClick = () => {
+		Api.setNotificationsRead();
+		this.setState({
+			isNotificationsModalOpen: true,
+			unreadNotificationsCount: 0
+		});
+	};
+
+	onNotificationsModalClose = () => {
+		this.setState({ isNotificationsModalOpen: false });
 	};
 
 	onLoginButtonClick = () => {
@@ -68,7 +106,11 @@ class Header extends React.Component {
 			isSignupModalOpen
 		} = this.props;
 		const { pathname } = location;
-		const { isSearchModalOpen } = this.state;
+		const {
+			isSearchModalOpen,
+			isNotificationsModalOpen,
+			unreadNotificationsCount
+		} = this.state;
 		const { avatar } = user;
 
 		const headerMenu = (
@@ -113,10 +155,19 @@ class Header extends React.Component {
 
 						<Col span={8} className="header-actions-container">
 							<Button
+								className="header-search-button"
 								shape="circle"
 								icon="search"
 								onClick={this.onSearchButtonClick}
 							/>
+
+							<Badge count={unreadNotificationsCount}>
+								<Button
+									shape="circle"
+									icon="bell"
+									onClick={this.onNotificationsButtonClick}
+								/>
+							</Badge>
 
 							{auth ? (
 								<Dropdown overlay={headerMenu} trigger={['click']}>
@@ -147,6 +198,13 @@ class Header extends React.Component {
 					isOpen={isSearchModalOpen}
 					onClose={this.onSearchModalClose}
 				/>
+
+				{isNotificationsModalOpen && (
+					<NotificationListModal
+						title="Notifications"
+						onClose={this.onNotificationsModalClose}
+					/>
+				)}
 
 				{!auth && (
 					<LoginModal

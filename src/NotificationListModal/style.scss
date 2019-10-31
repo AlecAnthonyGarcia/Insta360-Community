@@ -1,0 +1,15 @@
+.notification-list-modal {
+	.ant-modal-body {
+		height: 50vh;
+		overflow-y: auto;
+		padding-top: 5px;
+	}
+
+	.notification-timestamp {
+		font-size: 10px;
+	}
+
+	.notification-post-thumbnail {
+		height: 60px;
+	}
+}
