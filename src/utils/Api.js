@@ -73,11 +73,11 @@ async function getPost(postId) {
 	return data;
 }
 
-async function getTimelinePosts(postIdCursor) {
+async function getTimelinePosts(lastTimestamp) {
 	const pageSize = 20;
 	let url = `${COMMUNITY_API}timeline?page_size=${pageSize}`;
-	if (postIdCursor) {
-		url = `${url}?post_id=${postIdCursor}`;
+	if (lastTimestamp) {
+		url = `${url}&last_timestamp=${lastTimestamp}`;
 	}
 	const response = await axios.get(url);
 	const { data } = response;

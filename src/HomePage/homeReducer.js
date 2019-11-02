@@ -1,6 +1,6 @@
 import {
 	SET_CURRENT_TAB_KEY,
-	SET_TIMELINE_POSTS,
+	SET_TIMELINE_POSTS_RESPONSE,
 	SET_FEATURED_POSTS_RESPONSE,
 	SET_RECENT_POSTS_RESPONSE,
 	SET_LIKE_COUNT,
@@ -13,7 +13,9 @@ import { FEED_CARD_PARENTS } from '../utils/Constants';
 
 const DEFAULT_STATE = {
 	currentTabKey: 'featured',
-	timelinePosts: [],
+	timelinePostsResponse: {
+		list: []
+	},
 	featuredPostsResponse: {
 		shares: []
 	},
@@ -31,10 +33,22 @@ export default (state = DEFAULT_STATE, action) => {
 				...state,
 				currentTabKey: action.tabKey
 			};
-		case SET_TIMELINE_POSTS:
+		case SET_TIMELINE_POSTS_RESPONSE:
+			const { timelinePostsResponse } = state;
+			const { list: previousTimelinePosts } = timelinePostsResponse;
+
+			const { response } = action;
+			const { list } = response;
+
+			const lastPost = list[list.length - 1];
+
 			return {
 				...state,
-				timelinePosts: action.posts
+				timelinePostsResponse: {
+					...action.response,
+					list: previousTimelinePosts.concat(list),
+					lastTimestamp: lastPost.feed_time
+				}
 			};
 		case SET_FEATURED_POSTS_RESPONSE: {
 			const { featuredPostsResponse } = state;

@@ -1,7 +1,7 @@
 import Api from '../utils/Api';
 
 export const SET_CURRENT_TAB_KEY = 'SET_CURRENT_TAB_KEY';
-export const SET_TIMELINE_POSTS = 'SET_TIMELINE_POSTS';
+export const SET_TIMELINE_POSTS_RESPONSE = 'SET_TIMELINE_POSTS_RESPONSE';
 export const SET_FEATURED_POSTS_RESPONSE = 'SET_FEATURED_POSTS_RESPONSE';
 export const SET_RECENT_POSTS_RESPONSE = 'SET_RECENT_POSTS_RESPONSE';
 export const SET_LIKE_COUNT = 'SET_LIKE_COUNT';
@@ -9,15 +9,15 @@ export const SET_FOLLOWED = 'SET_FOLLOWED';
 export const SET_FOLLOWS_MAP = 'SET_FOLLOWS_MAP';
 export const SET_LIKES_MAP = 'SET_LIKES_MAP';
 
-export function getTimelinePosts() {
+export function getTimelinePosts(lastTimestamp) {
 	return async dispatch => {
-		const response = await Api.getTimelinePosts();
+		const response = await Api.getTimelinePosts(lastTimestamp);
 
-		const {
-			data: { shares }
-		} = response;
+		const { data } = response;
+		const { list: shares } = data;
 
-		dispatch(setTimelinePosts(shares));
+		dispatch(setTimelinePostsResponse(data));
+		dispatch(setLikesMap({ shares }));
 
 		return response;
 	};
@@ -108,10 +108,10 @@ export function setCurrentTabKey(tabKey) {
 	};
 }
 
-export function setTimelinePosts(posts) {
+export function setTimelinePostsResponse(response) {
 	return {
-		type: SET_TIMELINE_POSTS,
-		posts
+		type: SET_TIMELINE_POSTS_RESPONSE,
+		response
 	};
 }
 

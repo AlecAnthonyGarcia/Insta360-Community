@@ -12,6 +12,11 @@ export const FEED_CARD_PARENTS = {
 	TIMELINE: 'TIMELINE_FEED'
 };
 
+export const TIMELINE_ACTIONS = {
+	LIKE: 'like_post_set',
+	PUBLISH: 'publish_post'
+};
+
 export const NOTIFICATION_ACTIONS = {
 	LIKE: 'like_post',
 	FOLLOW: 'follow_user'

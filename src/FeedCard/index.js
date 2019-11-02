@@ -23,7 +23,7 @@ import CommentListModal from '../CommentListModal/index.js';
 import PanoModal from '../PanoModal/index.js';
 
 import { is360Pano, isVideo } from '../utils/Utils.js';
-import { FEED_CARD_PARENTS } from '../utils/Constants.js';
+import { FEED_CARD_PARENTS, TIMELINE_ACTIONS } from '../utils/Constants.js';
 import FollowButton from '../FollowButton';
 
 class FeedCard extends React.Component {
@@ -104,6 +104,38 @@ class FeedCard extends React.Component {
 		this.setState({ isCommentListModalOpen: false });
 	};
 
+	renderTitle = () => {
+		const { post, action } = this.props;
+
+		const { account } = post;
+
+		const { id: userId, nickname } = account;
+
+		return (
+			<React.Fragment>
+				<Link to={`/user/${userId}`}>{nickname}</Link>
+				{this.renderAction(action)}
+			</React.Fragment>
+		);
+	};
+
+	renderAction = action => {
+		const { post } = this.props;
+		const { type } = post;
+
+		let actionTitle;
+
+		switch (action) {
+			case TIMELINE_ACTIONS.PUBLISH:
+				const postType = isVideo(type) ? 'video' : 'photo';
+				actionTitle = `posted a ${postType}`;
+				break;
+			default:
+				actionTitle = '';
+		}
+		return <span className="feed-card-action-title">{actionTitle}</span>;
+	};
+
 	render() {
 		const {
 			isPanoModalOpen,
@@ -146,7 +178,7 @@ class FeedCard extends React.Component {
 									</Link>
 								) : null
 							}
-							title={<Link to={`/user/${userId}`}>{nickname}</Link>}
+							title={this.renderTitle()}
 							description={
 								<span>
 									<img
