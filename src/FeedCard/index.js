@@ -109,7 +109,11 @@ class FeedCard extends React.Component {
 
 		const { account } = post;
 
-		const { id: userId, nickname } = account;
+		const { id: userId, nickname } = account || {};
+
+		if (!userId) {
+			return null;
+		}
 
 		return (
 			<React.Fragment>
@@ -188,7 +192,7 @@ class FeedCard extends React.Component {
 									/>
 									<span>{location.en}</span>
 
-									{parent !== FEED_CARD_PARENTS.TIMELINE && (
+									{parent !== FEED_CARD_PARENTS.TIMELINE && userId && (
 										<FollowButton userId={userId} />
 									)}
 								</span>
