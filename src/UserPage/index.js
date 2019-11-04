@@ -121,7 +121,7 @@ class UserPage extends React.Component {
 		} = this.state;
 		const { account = {}, counts = {} } = user;
 		const { id: userId, avatar, nickname, description } = account;
-		const { follower, follows, got_like, public_post } = counts;
+		const { follower, follows, got_like, like, public_post } = counts;
 
 		return (
 			<div>
@@ -134,8 +134,11 @@ class UserPage extends React.Component {
 								<UserAvatar size={64} src={avatar} className="user-avatar" />
 
 								<div className="user-info-container">
-									<div className="user-nickname-container">
-										<span className="user-nickname">{nickname}</span>
+									<div className="user-nickname-row">
+										<div className="user-nickname-container">
+											<span className="user-nickname">{nickname}</span>
+											<span>{got_like} likes</span>
+										</div>
 										<FollowButton userId={userId} />
 									</div>
 
@@ -164,7 +167,9 @@ class UserPage extends React.Component {
 											/>
 										</Col>
 										<Col span={6}>
-											<Statistic title="Likes" value={got_like} />
+											<Link to={`/user/${userId}/liked`}>
+												<Statistic title="Liked" value={like} />
+											</Link>
 										</Col>
 									</Row>
 									<p>{description}</p>

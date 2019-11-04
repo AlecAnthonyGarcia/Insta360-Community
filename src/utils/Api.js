@@ -220,6 +220,15 @@ async function getFollowers(userId, pageNumber) {
 	return data;
 }
 
+async function getLikedPosts(userId, pageNumber) {
+	const pageSize = 20;
+	const response = await axios.get(
+		`${SHARE_API}listUserLikeShare?page_number=${pageNumber}&page_size=${pageSize}&user_id=${userId}`
+	);
+	const { data } = response;
+	return data;
+}
+
 async function likePost(postId) {
 	const response = await axios.get(`${SHARE_API}like/doLike/${postId}`);
 	const { data } = response;
@@ -285,6 +294,7 @@ const Api = {
 	unfollowUser,
 	getFollowing,
 	getFollowers,
+	getLikedPosts,
 	likePost,
 	unlikePost,
 	getNotifications,

@@ -13,9 +13,15 @@
 	flex: 1;
 	margin-left: 20px;
 
-	.user-nickname-container {
+	.user-nickname-row {
 		display: flex;
 		justify-content: space-between;
+	}
+
+	.user-nickname-container {
+		display: flex;
+		flex-direction: column;
+		font-size: 12px;
 	}
 
 	.user-nickname {
