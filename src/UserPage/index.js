@@ -11,7 +11,9 @@ import {
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { Spin, Statistic, Row, Col, List } from 'antd';
+import { Spin, Statistic, Row, Col, List, Skeleton } from 'antd';
+
+import InfiniteScroll from 'react-infinite-scroller';
 
 import Header from '../Header/index.js';
 import UserAvatar from '../UserAvatar/index.js';
@@ -22,13 +24,25 @@ import Api from '../utils/Api';
 import FollowButton from '../FollowButton';
 
 class UserPage extends React.Component {
-	state = {
-		user: {},
-		posts: [],
-		loading: true,
-		popularPosts: [],
-		isUserListModalOpen: false,
-		userListType: null
+	constructor(props) {
+		super(props);
+		this.state = this.getInitialState();
+	}
+
+	getInitialState = () => {
+		return {
+			user: {},
+			posts: [],
+			popularPosts: [],
+			isFirstLoad: true,
+			loading: true,
+			hasMore: true,
+			currentPage: 1,
+			totalPages: 1,
+			totalCount: null,
+			userListType: null,
+			isUserListModalOpen: false
+		};
 	};
 
 	componentDidMount() {
@@ -36,10 +50,11 @@ class UserPage extends React.Component {
 	}
 
 	loadUserData() {
-		this.setState({ loading: true });
-		this.getUser();
-		this.getUserPosts();
-		this.getUserPopularPosts();
+		this.setState(this.getInitialState(), () => {
+			this.getUser();
+			this.getUserPosts();
+			this.getUserPopularPosts();
+		});
 	}
 
 	componentDidUpdate(prevProps) {
@@ -65,10 +80,11 @@ class UserPage extends React.Component {
 
 		setFollowed(userId, followed);
 
-		this.setState({ loading: false, user });
+		this.setState({ user });
 	};
 
 	getUserPosts = async () => {
+		const { posts, currentPage } = this.state;
 		const {
 			match: { params },
 			setFollowsMap,
@@ -76,14 +92,20 @@ class UserPage extends React.Component {
 		} = this.props;
 		const { userId } = params;
 
-		const response = await Api.getUserPosts(userId, 1);
+		const response = await Api.getUserPosts(userId, currentPage);
 		const { data } = response;
-		const { list: posts } = data;
+		const { list, total_page: totalPages, total_count: totalCount } = data;
 
-		setFollowsMap(extractAccountsFromPosts(posts));
-		setLikesMap({ shares: posts });
+		setFollowsMap(extractAccountsFromPosts(list));
+		setLikesMap({ shares: list });
 
-		this.setState({ posts });
+		this.setState({
+			loading: false,
+			isFirstLoad: false,
+			posts: posts.concat(list),
+			totalPages,
+			totalCount
+		});
 	};
 
 	getUserPopularPosts = async () => {
@@ -102,6 +124,25 @@ class UserPage extends React.Component {
 		this.setState({ popularPosts });
 	};
 
+	onLoadMore = () => {
+		let { currentPage, totalPages } = this.state;
+
+		if (currentPage < totalPages) {
+			currentPage = currentPage + 1;
+
+			this.setState(
+				prevState => ({
+					loading: true,
+					hasMore: currentPage < totalPages,
+					currentPage: prevState.currentPage + 1
+				}),
+				() => {
+					this.getUserPosts();
+				}
+			);
+		}
+	};
+
 	showUserListModal = type => {
 		this.setState({ isUserListModalOpen: true, userListType: type });
 	};
@@ -110,15 +151,73 @@ class UserPage extends React.Component {
 		this.setState({ isUserListModalOpen: false });
 	};
 
+	renderPopularPosts = () => {
+		const { popularPosts } = this.state;
+
+		if (popularPosts.length === 0) {
+			return null;
+		}
+
+		return (
+			<List
+				grid={{
+					gutter: 16,
+					xs: 1,
+					sm: 2,
+					md: 3,
+					lg: 3,
+					xl: 3,
+					xxl: 3
+				}}
+				dataSource={popularPosts}
+				renderItem={item => {
+					const { id: postId } = item;
+					const { app_thumb } = item;
+
+					return (
+						<List.Item>
+							<Link to={`/post/${postId}`}>
+								<img
+									alt=""
+									src={app_thumb}
+									className="popular-post-thumbnail"
+								/>
+							</Link>
+						</List.Item>
+					);
+				}}
+			/>
+		);
+	};
+
+	renderUserPosts = () => {
+		const { isFirstLoad, loading, hasMore, posts } = this.state;
+
+		return (
+			<InfiniteScroll
+				initialLoad={false}
+				pageStart={0}
+				loadMore={this.onLoadMore}
+				hasMore={!loading && hasMore}
+				useWindow={true}
+			>
+				<List
+					dataSource={posts}
+					loading={loading}
+					renderItem={item => <FeedCard key={item.id} post={item} />}
+				>
+					{loading && !isFirstLoad && hasMore && (
+						<div className="loading-container">
+							<Spin />
+						</div>
+					)}
+				</List>
+			</InfiniteScroll>
+		);
+	};
+
 	render() {
-		const {
-			loading,
-			user,
-			posts,
-			popularPosts,
-			isUserListModalOpen,
-			userListType
-		} = this.state;
+		const { loading, user, isUserListModalOpen, userListType } = this.state;
 		const { account = {}, counts = {} } = user;
 		const { id: userId, avatar, nickname, description } = account;
 		const { follower, follows, got_like, like, public_post } = counts;
@@ -129,7 +228,7 @@ class UserPage extends React.Component {
 
 				<div className="App-container">
 					<div className="App-content">
-						<Spin spinning={loading}>
+						<Skeleton loading={loading} active avatar>
 							<div className="user-info-header">
 								<UserAvatar size={64} src={avatar} className="user-avatar" />
 
@@ -175,40 +274,11 @@ class UserPage extends React.Component {
 									<p>{description}</p>
 								</div>
 							</div>
-						</Spin>
+						</Skeleton>
 
-						<List
-							grid={{
-								gutter: 16,
-								xs: 1,
-								sm: 2,
-								md: 3,
-								lg: 3,
-								xl: 3,
-								xxl: 3
-							}}
-							dataSource={popularPosts}
-							renderItem={item => {
-								const { id: postId } = item;
-								const { app_thumb } = item;
+						{this.renderPopularPosts()}
 
-								return (
-									<List.Item>
-										<Link to={`/post/${postId}`}>
-											<img
-												alt=""
-												src={app_thumb}
-												className="popular-post-thumbnail"
-											/>
-										</Link>
-									</List.Item>
-								);
-							}}
-						/>
-
-						{posts.map(post => (
-							<FeedCard post={post} />
-						))}
+						{this.renderUserPosts()}
 					</div>
 				</div>
 				{isUserListModalOpen && (
