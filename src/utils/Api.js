@@ -115,11 +115,13 @@ async function getTag(tag) {
 	return data;
 }
 
-async function getTagPosts(tag, pageNumber) {
+async function getTagPosts(tag, postIdCursor) {
 	const pageSize = 20;
-	const response = await axios.get(
-		`${SHARE_API}tag/posts/recent?page_number=${pageNumber}&page_size=${pageSize}&tag=${tag}`
-	);
+	let url = `${SHARE_API}tag/posts/recent?page_size=${pageSize}&tag=${tag}`;
+	if (postIdCursor) {
+		url = `${url}&post_id=${postIdCursor}`;
+	}
+	const response = await axios.get(url);
 	const { data } = response;
 	return data;
 }
