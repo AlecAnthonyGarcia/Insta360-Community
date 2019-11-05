@@ -1,15 +1,19 @@
 import React from 'react';
+import './style.scss';
 
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { getTimelinePosts } from '../../HomePage/homeActions.js';
-import { List, Spin, Card } from 'antd';
+import { List, Spin, Card, Avatar } from 'antd';
 
 import InfiniteScroll from 'react-infinite-scroller';
+import moment from 'moment';
 
 import FeedCard from '../../FeedCard/index.js';
 
 import { FEED_CARD_PARENTS, TIMELINE_ACTIONS } from '../../utils/Constants.js';
+import { renderPostThumbnail } from '../../utils/Utils.js';
 
 class TimelineFeed extends React.Component {
 	state = {
@@ -48,15 +52,11 @@ class TimelineFeed extends React.Component {
 	};
 
 	renderTimelineFeedCard(post) {
-		const { action, subject, target } = post;
+		const { action, feed_time, subject, target } = post;
 
 		switch (action) {
-			case TIMELINE_ACTIONS.PUBLISH:
+			case TIMELINE_ACTIONS.PUBLISH: {
 				const { share } = target;
-				const { account: targetAccount } = share;
-				const { nickname: targetNickname } = targetAccount;
-				const [account] = subject;
-				const { avatar, nickname } = account;
 
 				return (
 					<FeedCard
@@ -66,17 +66,46 @@ class TimelineFeed extends React.Component {
 						action={action}
 					/>
 				);
-			// case TIMELINE_ACTIONS.LIKE:
-			// 	return (
-			// 		<Card title={`${nickname} liked ${targetNickname}'s post`}>
-			// 			<FeedCard
-			// 				id={post.id}
-			// 				post={share}
-			// 				parent={FEED_CARD_PARENTS.TIMELINE}
-			// 			/>
-			// 		</Card>
-			// 	);
+			}
+			case TIMELINE_ACTIONS.LIKE: {
+				const [account] = subject;
+				const { id: userId, avatar, nickname } = account;
+				const { shares } = target;
+
+				return (
+					<Card
+						className="timeline-likes-feed-card"
+						title={
+							<List.Item.Meta
+								avatar={
+									avatar && avatar.length > 0 ? (
+										<Link to={`/user/${userId}`}>
+											<Avatar src={avatar} />
+										</Link>
+									) : null
+								}
+								title={
+									<React.Fragment>
+										<Link to={`/user/${userId}`}>{nickname}</Link>
+										<span className="feed-card-action-title">{`liked ${shares.length} posts`}</span>
+									</React.Fragment>
+								}
+								description={moment(feed_time).fromNow()}
+							/>
+						}
+					>
+						<List
+							grid={{ gutter: 16, column: 3 }}
+							dataSource={shares}
+							renderItem={item => {
+								return <List.Item>{renderPostThumbnail(item)}</List.Item>;
+							}}
+						/>
+					</Card>
+				);
+			}
 			default:
+				return <div></div>;
 		}
 	}
 
