@@ -11,7 +11,7 @@ import {
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { Spin, Statistic, Row, Col, List, Skeleton } from 'antd';
+import { Spin, Statistic, Row, Col, List, Skeleton, Card } from 'antd';
 
 import InfiniteScroll from 'react-infinite-scroller';
 
@@ -20,6 +20,7 @@ import UserAvatar from '../UserAvatar/index.js';
 import FeedCard from '../FeedCard/index.js';
 import UserListModal from '../UserListModal/index.js';
 
+import { renderPostThumbnail } from '../utils/Utils.js';
 import Api from '../utils/Api';
 import FollowButton from '../FollowButton';
 
@@ -160,38 +161,25 @@ class UserPage extends React.Component {
 
 		return (
 			<List
-				grid={{
-					gutter: 16,
-					xs: 1,
-					sm: 2,
-					md: 3,
-					lg: 3,
-					xl: 3,
-					xxl: 3
-				}}
+				header={<div>Popular</div>}
+				grid={{ gutter: 16, column: 3 }}
 				dataSource={popularPosts}
 				renderItem={item => {
-					const { id: postId } = item;
-					const { app_thumb } = item;
-
-					return (
-						<List.Item>
-							<Link to={`/post/${postId}`}>
-								<img
-									alt=""
-									src={app_thumb}
-									className="popular-post-thumbnail"
-								/>
-							</Link>
-						</List.Item>
-					);
+					return <List.Item>{renderPostThumbnail(item)}</List.Item>;
 				}}
 			/>
 		);
 	};
 
 	renderUserPosts = () => {
-		const { isFirstLoad, loading, hasMore, posts } = this.state;
+		const { isFirstLoad, loading, hasMore, totalCount, posts } = this.state;
+
+		const renderHeader = () => {
+			if (!loading && posts.length > 0) {
+				return <div>Posts ({totalCount})</div>;
+			}
+			return null;
+		};
 
 		return (
 			<InfiniteScroll
@@ -202,6 +190,7 @@ class UserPage extends React.Component {
 				useWindow={true}
 			>
 				<List
+					header={renderHeader()}
 					dataSource={posts}
 					loading={loading}
 					renderItem={item => <FeedCard key={item.id} post={item} />}
@@ -229,51 +218,53 @@ class UserPage extends React.Component {
 				<div className="App-container">
 					<div className="App-content">
 						<Skeleton loading={loading} active avatar>
-							<div className="user-info-header">
-								<UserAvatar size={64} src={avatar} className="user-avatar" />
+							<Card className="user-info-header-card">
+								<div className="user-info-header-container">
+									<UserAvatar size={64} src={avatar} className="user-avatar" />
 
-								<div className="user-info-container">
-									<div className="user-nickname-row">
-										<div className="user-nickname-container">
-											<span className="user-nickname">{nickname}</span>
-											<span>{got_like} likes</span>
+									<div className="user-info-container">
+										<div className="user-nickname-row">
+											<div className="user-nickname-container">
+												<span className="user-nickname">{nickname}</span>
+												<span>{got_like} likes</span>
+											</div>
+											<FollowButton userId={userId} />
 										</div>
-										<FollowButton userId={userId} />
-									</div>
 
-									<Row gutter={16} className="stats-row">
-										<Col span={6}>
-											<Statistic title="Posts" value={public_post} />
-										</Col>
-										<Col
-											span={6}
-											onClick={() => this.showUserListModal('following')}
-										>
-											<Statistic
-												className="clickable"
-												title="Following"
-												value={follows}
-											/>
-										</Col>
-										<Col
-											span={6}
-											onClick={() => this.showUserListModal('followers')}
-										>
-											<Statistic
-												className="clickable"
-												title="Followers"
-												value={follower}
-											/>
-										</Col>
-										<Col span={6}>
-											<Link to={`/user/${userId}/liked`}>
-												<Statistic title="Liked" value={like} />
-											</Link>
-										</Col>
-									</Row>
-									<p>{description}</p>
+										<Row gutter={16} className="stats-row">
+											<Col span={6}>
+												<Statistic title="Posts" value={public_post} />
+											</Col>
+											<Col
+												span={6}
+												onClick={() => this.showUserListModal('following')}
+											>
+												<Statistic
+													className="clickable"
+													title="Following"
+													value={follows}
+												/>
+											</Col>
+											<Col
+												span={6}
+												onClick={() => this.showUserListModal('followers')}
+											>
+												<Statistic
+													className="clickable"
+													title="Followers"
+													value={follower}
+												/>
+											</Col>
+											<Col span={6}>
+												<Link to={`/user/${userId}/liked`}>
+													<Statistic title="Liked" value={like} />
+												</Link>
+											</Col>
+										</Row>
+										<p>{description}</p>
+									</div>
 								</div>
-							</div>
+							</Card>
 						</Skeleton>
 
 						{this.renderPopularPosts()}

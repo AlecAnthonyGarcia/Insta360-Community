@@ -1,6 +1,13 @@
-.user-info-header {
-	display: flex;
+.user-info-header-card {
 	margin-bottom: 20px;
+
+	.ant-card-body {
+		padding: 16px;
+	}
+}
+
+.user-info-header-container {
+	display: flex;
 
 	.user-avatar {
 		align-self: center;
@@ -33,10 +40,6 @@
 		text-align: center;
 		margin: 10px 0px;
 	}
-}
-
-.popular-post-thumbnail {
-	width: 100%;
 }
 
 .ant-statistic.clickable {

@@ -9,6 +9,7 @@ import Header from '../Header/index.js';
 import FeedCard from '../FeedCard/index.js';
 
 import Api from '../utils/Api';
+import { renderPostThumbnail } from '../utils/Utils';
 
 class HashtagPage extends React.Component {
 	state = {
@@ -134,19 +135,7 @@ class HashtagPage extends React.Component {
 							}}
 							dataSource={popularPosts}
 							renderItem={item => {
-								const { id: postId } = item;
-
-								return (
-									<List.Item>
-										<Link to={`/post/${postId}`}>
-											<img
-												alt=""
-												src={item.app_thumb}
-												className="popular-post-thumbnail"
-											/>
-										</Link>
-									</List.Item>
-								);
+								return <List.Item>{renderPostThumbnail(item)}</List.Item>;
 							}}
 						/>
 
