@@ -22,7 +22,7 @@ import FeedImage from './FeedImage.js';
 import CommentListModal from '../CommentListModal/index.js';
 import PanoModal from '../PanoModal/index.js';
 
-import { is360Pano, isVideo } from '../utils/Utils.js';
+import { is360Pano, isVideo, getFeedImageSrc } from '../utils/Utils.js';
 import { FEED_CARD_PARENTS, TIMELINE_ACTIONS } from '../utils/Constants.js';
 import FollowButton from '../FollowButton';
 
@@ -251,7 +251,7 @@ class FeedCard extends React.Component {
 						) : (
 							<FeedImage
 								isPanoLoading={isPanoLoading}
-								src={is360Pano(type) || isVideo(type) ? cover : app_thumb}
+								src={getFeedImageSrc(post)}
 							/>
 						)}
 					</div>

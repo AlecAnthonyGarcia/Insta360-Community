@@ -17,6 +17,16 @@ export function isVideo(type) {
 	return type === 'single_video' || type === 'single_video2d';
 }
 
+export function getFeedImageSrc(post) {
+	const { cover, app_thumb, type } = post;
+
+	if (is360Pano(type) || isVideo(type) || type === 'single_photo2d') {
+		return cover;
+	}
+
+	return app_thumb;
+}
+
 export function renderPostThumbnail(post) {
 	const { id: postId, cover, popular_flag: isPopular, recommend, type } = post;
 
