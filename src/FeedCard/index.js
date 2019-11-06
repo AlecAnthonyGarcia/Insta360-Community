@@ -106,9 +106,9 @@ class FeedCard extends React.Component {
 
 	hasComments = () => {
 		const { post } = this.props;
-		const { comment_count } = post;
+		const { comments } = post;
 
-		return comment_count > 0;
+		return comments && comments.length > 0;
 	};
 
 	hasMoreComments = () => {
