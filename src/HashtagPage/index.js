@@ -120,6 +120,7 @@ class HashtagPage extends React.Component {
 
 		return (
 			<List
+				className="popular-posts-list"
 				header={<div>Popular</div>}
 				grid={{ gutter: 16, column: 3 }}
 				dataSource={popularPosts}
@@ -149,6 +150,7 @@ class HashtagPage extends React.Component {
 				useWindow={true}
 			>
 				<List
+					className="posts-list"
 					header={renderHeader()}
 					dataSource={posts}
 					loading={loading}

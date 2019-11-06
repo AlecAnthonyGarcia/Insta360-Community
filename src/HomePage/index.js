@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { connect } from 'react-redux';
+import { useMediaQuery } from 'react-responsive';
 
 import Header from '../Header/index.js';
 import TimelineFeed from '../feeds/TimelineFeed/index.js';
@@ -46,12 +47,24 @@ class HomePage extends React.Component {
 	render() {
 		const { currentFeedComponent } = this.state;
 
+		const HomePageComponent = () => {
+			const isTabletOrMobile = useMediaQuery({ maxWidth: 992 });
+
+			return (
+				<div
+					className={
+						isTabletOrMobile ? 'App-container-tabbed-header' : 'App-container'
+					}
+				>
+					<div className="App-content">{currentFeedComponent}</div>
+				</div>
+			);
+		};
+
 		return (
 			<div>
 				<Header />
-				<div className="App-container">
-					<div className="App-content">{currentFeedComponent}</div>
-				</div>
+				<HomePageComponent />
 			</div>
 		);
 	}

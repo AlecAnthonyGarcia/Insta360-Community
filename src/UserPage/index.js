@@ -161,6 +161,7 @@ class UserPage extends React.Component {
 
 		return (
 			<List
+				className="popular-posts-list"
 				header={<div>Popular</div>}
 				grid={{ gutter: 16, column: 3 }}
 				dataSource={popularPosts}
@@ -190,6 +191,7 @@ class UserPage extends React.Component {
 				useWindow={true}
 			>
 				<List
+					className="posts-list"
 					header={renderHeader()}
 					dataSource={posts}
 					loading={loading}
@@ -220,7 +222,7 @@ class UserPage extends React.Component {
 						<Skeleton loading={loading} active avatar>
 							<Card className="user-info-header-card">
 								<div className="user-info-header-container">
-									<UserAvatar size={64} src={avatar} className="user-avatar" />
+									<UserAvatar size={77} src={avatar} className="user-avatar" />
 
 									<div className="user-info-container">
 										<div className="user-nickname-row">
@@ -230,6 +232,8 @@ class UserPage extends React.Component {
 											</div>
 											<FollowButton userId={userId} />
 										</div>
+
+										<p className="user-bio">{description}</p>
 
 										<Row gutter={16} className="stats-row">
 											<Col span={6}>
@@ -261,7 +265,6 @@ class UserPage extends React.Component {
 												</Link>
 											</Col>
 										</Row>
-										<p>{description}</p>
 									</div>
 								</div>
 							</Card>

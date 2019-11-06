@@ -8,7 +8,20 @@
 	height: 64px;
 	background: #fff;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-	padding: 0 8px;
+
+	.ant-tabs {
+		align-self: center;
+		background: white;
+
+		.ant-tabs-bar {
+			margin-bottom: 0px;
+		}
+
+		.ant-tabs-nav-scroll {
+			display: flex;
+			justify-content: center;
+		}
+	}
 }
 
 .header-content {
@@ -39,7 +52,7 @@
 		justify-content: center;
 
 		.header-login-button {
-			margin-left: 15px;
+			margin-left: 10px;
 		}
 
 		.header-search-button {
@@ -52,11 +65,10 @@
 		}
 	}
 
-	.ant-tabs {
-		align-self: center;
-
-		.ant-tabs-bar {
-			margin-bottom: 0px;
+	@media screen and (max-width: 992px) {
+		.header-actions-container {
+			justify-content: flex-end;
+			padding-right: 10px;
 		}
 	}
 }

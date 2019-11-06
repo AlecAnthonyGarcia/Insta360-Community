@@ -10,9 +10,27 @@
 	margin-top: 100px;
 }
 
+.App-container-tabbed-header {
+	margin-top: 140px;
+}
+
 .App-content {
 	max-width: 550px;
 	margin: auto;
+}
+
+@media screen and (max-width: 992px) {
+	.App-container {
+		margin-top: 80px;
+	}
+
+	.App-container .popular-posts-list {
+		padding: 12px;
+	}
+
+	.App-container .posts-list .ant-list-header {
+		padding: 12px;
+	}
 }
 
 .App-link {

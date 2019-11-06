@@ -3,6 +3,7 @@ import './style.scss';
 
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import MediaQuery from 'react-responsive';
 
 import logo from '../static/img/logo.png';
 
@@ -24,6 +25,7 @@ import {
 	setLoginModalVisibility,
 	setSignupModalVisibility
 } from '../AuthModal/authActions';
+
 import LoginModal from '../AuthModal/LoginModal/index.js';
 import SearchModal from '../SearchModal/index.js';
 import SignupModal from '../AuthModal/SignupModal';
@@ -96,6 +98,23 @@ class Header extends React.Component {
 		setCurrentTabKey(activeTabKey);
 	};
 
+	renderTabs = () => {
+		const { location } = this.props;
+		const { pathname } = location;
+
+		if (pathname === '/') {
+			return (
+				<Tabs defaultActiveKey="featured" onChange={this.onTabChange}>
+					<TabPane tab="Following" key="timeline" />
+					<TabPane tab="Featured" key="featured" />
+					<TabPane tab="Recent" key="recent" />
+				</Tabs>
+			);
+		}
+
+		return null;
+	};
+
 	render() {
 		const {
 			location,
@@ -143,17 +162,13 @@ class Header extends React.Component {
 							</Link>
 						</Col>
 
-						<Col span={8} className="header-tabs-container">
-							{pathname === '/' && (
-								<Tabs defaultActiveKey="featured" onChange={this.onTabChange}>
-									<TabPane tab="Following" key="timeline"></TabPane>
-									<TabPane tab="Featured" key="featured"></TabPane>
-									<TabPane tab="Recent" key="recent"></TabPane>
-								</Tabs>
-							)}
-						</Col>
+						<MediaQuery minWidth={992}>
+							<Col span={8} className="header-tabs-container">
+								{this.renderTabs()}
+							</Col>
+						</MediaQuery>
 
-						<Col span={8} className="header-actions-container">
+						<Col xs={16} lg={8} className="header-actions-container">
 							<Button
 								className="header-search-button"
 								shape="circle"
@@ -161,13 +176,15 @@ class Header extends React.Component {
 								onClick={this.onSearchButtonClick}
 							/>
 
-							<Badge count={unreadNotificationsCount}>
-								<Button
-									shape="circle"
-									icon="bell"
-									onClick={this.onNotificationsButtonClick}
-								/>
-							</Badge>
+							{auth && (
+								<Badge count={unreadNotificationsCount}>
+									<Button
+										shape="circle"
+										icon="bell"
+										onClick={this.onNotificationsButtonClick}
+									/>
+								</Badge>
+							)}
 
 							{auth ? (
 								<Dropdown overlay={headerMenu} trigger={['click']}>
@@ -181,11 +198,7 @@ class Header extends React.Component {
 									>
 										Login
 									</Button>
-									<Button
-										className="header-login-button"
-										type="link"
-										onClick={this.onSignupButtonClick}
-									>
+									<Button type="link" onClick={this.onSignupButtonClick}>
 										Signup
 									</Button>
 								</div>
@@ -193,6 +206,8 @@ class Header extends React.Component {
 						</Col>
 					</Row>
 				</div>
+
+				<MediaQuery maxWidth={992}>{this.renderTabs()}</MediaQuery>
 
 				<SearchModal
 					isOpen={isSearchModalOpen}
