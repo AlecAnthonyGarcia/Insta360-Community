@@ -10,6 +10,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 import UserAvatar from '../UserAvatar/index.js';
 
 import Api from '../utils/Api';
+import UserNickname from '../UserNickname';
 
 class UserListModal extends React.Component {
 	constructor(props) {
@@ -105,14 +106,14 @@ class UserListModal extends React.Component {
 						loading={loading}
 						renderItem={item => {
 							const { account } = item;
-							const { avatar, nickname } = account;
+							const { avatar } = account;
 
 							return (
 								<Link to={`/user/${account.id}`} onClick={this.onListItemClick}>
 									<List.Item key={item.id}>
 										<List.Item.Meta
 											avatar={<UserAvatar src={avatar} />}
-											title={nickname}
+											title={<UserNickname user={account} />}
 										/>
 										<Icon type="right" />
 									</List.Item>

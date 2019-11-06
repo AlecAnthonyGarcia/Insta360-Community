@@ -23,6 +23,7 @@ import UserListModal from '../UserListModal/index.js';
 import { renderPostThumbnail } from '../utils/Utils.js';
 import Api from '../utils/Api';
 import FollowButton from '../FollowButton';
+import UserNickname from '../UserNickname';
 
 class UserPage extends React.Component {
 	constructor(props) {
@@ -210,7 +211,7 @@ class UserPage extends React.Component {
 	render() {
 		const { loading, user, isUserListModalOpen, userListType } = this.state;
 		const { account = {}, counts = {} } = user;
-		const { id: userId, avatar, nickname, description } = account;
+		const { id: userId, avatar, description } = account;
 		const { follower, follows, got_like, like, public_post } = counts;
 
 		return (
@@ -227,7 +228,9 @@ class UserPage extends React.Component {
 									<div className="user-info-container">
 										<div className="user-nickname-row">
 											<div className="user-nickname-container">
-												<span className="user-nickname">{nickname}</span>
+												<span className="user-nickname">
+													<UserNickname user={account} disableLink />
+												</span>
 												<span>{got_like} likes</span>
 											</div>
 											<FollowButton userId={userId} />

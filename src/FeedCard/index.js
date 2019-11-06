@@ -26,6 +26,7 @@ import PanoModal from '../PanoModal/index.js';
 import { is360Pano, isVideo, getFeedImageSrc } from '../utils/Utils.js';
 import { FEED_CARD_PARENTS, TIMELINE_ACTIONS } from '../utils/Constants.js';
 import FollowButton from '../FollowButton';
+import UserNickname from '../UserNickname';
 
 class FeedCard extends React.Component {
 	state = {
@@ -124,7 +125,7 @@ class FeedCard extends React.Component {
 
 		const { account } = post;
 
-		const { id: userId, nickname } = account || {};
+		const { id: userId } = account || {};
 
 		if (!userId) {
 			return null;
@@ -132,7 +133,7 @@ class FeedCard extends React.Component {
 
 		return (
 			<React.Fragment>
-				<Link to={`/user/${userId}`}>{nickname}</Link>
+				<UserNickname user={account} />
 				{this.renderAction(action)}
 			</React.Fragment>
 		);
@@ -179,7 +180,7 @@ class FeedCard extends React.Component {
 		} = post;
 
 		const { app_urls: { source } = {}, create_time } = works[0] || {};
-		const { id: userId, avatar, nickname } = account || {};
+		const { id: userId, avatar } = account || {};
 
 		const followed = followsMap[userId];
 		const { like, likeCount } = likesMap[postId] || {};
@@ -307,16 +308,18 @@ class FeedCard extends React.Component {
 								<Divider />
 
 								<div className="feed-card-comments-container">
-									{comments.map(comment => (
-										<p key={comment.id}>
-											<span>
-												<Link to={`/user/${comment.account.id}`}>
-													{comment.account.nickname}
-												</Link>
-											</span>{' '}
-											<span>{comment.content}</span>
-										</p>
-									))}
+									{comments.map(comment => {
+										const { id: commentId, account, content } = comment;
+
+										return (
+											<p key={commentId}>
+												<span>
+													<UserNickname user={account} />
+												</span>{' '}
+												<span>{content}</span>
+											</p>
+										);
+									})}
 
 									{this.hasMoreComments() && (
 										<Button

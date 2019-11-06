@@ -14,6 +14,7 @@ import FeedCard from '../../FeedCard/index.js';
 
 import { FEED_CARD_PARENTS, TIMELINE_ACTIONS } from '../../utils/Constants.js';
 import { renderPostThumbnail } from '../../utils/Utils.js';
+import UserNickname from '../../UserNickname';
 
 class TimelineFeed extends React.Component {
 	state = {
@@ -69,7 +70,7 @@ class TimelineFeed extends React.Component {
 			}
 			case TIMELINE_ACTIONS.LIKE: {
 				const [account] = subject;
-				const { id: userId, avatar, nickname } = account;
+				const { id: userId, avatar } = account;
 				const { shares } = target;
 
 				return (
@@ -86,7 +87,7 @@ class TimelineFeed extends React.Component {
 								}
 								title={
 									<React.Fragment>
-										<Link to={`/user/${userId}`}>{nickname}</Link>
+										<UserNickname user={account} />
 										<span className="feed-card-action-title">{`liked ${shares.length} posts`}</span>
 									</React.Fragment>
 								}

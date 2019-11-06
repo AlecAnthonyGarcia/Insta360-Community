@@ -20,6 +20,7 @@ import FeedCard from '../FeedCard/index.js';
 
 import Api from '../utils/Api';
 import { renderPostThumbnail } from '../utils/Utils';
+import UserNickname from '../UserNickname';
 
 class HashtagPage extends React.Component {
 	constructor(props) {
@@ -209,10 +210,10 @@ class HashtagPage extends React.Component {
 								<div className="campaign-info-container">
 									<Link to={`/user/${initiator.id}`}>
 										<Avatar src={initiator.avatar} />
-										<span className="campaign-tag-user-nickname">
-											{initiator.nickname}
-										</span>
 									</Link>
+									<span className="campaign-tag-user-nickname">
+										<UserNickname user={initiator} />
+									</span>
 									<p className="campaign-tag-description ">
 										{content.description}
 									</p>

@@ -10,6 +10,7 @@ import { Modal, Input, Tabs, List, Avatar } from 'antd';
 
 import Api from '../utils/Api';
 import FollowButton from '../FollowButton';
+import UserNickname from '../UserNickname';
 
 const { Search } = Input;
 const { TabPane } = Tabs;
@@ -169,7 +170,7 @@ class SearchModal extends React.Component {
 									<List.Item key={item.id}>
 										<List.Item.Meta
 											avatar={<Avatar src={item.avatar} />}
-											title={item.nickname}
+											title={<UserNickname user={item} />}
 											description={`${item.counts.public_post} posts ${item.counts.follower} followers`}
 										/>
 

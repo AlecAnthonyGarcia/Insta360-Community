@@ -17,6 +17,7 @@ import Header from '../Header/index.js';
 import FeedCard from '../FeedCard/index.js';
 
 import Api from '../utils/Api';
+import UserNickname from '../UserNickname';
 
 class UserLikedPostsPage extends React.Component {
 	state = {
@@ -121,15 +122,21 @@ class UserLikedPostsPage extends React.Component {
 		if (this.isUserLoaded()) {
 			const { user } = this.state;
 			const { account } = user;
-			const { avatar, nickname } = account;
+			const { avatar } = account;
 
 			return (
 				<PageHeader
 					style={{
-						border: '1px solid rgb(235, 237, 240)'
+						border: '1px solid rgb(235, 237, 240)',
+						background: 'white'
 					}}
 					onBack={this.onBack}
-					title={`${nickname}'s liked posts`}
+					title={
+						<span>
+							<UserNickname user={account} />
+							's liked posts
+						</span>
+					}
 					avatar={{ src: avatar }}
 				/>
 			);

@@ -16,6 +16,7 @@ import UserAvatar from '../UserAvatar/index.js';
 import { NOTIFICATION_ACTIONS } from '../utils/Constants';
 import Api from '../utils/Api';
 import FollowButton from '../FollowButton';
+import UserNickname from '../UserNickname';
 
 class NotificationListModal extends React.Component {
 	constructor(props) {
@@ -151,7 +152,7 @@ class NotificationListModal extends React.Component {
 						renderItem={item => {
 							const { id, action, data, create_time } = item;
 							const { account } = data;
-							const { id: userId, avatar, nickname } = account;
+							const { id: userId, avatar } = account;
 
 							return (
 								<List.Item key={id}>
@@ -162,9 +163,7 @@ class NotificationListModal extends React.Component {
 											</Link>
 										}
 										title={
-											<Link to={`/user/${userId}`} onClick={this.onCancel}>
-												{nickname}
-											</Link>
+											<UserNickname user={account} onClick={this.onCancel} />
 										}
 										description={
 											<div>

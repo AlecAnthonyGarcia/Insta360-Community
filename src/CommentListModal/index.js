@@ -11,6 +11,7 @@ import moment from 'moment';
 import UserAvatar from '../UserAvatar/index.js';
 
 import Api from '../utils/Api';
+import UserNickname from '../UserNickname';
 
 class CommentListModal extends React.Component {
 	constructor(props) {
@@ -101,7 +102,7 @@ class CommentListModal extends React.Component {
 						loading={loading}
 						renderItem={item => {
 							const { account, content, create_time } = item;
-							const { id: userId, avatar, nickname } = account;
+							const { id: userId, avatar } = account;
 
 							return (
 								<List.Item key={item.post_id}>
@@ -111,7 +112,7 @@ class CommentListModal extends React.Component {
 												<UserAvatar src={avatar} />
 											</Link>
 										}
-										title={<Link to={`/user/${userId}`}>{nickname}</Link>}
+										title={<UserNickname user={account} />}
 										description={content}
 									/>
 									<div>{moment(create_time).fromNow()}</div>
