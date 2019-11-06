@@ -1,6 +1,7 @@
 import React from 'react';
 import './style.scss';
 
+import LocationIcon from '../static/img/icon_location.png';
 import PlayIcon from '../static/img/icon_play.png';
 import Pano360ImageIcon from '../static/img/icon_360_pano_image.png';
 import Pano360VideoIcon from '../static/img/icon_360_pano_video.png';
@@ -201,7 +202,7 @@ class FeedCard extends React.Component {
 								<span>
 									<img
 										alt="Country"
-										src={location_flag}
+										src={location_flag || LocationIcon}
 										className="feed-card-user-country-flag"
 									/>
 									<span>{location.en}</span>
