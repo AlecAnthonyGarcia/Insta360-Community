@@ -104,6 +104,20 @@ class FeedCard extends React.Component {
 		this.setState({ isCommentListModalOpen: false });
 	};
 
+	hasComments = () => {
+		const { post } = this.props;
+		const { comment_count } = post;
+
+		return comment_count > 0;
+	};
+
+	hasMoreComments = () => {
+		const { post } = this.props;
+		const { comment_count } = post;
+
+		return comment_count > 2;
+	};
+
 	renderTitle = () => {
 		const { post, action } = this.props;
 
@@ -287,30 +301,34 @@ class FeedCard extends React.Component {
 							<span dangerouslySetInnerHTML={this.renderCaption()} />
 						</div>
 
-						<Divider />
+						{this.hasComments() && (
+							<React.Fragment>
+								<Divider />
 
-						<div className="feed-card-comments-container">
-							{comments &&
-								comments.length > 0 &&
-								comments.map(comment => (
-									<p key={comment.id}>
-										<span>
-											<Link to={`/user/${comment.account.id}`}>
-												{comment.account.nickname}
-											</Link>
-										</span>{' '}
-										<span>{comment.content}</span>
-									</p>
-								))}
+								<div className="feed-card-comments-container">
+									{comments.map(comment => (
+										<p key={comment.id}>
+											<span>
+												<Link to={`/user/${comment.account.id}`}>
+													{comment.account.nickname}
+												</Link>
+											</span>{' '}
+											<span>{comment.content}</span>
+										</p>
+									))}
 
-							<Button
-								className="view-more-comments-button"
-								type="link"
-								onClick={this.showCommentListModal}
-							>
-								View more comments
-							</Button>
-						</div>
+									{this.hasMoreComments() && (
+										<Button
+											className="view-more-comments-button"
+											type="link"
+											onClick={this.showCommentListModal}
+										>
+											View more comments
+										</Button>
+									)}
+								</div>
+							</React.Fragment>
+						)}
 					</div>
 				</Card>
 
