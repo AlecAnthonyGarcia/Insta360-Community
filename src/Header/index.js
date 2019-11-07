@@ -99,13 +99,13 @@ class Header extends React.Component {
 	};
 
 	renderTabs = () => {
-		const { location } = this.props;
+		const { location, auth } = this.props;
 		const { pathname } = location;
 
 		if (pathname === '/') {
 			return (
 				<Tabs defaultActiveKey="featured" onChange={this.onTabChange}>
-					<TabPane tab="Following" key="timeline" />
+					{auth && <TabPane tab="Following" key="timeline" />}
 					<TabPane tab="Featured" key="featured" />
 					<TabPane tab="Recent" key="recent" />
 				</Tabs>
