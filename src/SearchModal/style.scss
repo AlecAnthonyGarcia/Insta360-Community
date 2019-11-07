@@ -7,4 +7,12 @@
 		height: 50vh;
 		overflow-y: auto;
 	}
+
+	.ant-tabs-nav .ant-tabs-tab-active {
+		color: black;
+	}
+
+	.ant-tabs-ink-bar {
+		height: 3px;
+	}
 }

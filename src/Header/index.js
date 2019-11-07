@@ -198,7 +198,11 @@ class Header extends React.Component {
 									>
 										Login
 									</Button>
-									<Button type="link" onClick={this.onSignupButtonClick}>
+									<Button
+										className="header-signup-button"
+										type="link"
+										onClick={this.onSignupButtonClick}
+									>
 										Signup
 									</Button>
 								</div>

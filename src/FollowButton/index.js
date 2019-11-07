@@ -35,7 +35,7 @@ const FollowButton = props => {
 
 	return (
 		<Button
-			className="follow-button"
+			className={'follow-button' + (followed ? ' following' : '')}
 			shape="round"
 			type={followed ? 'link' : 'primary'}
 			icon={followed ? 'check-circle' : 'user-add'}

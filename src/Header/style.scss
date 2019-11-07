@@ -15,11 +15,20 @@
 
 		.ant-tabs-bar {
 			margin-bottom: 0px;
+			border: none;
+		}
+
+		.ant-tabs-nav .ant-tabs-tab-active {
+			color: black;
 		}
 
 		.ant-tabs-nav-scroll {
 			display: flex;
 			justify-content: center;
+		}
+
+		.ant-tabs-ink-bar {
+			height: 3px;
 		}
 	}
 }
@@ -53,6 +62,10 @@
 
 		.header-login-button {
 			margin-left: 10px;
+		}
+
+		.header-signup-button {
+			color: black;
 		}
 
 		.header-search-button {

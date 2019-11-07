@@ -78,3 +78,7 @@
 	width: 16px;
 	margin-left: 5px;
 }
+
+.follow-button.following {
+	color: black;
+}

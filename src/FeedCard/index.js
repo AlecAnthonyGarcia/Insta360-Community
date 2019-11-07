@@ -16,7 +16,7 @@ import {
 
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Card, List, Avatar, Button, Divider, Spin } from 'antd';
+import { Card, List, Avatar, Button, Divider, Icon } from 'antd';
 import moment from 'moment';
 
 import FeedImage from './FeedImage.js';
@@ -261,12 +261,12 @@ class FeedCard extends React.Component {
 					<div className="feed-card-body-container">
 						<div className="feed-card-actions-container">
 							<Button
-								className="feed-card-action-button"
+								className="feed-card-action-button like-button"
 								type={like ? 'primary' : 'default'}
 								shape="round"
-								icon="like"
 								onClick={this.onLikeButtonClick}
 							>
+								<Icon type="like" theme={like ? 'filled' : 'outlined'} />
 								<span>{likeCount}</span>
 							</Button>
 
