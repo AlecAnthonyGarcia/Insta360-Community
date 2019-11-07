@@ -2,9 +2,6 @@ import React from 'react';
 import './style.scss';
 
 import LocationIcon from '../static/img/icon_location.png';
-import PlayIcon from '../static/img/icon_play.png';
-import Pano360ImageIcon from '../static/img/icon_360_pano_image.png';
-import Pano360VideoIcon from '../static/img/icon_360_pano_video.png';
 
 import { setLoginModalVisibility } from '../AuthModal/authActions';
 import {
@@ -20,6 +17,7 @@ import { Card, List, Avatar, Button, Divider, Icon } from 'antd';
 import moment from 'moment';
 
 import FeedImage from './FeedImage.js';
+import FeedVideo from './FeedVideo.js';
 import CommentListModal from '../CommentListModal/index.js';
 import PanoModal from '../PanoModal/index.js';
 
@@ -45,10 +43,6 @@ class FeedCard extends React.Component {
 				isPanoLoading: isVideo(type) ? false : true,
 				isPanoModalOpen: true
 			});
-		} else {
-			if (isVideo(type)) {
-				this.setState({ isVideoLoaded: true });
-			}
 		}
 	};
 
@@ -218,42 +212,18 @@ class FeedCard extends React.Component {
 				>
 					<div
 						className="feed-card-media-container"
-						onClick={this.onPostClick}
 						style={{
 							cursor: is360Pano(type) || isVideo(type) ? 'pointer' : 'default'
 						}}
 					>
-						{is360Pano(type) && !isVideo(type) && (
-							<img
-								alt="360 Pano"
-								src={Pano360ImageIcon}
-								className="pano-360-icon"
-							/>
-						)}
-
-						{is360Pano(type) && isVideo(type) && (
-							<img
-								alt="360 Pano"
-								src={Pano360VideoIcon}
-								className="pano-360-icon"
-							/>
-						)}
-
-						{!is360Pano(type) && isVideo(type) && !isVideoLoaded && (
-							<img alt="Play Button" src={PlayIcon} className="play-button" />
-						)}
-
-						{isVideoLoaded ? (
-							<video
-								autoPlay
-								controls
-								src={source}
-								className="feed-card-video"
-							/>
+						{isVideo(type) && !is360Pano(type) ? (
+							<FeedVideo post={post} />
 						) : (
 							<FeedImage
 								isPanoLoading={isPanoLoading}
 								src={getFeedImageSrc(post)}
+								type={type}
+								onClick={this.onPostClick}
 							/>
 						)}
 					</div>
