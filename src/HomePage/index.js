@@ -19,8 +19,12 @@ class HomePage extends React.Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		const { currentTabKey } = this.props;
-		if (prevProps.currentTabKey !== currentTabKey) {
+		let { currentTabKey, auth } = this.props;
+		if (prevProps.currentTabKey !== currentTabKey || prevProps.auth !== auth) {
+			if (!auth && currentTabKey === 'timeline') {
+				currentTabKey = 'featured';
+			}
+
 			this.updateFeedComponent(currentTabKey);
 		}
 	}
@@ -71,10 +75,12 @@ class HomePage extends React.Component {
 }
 
 function mapStateToProps(state) {
-	const { homeReducer } = state;
+	const { authReducer, homeReducer } = state;
+	const { isAuthenticated } = authReducer;
 	const { currentTabKey } = homeReducer;
 	return {
-		currentTabKey
+		currentTabKey,
+		auth: isAuthenticated
 	};
 }
 
