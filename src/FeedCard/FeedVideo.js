@@ -3,6 +3,7 @@ import './style.scss';
 
 import PlayIcon from '../static/img/icon_play.png';
 
+import 'intersection-observer';
 import { InView } from 'react-intersection-observer';
 
 import { is360Pano, getFeedImageSrc } from '../utils/Utils.js';

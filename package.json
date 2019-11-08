@@ -8,6 +8,7 @@
 		"babel-plugin-import": "^1.12.2",
 		"blueimp-md5": "^2.12.0",
 		"customize-cra": "^0.8.0",
+		"intersection-observer": "^0.7.0",
 		"less": "^3.10.3",
 		"less-loader": "^5.0.0",
 		"node-sass": "^4.12.0",
