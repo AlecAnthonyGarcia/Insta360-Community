@@ -1,7 +1,11 @@
 import React from 'react';
 
 import { connect } from 'react-redux';
-import { login } from '../authActions';
+import {
+	login,
+	setSignupModalVisibility,
+	setForgotPasswordModalVisibility
+} from '../authActions';
 
 import { Modal, Form, Input, Button, Icon, Alert } from 'antd';
 
@@ -72,6 +76,18 @@ class LoginModal extends React.Component {
 		if (onClose) {
 			onClose();
 		}
+	};
+
+	onSignupButtonClick = () => {
+		const { setSignupModalVisibility } = this.props;
+		setSignupModalVisibility(true);
+		this.onCancel();
+	};
+
+	onForgotPasswordButtonClick = () => {
+		const { setForgotPasswordModalVisibility } = this.props;
+		setForgotPasswordModalVisibility(true);
+		this.onCancel();
 	};
 
 	resetModal = () => {
@@ -149,8 +165,15 @@ class LoginModal extends React.Component {
 						)}
 					</Form.Item>
 
-					<Form.Item style={{ textAlign: 'center' }}>
+					<div className="forgot-password-button-container">
+						<Button type="link" onClick={this.onForgotPasswordButtonClick}>
+							Forgot your password?
+						</Button>
+					</div>
+
+					<Form.Item>
 						<Button
+							block
 							size="large"
 							type="primary"
 							htmlType="submit"
@@ -159,6 +182,12 @@ class LoginModal extends React.Component {
 							Login
 						</Button>
 					</Form.Item>
+
+					<div className="register-new-account-button-container">
+						<Button type="link" onClick={this.onSignupButtonClick}>
+							Register a new account?
+						</Button>
+					</div>
 				</Form>
 			</Modal>
 		);
@@ -169,5 +198,5 @@ const WrappedForm = Form.create({ name: 'login' })(LoginModal);
 
 export default connect(
 	null,
-	{ login }
+	{ login, setSignupModalVisibility, setForgotPasswordModalVisibility }
 )(WrappedForm);

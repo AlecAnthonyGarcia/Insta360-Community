@@ -23,7 +23,8 @@ import { setCurrentTabKey } from '../HomePage/homeActions';
 import {
 	logout,
 	setLoginModalVisibility,
-	setSignupModalVisibility
+	setSignupModalVisibility,
+	setForgotPasswordModalVisibility
 } from '../AuthModal/authActions';
 
 import LoginModal from '../AuthModal/LoginModal/index.js';
@@ -32,6 +33,7 @@ import SignupModal from '../AuthModal/SignupModal';
 import NotificationListModal from '../NotificationListModal';
 
 import Api from '../utils/Api';
+import ForgotPasswordModal from '../AuthModal/ForgotPasswordModal';
 
 const { TabPane } = Tabs;
 
@@ -93,6 +95,11 @@ class Header extends React.Component {
 		setSignupModalVisibility(false);
 	};
 
+	onForgotPasswordModalClose = () => {
+		const { setForgotPasswordModalVisibility } = this.props;
+		setForgotPasswordModalVisibility(false);
+	};
+
 	onTabChange = activeTabKey => {
 		const { setCurrentTabKey } = this.props;
 		setCurrentTabKey(activeTabKey);
@@ -122,7 +129,8 @@ class Header extends React.Component {
 			user,
 			logout,
 			isLoginModalOpen,
-			isSignupModalOpen
+			isSignupModalOpen,
+			isForgotPasswordModalOpen
 		} = this.props;
 		const { pathname } = location;
 		const {
@@ -238,6 +246,13 @@ class Header extends React.Component {
 						onClose={this.onSignupModalClose}
 					/>
 				)}
+
+				{!auth && (
+					<ForgotPasswordModal
+						isOpen={isForgotPasswordModalOpen}
+						onClose={this.onForgotPasswordModalClose}
+					/>
+				)}
 			</div>
 		);
 	}
@@ -249,13 +264,15 @@ function mapStateToProps(state) {
 		isAuthenticated,
 		isLoginModalOpen,
 		isSignupModalOpen,
+		isForgotPasswordModalOpen,
 		user
 	} = authReducer;
 	return {
 		auth: isAuthenticated,
 		user,
 		isLoginModalOpen,
-		isSignupModalOpen
+		isSignupModalOpen,
+		isForgotPasswordModalOpen
 	};
 }
 
@@ -266,7 +283,8 @@ export default withRouter(
 			logout,
 			setCurrentTabKey,
 			setLoginModalVisibility,
-			setSignupModalVisibility
+			setSignupModalVisibility,
+			setForgotPasswordModalVisibility
 		}
 	)(Header)
 );

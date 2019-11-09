@@ -6,6 +6,8 @@ import Api from '../utils/Api';
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 export const SET_LOGIN_MODAL_VISIBILITY = 'SET_LOGIN_MODAL_VISIBILITY';
 export const SET_SIGNUP_MODAL_VISIBILITY = 'SET_SIGNUP_MODAL_VISIBILITY';
+export const SET_FORGOT_PASSWORD_MODAL_VISIBILITY =
+	'SET_FORGOT_PASSWORD_MODAL_VISIBILITY';
 
 export function setAuthorizationToken(token) {
 	if (token) {
@@ -77,6 +79,13 @@ export function setLoginModalVisibility(visible) {
 export function setSignupModalVisibility(visible) {
 	return {
 		type: SET_SIGNUP_MODAL_VISIBILITY,
+		visible
+	};
+}
+
+export function setForgotPasswordModalVisibility(visible) {
+	return {
+		type: SET_FORGOT_PASSWORD_MODAL_VISIBILITY,
 		visible
 	};
 }

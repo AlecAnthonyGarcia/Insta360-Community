@@ -1,7 +1,8 @@
 import React from 'react';
+import '../style.scss';
 
 import { connect } from 'react-redux';
-import { signup } from '../authActions';
+import { signup, setLoginModalVisibility } from '../authActions';
 
 import { Modal, Form, Input, Button, Icon, Alert } from 'antd';
 
@@ -65,6 +66,12 @@ class SignupModal extends React.Component {
 		}
 	};
 
+	onLoginButtonClick = () => {
+		const { setLoginModalVisibility } = this.props;
+		setLoginModalVisibility(true);
+		this.onCancel();
+	};
+
 	resetModal = () => {
 		const { form } = this.props;
 
@@ -81,7 +88,7 @@ class SignupModal extends React.Component {
 		return (
 			<Modal
 				visible={isOpen}
-				title="Register"
+				title="Signup"
 				centered
 				footer={null}
 				onCancel={this.onCancel}
@@ -140,16 +147,24 @@ class SignupModal extends React.Component {
 						)}
 					</Form.Item>
 
-					<Form.Item style={{ textAlign: 'center' }}>
+					<Form.Item>
 						<Button
+							block
 							size="large"
 							type="primary"
 							htmlType="submit"
 							loading={loading}
 						>
-							Register
+							Signup now
 						</Button>
 					</Form.Item>
+
+					<div className="login-now-button-container">
+						Already have an account?
+						<Button type="link" onClick={this.onLoginButtonClick}>
+							Log in now
+						</Button>
+					</div>
 				</Form>
 			</Modal>
 		);
@@ -160,5 +175,5 @@ const WrappedForm = Form.create({ name: 'signup' })(SignupModal);
 
 export default connect(
 	null,
-	{ signup }
+	{ signup, setLoginModalVisibility }
 )(WrappedForm);

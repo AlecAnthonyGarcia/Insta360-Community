@@ -6,7 +6,8 @@ import {
 	COMMUNITY_API,
 	FOLLOW_API,
 	SHARE_API,
-	NOTICE_API
+	NOTICE_API,
+	AUTH_API
 } from './Constants';
 
 async function login(email, password) {
@@ -274,6 +275,41 @@ async function setNotificationsRead() {
 	return data;
 }
 
+async function sendVerificationCode(email) {
+	const response = await axios({
+		method: 'POST',
+		url: `${AUTH_API}captcha/send`,
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json'
+		},
+		data: JSON.stringify({
+			email,
+			type: 'forgetAccountPassword'
+		})
+	});
+	const { data } = response;
+	return data;
+}
+
+async function resetPassword({ email, password, verificationCode }) {
+	const response = await axios({
+		method: 'POST',
+		url: `${ACCOUNT_API}resetPassword`,
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json'
+		},
+		data: JSON.stringify({
+			username: email,
+			password,
+			captcha: verificationCode
+		})
+	});
+	const { data } = response;
+	return data;
+}
+
 const Api = {
 	login,
 	signup,
@@ -301,7 +337,9 @@ const Api = {
 	unlikePost,
 	getNotifications,
 	getUnreadNotificationsCount,
-	setNotificationsRead
+	setNotificationsRead,
+	sendVerificationCode,
+	resetPassword
 };
 
 export default Api;
