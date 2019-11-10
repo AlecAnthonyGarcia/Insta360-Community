@@ -11,10 +11,20 @@ import {
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { Spin, Statistic, Row, Col, List, Avatar, Divider } from 'antd';
+import {
+	Spin,
+	Statistic,
+	Row,
+	Col,
+	List,
+	Avatar,
+	Divider,
+	Skeleton
+} from 'antd';
 
 import InfiniteScroll from 'react-infinite-scroller';
 
+import NoMatchPage from '../NoMatchPage';
 import Header from '../Header/index.js';
 import FeedCard from '../FeedCard/index.js';
 
@@ -47,10 +57,13 @@ class HashtagPage extends React.Component {
 	}
 
 	loadHashtagData() {
-		this.setState(this.getInitialState(), () => {
-			this.getTag();
-			this.getTagPosts();
-			this.getTagPopularPosts();
+		this.setState(this.getInitialState(), async () => {
+			const tag = await this.getTag();
+
+			if (tag) {
+				this.getTagPosts();
+				this.getTagPopularPosts();
+			}
 		});
 	}
 
@@ -65,10 +78,13 @@ class HashtagPage extends React.Component {
 	getTag = async () => {
 		const { tag } = this.props.match.params;
 		const response = await Api.getTag(tag);
-		const {
-			data: { tag: tagInfo, initiator, campaign_tag: campaignTag }
-		} = response;
+
+		const { data } = response;
+		let { tag: tagInfo, initiator, campaign_tag: campaignTag } = data;
+
 		this.setState({ loading: false, tag: tagInfo, initiator, campaignTag });
+
+		return tagInfo;
 	};
 
 	getTagPosts = async () => {
@@ -169,8 +185,12 @@ class HashtagPage extends React.Component {
 
 	render() {
 		const { loading, tag, initiator, campaignTag } = this.state;
-		const { user_count, post_count } = tag;
+		const { user_count, post_count } = tag || {};
 		const { content } = campaignTag || {};
+
+		if (!tag) {
+			return <NoMatchPage />;
+		}
 
 		return (
 			<div>
@@ -178,7 +198,7 @@ class HashtagPage extends React.Component {
 
 				<div className="App-container">
 					<div className="App-content">
-						<Spin spinning={loading}>
+						<Skeleton loading={loading} active>
 							<div className="tag-info-header">
 								<div className="tag-info-container">
 									<span className="tag-name">#{tag.value}</span>
@@ -192,7 +212,7 @@ class HashtagPage extends React.Component {
 									</Row>
 								</div>
 							</div>
-						</Spin>
+						</Skeleton>
 
 						{campaignTag && (
 							<div>

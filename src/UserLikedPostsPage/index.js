@@ -18,6 +18,7 @@ import FeedCard from '../FeedCard/index.js';
 
 import Api from '../utils/Api';
 import UserNickname from '../UserNickname';
+import NoMatchPage from '../NoMatchPage';
 
 class UserLikedPostsPage extends React.Component {
 	state = {
@@ -35,10 +36,13 @@ class UserLikedPostsPage extends React.Component {
 		this.loadUserData();
 	}
 
-	loadUserData() {
+	async loadUserData() {
 		this.setState({ loading: true });
-		this.getUser();
-		this.getLikedPosts();
+		const user = await this.getUser();
+
+		if (user) {
+			this.getLikedPosts();
+		}
 	}
 
 	getUser = async () => {
@@ -51,12 +55,19 @@ class UserLikedPostsPage extends React.Component {
 		const response = await Api.getUser(userId);
 
 		const { data: user } = response;
+
+		this.setState({ user });
+
+		if (!user) {
+			return user;
+		}
+
 		const { account } = user;
 		const { followed } = account;
 
 		setFollowed(userId, followed);
 
-		this.setState({ loading: false, user });
+		return user;
 	};
 
 	getLikedPosts = async () => {
@@ -115,7 +126,7 @@ class UserLikedPostsPage extends React.Component {
 
 	isUserLoaded = () => {
 		const { user } = this.state;
-		return Object.keys(user).length !== 0;
+		return user && Object.keys(user).length !== 0;
 	};
 
 	renderPageHeader = () => {
@@ -145,7 +156,11 @@ class UserLikedPostsPage extends React.Component {
 	};
 
 	render() {
-		const { isFirstLoad, loading, hasMore, posts } = this.state;
+		const { isFirstLoad, loading, user, hasMore, posts } = this.state;
+
+		if (!user) {
+			return <NoMatchPage />;
+		}
 
 		return (
 			<div>

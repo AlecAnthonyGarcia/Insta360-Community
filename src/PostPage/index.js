@@ -4,9 +4,12 @@ import Header from '../Header/index.js';
 import FeedCard from '../FeedCard/index.js';
 
 import Api from '../utils/Api';
+import NoMatchPage from '../NoMatchPage.js';
+import { Skeleton } from 'antd';
 
 class PostPage extends React.Component {
 	state = {
+		loading: true,
 		post: {}
 	};
 
@@ -17,11 +20,19 @@ class PostPage extends React.Component {
 	getPost = async () => {
 		const { postId } = this.props.match.params;
 		const response = await Api.getPost(postId);
-		this.setState({ post: response.data.share });
+
+		const { data } = response;
+		const { share: post } = data || {};
+
+		this.setState({ post, loading: false });
 	};
 
 	render() {
-		const { post } = this.state;
+		const { loading, post } = this.state;
+
+		if (!post) {
+			return <NoMatchPage />;
+		}
 
 		return (
 			<div>
@@ -29,7 +40,9 @@ class PostPage extends React.Component {
 
 				<div className="App-container">
 					<div className="App-content">
-						<FeedCard post={post} />
+						<Skeleton loading={loading} active>
+							<FeedCard post={post} />
+						</Skeleton>
 					</div>
 				</div>
 			</div>

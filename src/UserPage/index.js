@@ -15,6 +15,7 @@ import { Spin, Statistic, Row, Col, List, Skeleton, Card } from 'antd';
 
 import InfiniteScroll from 'react-infinite-scroller';
 
+import NoMatchPage from '../NoMatchPage';
 import Header from '../Header/index.js';
 import UserAvatar from '../UserAvatar/index.js';
 import FeedCard from '../FeedCard/index.js';
@@ -52,10 +53,13 @@ class UserPage extends React.Component {
 	}
 
 	loadUserData() {
-		this.setState(this.getInitialState(), () => {
-			this.getUser();
-			this.getUserPosts();
-			this.getUserPopularPosts();
+		this.setState(this.getInitialState(), async () => {
+			const user = await this.getUser();
+
+			if (user) {
+				this.getUserPosts();
+				this.getUserPopularPosts();
+			}
 		});
 	}
 
@@ -77,12 +81,19 @@ class UserPage extends React.Component {
 		const response = await Api.getUser(userId);
 
 		const { data: user } = response;
+
+		this.setState({ user });
+
+		if (!user) {
+			return user;
+		}
+
 		const { account } = user;
 		const { followed } = account;
 
 		setFollowed(userId, followed);
 
-		this.setState({ user });
+		return user;
 	};
 
 	getUserPosts = async () => {
@@ -210,9 +221,13 @@ class UserPage extends React.Component {
 
 	render() {
 		const { loading, user, isUserListModalOpen, userListType } = this.state;
-		const { account = {}, counts = {} } = user;
+		const { account = {}, counts = {} } = user || {};
 		const { id: userId, avatar, description } = account;
 		const { follower, follows, got_like, like, public_post } = counts;
+
+		if (!user) {
+			return <NoMatchPage />;
+		}
 
 		return (
 			<div>

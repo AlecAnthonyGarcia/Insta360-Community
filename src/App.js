@@ -9,6 +9,7 @@ import UserPage from './UserPage/index.js';
 import UserLikedPostsPage from './UserLikedPostsPage/index.js';
 import PostPage from './PostPage/index.js';
 import HashtagPage from './HashtagPage/index.js';
+import NoMatchPage from './NoMatchPage';
 
 function App() {
 	return (
@@ -23,6 +24,7 @@ function App() {
 				/>
 				<Route exact path="/post/:postId" component={PostPage} />
 				<Route exact path="/tag/:tag" component={HashtagPage} />
+				<Route component={NoMatchPage} />
 			</Switch>
 		</BrowserRouter>
 	);
