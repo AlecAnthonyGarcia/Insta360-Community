@@ -284,7 +284,11 @@ class FeedCard extends React.Component {
 										return (
 											<p key={commentId}>
 												<span>
-													<UserNickname user={account} />
+													{account ? (
+														<UserNickname user={account} />
+													) : (
+														'[Unknown User]'
+													)}
 												</span>{' '}
 												<span>{content}</span>
 											</p>
