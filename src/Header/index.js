@@ -124,7 +124,6 @@ class Header extends React.Component {
 
 	render() {
 		const {
-			location,
 			auth,
 			user,
 			logout,
@@ -132,7 +131,6 @@ class Header extends React.Component {
 			isSignupModalOpen,
 			isForgotPasswordModalOpen
 		} = this.props;
-		const { pathname } = location;
 		const {
 			isSearchModalOpen,
 			isNotificationsModalOpen,

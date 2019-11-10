@@ -9,8 +9,6 @@ import {
 	SET_LIKES_MAP
 } from './homeActions';
 
-import { FEED_CARD_PARENTS } from '../utils/Constants';
-
 const DEFAULT_STATE = {
 	currentTabKey: 'featured',
 	timelinePostsResponse: {

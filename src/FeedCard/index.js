@@ -154,17 +154,14 @@ class FeedCard extends React.Component {
 		const {
 			isPanoModalOpen,
 			isCommentListModalOpen,
-			isPanoLoading,
-			isVideoLoaded
+			isPanoLoading
 		} = this.state;
-		const { post, parent, followsMap, likesMap } = this.props || {};
+		const { post, parent, likesMap } = this.props || {};
 
 		const {
 			account,
 			location = {},
 			location_flag,
-			cover,
-			app_thumb,
 			comments,
 			comment_count,
 			type,
@@ -173,10 +170,9 @@ class FeedCard extends React.Component {
 			id: postId
 		} = post;
 
-		const { app_urls: { source } = {}, create_time } = works[0] || {};
+		const { create_time } = works[0] || {};
 		const { id: userId, avatar } = account || {};
 
-		const followed = followsMap[userId];
 		const { like, likeCount } = likesMap[postId] || {};
 
 		return (
