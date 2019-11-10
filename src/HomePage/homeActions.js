@@ -126,8 +126,11 @@ export function setFollowsMap(accounts) {
 	let followsMap = {};
 
 	accounts.forEach(account => {
-		const { id: userId, followed } = account;
-		followsMap[userId] = followed;
+		const { id: userId, followed } = account || {};
+
+		if (userId) {
+			followsMap[userId] = followed;
+		}
 	});
 
 	return {
