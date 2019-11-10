@@ -2,6 +2,7 @@ import React from 'react';
 import './style.scss';
 
 import PlayIcon from '../static/img/icon_play.png';
+import PauseIcon from '../static/img/icon_pause.png';
 import imagepano from '../static/xml/imagepano.xml';
 import videopano from '../static/xml/videopano.xml';
 
@@ -14,16 +15,13 @@ const SWF_PATH =
 
 class PanoModal extends React.Component {
 	state = {
-		loading: true
+		loading: true,
+		isPlaying: false
 	};
 
 	componentDidMount() {
-		const { post } = this.props;
-		const { type } = post;
-
-		if (isVideo(type)) {
+		if (this.isVideo()) {
 			this.embedVideoPano();
-			this.setState({ loading: false });
 		} else {
 			this.embedImagePano();
 		}
@@ -79,6 +77,10 @@ class PanoModal extends React.Component {
 	onLoadComplete = () => {
 		this.props.onLoadComplete();
 		this.setState({ loading: false });
+
+		if (this.isVideo()) {
+			this.onPlayButtonClick();
+		}
 	};
 
 	onClose = () => {
@@ -87,17 +89,28 @@ class PanoModal extends React.Component {
 	};
 
 	onPlayButtonClick = () => {
-		if (window.krpano.get('plugin[video].isPaused')) {
+		if (this.isPaused()) {
 			window.krpano.call('plugin[video].play()');
+			this.setState({ isPlaying: true });
 		} else {
 			window.krpano.call('plugin[video].pause()');
+			this.setState({ isPlaying: false });
 		}
 	};
 
-	render() {
-		const { loading } = this.state;
+	isVideo = () => {
 		const { post } = this.props;
 		const { type } = post;
+
+		return isVideo(type);
+	};
+
+	isPaused = () => {
+		return window.krpano && window.krpano.get('plugin[video].isPaused');
+	};
+
+	render() {
+		const { loading, isPlaying } = this.state;
 
 		return (
 			<div
@@ -112,12 +125,11 @@ class PanoModal extends React.Component {
 				>
 					Close
 				</Button>
-
-				{isVideo(type) && (
+				{this.isVideo() && (
 					<img
 						alt="Play Button"
-						src={PlayIcon}
-						className="play-button"
+						src={isPlaying ? PauseIcon : PlayIcon}
+						className="pano-video-play-button"
 						onClick={this.onPlayButtonClick}
 					/>
 				)}

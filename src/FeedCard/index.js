@@ -40,7 +40,7 @@ class FeedCard extends React.Component {
 
 		if (is360Pano(type)) {
 			this.setState({
-				isPanoLoading: isVideo(type) ? false : true,
+				isPanoLoading: true,
 				isPanoModalOpen: true
 			});
 		}

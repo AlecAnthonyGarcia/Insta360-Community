@@ -12,10 +12,10 @@
 			url.html5="https://static.insta360.com/assets/www/project/share/player/plugins/videoplayer.js"
 			url.flash="https://static.insta360.com/assets/www/project/share/player/plugins/videoplayer.swf"
 			videourl="%$videourl%"
-			posterurl="%$posterurl%"
+
 			loop="true"
 			volume="1.0"
-			pausedonstart="false"
+			pausedonstart="true"
 			/>
         <!-- use the videoplayer plugin as panoramic image source -->
         <image>
@@ -23,5 +23,6 @@
         </image>
         <!-- set the default view -->
         <view hlookat="0" vlookat="0" fovtype="DFOV" fov="130" fovmin="75" fovmax="150" distortion="0.0" />
+		<events name="scene" onloadcomplete="onLoadComplete()" />
     </scene>
 </krpano>

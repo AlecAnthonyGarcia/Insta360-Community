@@ -29,10 +29,12 @@
 		z-index: 1;
 	}
 
-	.play-button {
+	.pano-video-play-button {
 		position: absolute;
 		align-self: center;
 		cursor: pointer;
 		z-index: 1;
+		bottom: 10px;
+		left: 10px;
 	}
 }
