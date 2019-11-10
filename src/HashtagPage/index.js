@@ -181,7 +181,7 @@ class HashtagPage extends React.Component {
 						<Spin spinning={loading}>
 							<div className="tag-info-header">
 								<div className="tag-info-container">
-									<span className="tag-name">{tag.value}</span>
+									<span className="tag-name">#{tag.value}</span>
 									<Row gutter={16} className="stats-row">
 										<Col span={12}>
 											<Statistic title="Users" value={user_count} />
