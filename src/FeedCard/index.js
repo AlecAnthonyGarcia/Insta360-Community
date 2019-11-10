@@ -150,6 +150,55 @@ class FeedCard extends React.Component {
 		return <span className="feed-card-action-title">{actionTitle}</span>;
 	};
 
+	renderShareSourceIcon = () => {
+		const { post } = this.props;
+		const { share_source, share_source_icon } = post;
+
+		let affiliateLink;
+
+		switch (share_source) {
+			case 'onex':
+			case 'onex_android':
+				affiliateLink = 'https://www.insta360.com/sal/one_x?insrc=INRIICZ';
+				break;
+			case 'one':
+			case 'one_android':
+				affiliateLink = 'https://www.insta360.com/sal/one?insrc=INRIICZ';
+				break;
+			case 'nano':
+			case 'nano_android':
+				affiliateLink = 'https://www.insta360.com/sal/nanos?insrc=INRIICZ';
+				break;
+			case 'evo':
+			case 'evo_android':
+				affiliateLink = 'https://www.insta360.com/sal/evo?insrc=INRIICZ';
+				break;
+			default:
+		}
+
+		const shareSourceIconImage = (
+			<img
+				alt="Share Source"
+				src={share_source_icon}
+				className="share-source-icon"
+			/>
+		);
+
+		if (!share_source_icon) {
+			return null;
+		}
+
+		if (!affiliateLink) {
+			return shareSourceIconImage;
+		}
+
+		return (
+			<a href={affiliateLink} target="_blank" rel="noopener noreferrer">
+				{shareSourceIconImage}
+			</a>
+		);
+	};
+
 	render() {
 		const {
 			isPanoModalOpen,
@@ -166,7 +215,6 @@ class FeedCard extends React.Component {
 			comment_count,
 			type,
 			works = [],
-			share_source_icon,
 			id: postId
 		} = post;
 
@@ -256,11 +304,7 @@ class FeedCard extends React.Component {
 								</Button>
 							</Link>
 
-							<img
-								alt="Share Source"
-								src={share_source_icon}
-								className="share-source-icon"
-							/>
+							{this.renderShareSourceIcon()}
 						</div>
 
 						<div className="feed-card-caption-container">
