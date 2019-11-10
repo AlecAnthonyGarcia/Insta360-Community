@@ -16,7 +16,9 @@ const SWF_PATH =
 class PanoModal extends React.Component {
 	state = {
 		loading: true,
-		isPlaying: false
+		isPlaying: false,
+		currentViewTypeIndex: 0,
+		viewTypes: ['Fisheye', 'Normal', 'Tiny Planet']
 	};
 
 	componentDidMount() {
@@ -69,6 +71,30 @@ class PanoModal extends React.Component {
 		});
 	};
 
+	normalizeView = () => {
+		window.krpano.call(
+			'tween(view.vlookat, 0.0, 1.0, easeInOutSine); tween(view.fov, 100, distance(150,0.8));'
+		);
+	};
+
+	normalView = () => {
+		window.krpano.call(
+			'tween(view.architectural, 0.0, distance(1.0,0.5)); tween(view.pannini, 0.0, distance(1.0,0.5)); tween(view.fisheye, 0.0, distance(1.0,0.5));'
+		);
+	};
+
+	fisheyeView = () => {
+		window.krpano.call(
+			'tween(view.architectural, 0.0, distance(1.0,0.5)); tween(view.pannini, 0.0, distance(1.0,0.5)); tween(view.fisheye, 0.35, distance(1.0,0.5));'
+		);
+	};
+
+	tinyPlanetView = () => {
+		window.krpano.call(
+			'tween(view.architectural, 0.0, distance(1.0,0.5)); tween(view.pannini, 0.0, distance(1.0,0.5)); tween(view.fisheye, 1.0, distance(1.0,0.8)); tween(view.fov, 150, distance(150,0.8)); tween(view.vlookat, 90, distance(100,0.8)); add(new_hlookat, view.hlookat, 123.0); tween(view.hlookat, get(new_hlookat), distance(100,0.8));'
+		);
+	};
+
 	onKrpanoReady = instance => {
 		instance.set('onloadcomplete', this.onLoadComplete);
 		window.krpano = instance;
@@ -98,6 +124,35 @@ class PanoModal extends React.Component {
 		}
 	};
 
+	onViewTypeChange = () => {
+		let { currentViewTypeIndex, viewTypes } = this.state;
+
+		if (currentViewTypeIndex < viewTypes.length - 1) {
+			currentViewTypeIndex++;
+		} else {
+			currentViewTypeIndex = 0;
+		}
+
+		this.setState({ currentViewTypeIndex });
+
+		const nextViewType = viewTypes[currentViewTypeIndex];
+
+		this.normalizeView();
+
+		switch (nextViewType) {
+			case 'Normal':
+				this.normalView();
+				break;
+			case 'Fisheye':
+				this.fisheyeView();
+				break;
+			case 'Tiny Planet':
+				this.tinyPlanetView();
+				break;
+			default:
+		}
+	};
+
 	isVideo = () => {
 		const { post } = this.props;
 		const { type } = post;
@@ -110,13 +165,22 @@ class PanoModal extends React.Component {
 	};
 
 	render() {
-		const { loading, isPlaying } = this.state;
+		const { loading, isPlaying, currentViewTypeIndex, viewTypes } = this.state;
+		const currentViewType = viewTypes[currentViewTypeIndex];
 
 		return (
 			<div
 				className="pano-modal"
 				style={{ display: loading ? 'none' : 'flex' }}
 			>
+				<Button
+					className="pano-modal-view-type-button"
+					type="link"
+					onClick={this.onViewTypeChange}
+				>
+					{currentViewType} View
+				</Button>
+
 				<Button
 					className="pano-modal-close-button"
 					type="primary"
@@ -125,6 +189,7 @@ class PanoModal extends React.Component {
 				>
 					Close
 				</Button>
+
 				{this.isVideo() && (
 					<img
 						alt="Play Button"
