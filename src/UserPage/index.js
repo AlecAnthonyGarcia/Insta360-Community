@@ -231,7 +231,9 @@ class UserPage extends React.Component {
 												<span className="user-nickname">
 													<UserNickname user={account} disableLink />
 												</span>
-												<span>{got_like} likes</span>
+												<span>
+													{got_like && got_like.toLocaleString()} likes
+												</span>
 											</div>
 											<FollowButton userId={userId} />
 										</div>
