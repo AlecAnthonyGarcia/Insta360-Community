@@ -71,7 +71,7 @@ class FeedCard extends React.Component {
 	};
 
 	replaceHashtagsWithLinks = text => {
-		return text.replace(/#([^\b# ]*)/gi, `<a href="/tag/$1/">#$1</a>`);
+		return text.replace(/#([^\b#.,， ]*)/gi, `<a href="/tag/$1/">#$1</a>`);
 	};
 
 	renderCaption() {
@@ -266,7 +266,10 @@ class FeedCard extends React.Component {
 						<div className="feed-card-caption-container">
 							<p className="timestamp">{moment(create_time).fromNow()}</p>
 
-							<span dangerouslySetInnerHTML={this.renderCaption()} />
+							<span
+								className="caption"
+								dangerouslySetInnerHTML={this.renderCaption()}
+							/>
 						</div>
 
 						{this.hasComments() && (
