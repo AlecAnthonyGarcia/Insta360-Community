@@ -3,6 +3,7 @@ import md5 from 'blueimp-md5';
 
 import Api from '../utils/Api';
 
+export const RESET_STATE = 'RESET_STATE';
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 export const SET_LOGIN_MODAL_VISIBILITY = 'SET_LOGIN_MODAL_VISIBILITY';
 export const SET_SIGNUP_MODAL_VISIBILITY = 'SET_SIGNUP_MODAL_VISIBILITY';
@@ -28,6 +29,7 @@ export function login({ email, password }) {
 			localStorage.setItem('user', JSON.stringify(account));
 			localStorage.setItem('jwtToken', token);
 			setAuthorizationToken(token);
+			dispatch(resetState());
 			dispatch(setCurrentUser(account));
 		}
 
@@ -46,6 +48,7 @@ export function signup({ email, password }) {
 			localStorage.setItem('user', JSON.stringify(account));
 			localStorage.setItem('jwtToken', token);
 			setAuthorizationToken(token);
+			dispatch(resetState());
 			dispatch(setCurrentUser(account));
 		}
 
@@ -58,7 +61,13 @@ export function logout() {
 		localStorage.removeItem('user');
 		localStorage.removeItem('jwtToken');
 		setAuthorizationToken(false);
-		dispatch(setCurrentUser({}));
+		dispatch(resetState());
+	};
+}
+
+export function resetState() {
+	return {
+		type: RESET_STATE
 	};
 }
 
