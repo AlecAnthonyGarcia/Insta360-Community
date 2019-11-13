@@ -49,3 +49,15 @@
 .ant-statistic.clickable {
 	cursor: pointer;
 }
+
+@media screen and (max-width: 992px) {
+	.stats-row {
+		.ant-statistic-title {
+			font-size: 12px;
+		}
+
+		.ant-statistic-content {
+			font-size: 18px;
+		}
+	}
+}
