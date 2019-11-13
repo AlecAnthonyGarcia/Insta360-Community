@@ -84,11 +84,13 @@ export default (state = DEFAULT_STATE, action) => {
 			};
 		}
 		case SET_LIKE_COUNT: {
+			const { likesMap } = state;
 			const { postId, count: likeCount, like } = action.payload;
 
 			return {
 				...state,
 				likesMap: {
+					...likesMap,
 					[postId]: {
 						like,
 						likeCount
@@ -109,11 +111,13 @@ export default (state = DEFAULT_STATE, action) => {
 			};
 		}
 		case SET_FOLLOWED: {
+			const { followsMap } = state;
 			const { userId, followed } = action.payload;
 
 			return {
 				...state,
 				followsMap: {
+					...followsMap,
 					[userId]: followed
 				}
 			};
