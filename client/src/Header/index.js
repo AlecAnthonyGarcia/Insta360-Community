@@ -145,11 +145,6 @@ class Header extends React.Component {
 						<Icon type="user" /> View Profile
 					</Link>
 				</Menu.Item>
-				<Menu.Item key="settings">
-					<Link to={`/settings`}>
-						<Icon type="setting" /> Settings
-					</Link>
-				</Menu.Item>
 				<Menu.Divider />
 				<Menu.Item key="logout" onClick={logout}>
 					<Icon type="logout" />
