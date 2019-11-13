@@ -21,7 +21,7 @@ import UserAvatar from '../UserAvatar/index.js';
 import FeedCard from '../FeedCard/index.js';
 import UserListModal from '../UserListModal/index.js';
 
-import { renderPostThumbnail } from '../utils/Utils.js';
+import { renderPostThumbnail, kFormatter } from '../utils/Utils.js';
 import Api from '../utils/Api';
 import FollowButton from '../FollowButton';
 import UserNickname from '../UserNickname';
@@ -276,7 +276,7 @@ class UserPage extends React.Component {
 												<Statistic
 													className="clickable"
 													title="Followers"
-													value={follower}
+													value={kFormatter(follower)}
 												/>
 											</Col>
 											<Col span={6}>

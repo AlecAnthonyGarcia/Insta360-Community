@@ -33,6 +33,12 @@ export function getFeedImageSrc(post) {
 	return app_thumb;
 }
 
+export function kFormatter(num) {
+	return Math.abs(num) > 999
+		? Math.sign(num) * (Math.abs(num) / 1000).toFixed(1) + 'k'
+		: Math.sign(num) * Math.abs(num);
+}
+
 export function renderPostThumbnail(post) {
 	const { id: postId, cover, popular_flag: isPopular, recommend, type } = post;
 
