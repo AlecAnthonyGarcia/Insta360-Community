@@ -239,12 +239,20 @@ class FeedCard extends React.Component {
 							title={this.renderTitle()}
 							description={
 								<span>
-									<img
-										alt="Country"
-										src={location_flag || LocationIcon}
-										className="feed-card-user-country-flag"
-									/>
-									<span>{location.en}</span>
+									{location && location.en ? (
+										<React.Fragment>
+											<img
+												alt="Country"
+												src={location_flag || LocationIcon}
+												className="feed-card-user-country-flag"
+											/>
+											<span className="feed-card-user-country-name">
+												{location.en}
+											</span>
+										</React.Fragment>
+									) : (
+										'‏‏‎ ‎'
+									)}
 
 									{parent !== FEED_CARD_PARENTS.TIMELINE && userId && (
 										<FollowButton userId={userId} />

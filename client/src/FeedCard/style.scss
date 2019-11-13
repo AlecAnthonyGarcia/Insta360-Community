@@ -23,8 +23,9 @@
 	}
 
 	.follow-button {
-		float: right;
+		position: absolute;
 		margin-top: -20px;
+		right: 20px;
 		color: black;
 	}
 
@@ -88,4 +89,10 @@
 
 .feed-card-comments-container {
 	margin-left: 5px;
+}
+
+@media screen and (max-width: 992px) {
+	.feed-card-user-country-name {
+		font-size: 10px;
+	}
 }
