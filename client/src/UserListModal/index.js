@@ -21,7 +21,8 @@ class UserListModal extends React.Component {
 			loading: true,
 			hasMore: true,
 			currentPage: 1,
-			totalPages: 1
+			totalPages: 1,
+			totalCount: null
 		};
 	}
 
@@ -39,13 +40,14 @@ class UserListModal extends React.Component {
 		const response = await apiMethod(userId, currentPage);
 
 		const { data } = response;
-		const { list, total_page: totalPages } = data;
+		const { list, total_page: totalPages, total_count: totalCount } = data;
 
 		this.setState({
 			loading: false,
 			isFirstLoad: false,
 			users: users.concat(list),
-			totalPages
+			totalPages,
+			totalCount
 		});
 	};
 
@@ -82,13 +84,13 @@ class UserListModal extends React.Component {
 
 	render() {
 		const { title } = this.props;
-		const { isFirstLoad, loading, hasMore, users } = this.state;
+		const { isFirstLoad, loading, hasMore, totalCount, users } = this.state;
 
 		return (
 			<Modal
 				className="user-list-modal"
 				visible
-				title={title}
+				title={title + (totalCount ? ` (${totalCount.toLocaleString()})` : '')}
 				centered
 				footer={null}
 				style={{ maxHeight: '70vh ' }}
