@@ -19,9 +19,12 @@ class FeedVideo extends React.Component {
 	}
 
 	onVideoClick = e => {
+		e.preventDefault();
+
 		const { current: video } = this.videoRef;
 
 		if (video.paused) {
+			video.play();
 			this.setState({ isVideoPlaying: true });
 		} else {
 			video.pause();
