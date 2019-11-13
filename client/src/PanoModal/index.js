@@ -1,6 +1,8 @@
 import React from 'react';
 import './style.scss';
 
+import MuteIcon from '../static/img/icon_mute.png';
+import UnmuteIcon from '../static/img/icon_unmute.png';
 import PlayIcon from '../static/img/icon_play.png';
 import PauseIcon from '../static/img/icon_pause.png';
 import imagepano from '../static/xml/imagepano.xml';
@@ -8,7 +10,7 @@ import videopano from '../static/xml/videopano.xml';
 
 import { Button } from 'antd';
 
-import { isVideo } from '../utils/Utils.js';
+import { isVideo, shouldMuteAutoPlayVideo } from '../utils/Utils.js';
 
 const SWF_PATH =
 	'https://static.insta360.com/assets/www/project/share/player/krpano.swf';
@@ -17,6 +19,7 @@ class PanoModal extends React.Component {
 	state = {
 		loading: true,
 		isPlaying: false,
+		isMuted: shouldMuteAutoPlayVideo(),
 		currentViewTypeIndex: 0,
 		viewTypes: ['Fisheye', 'Normal', 'Tiny Planet']
 	};
@@ -53,7 +56,7 @@ class PanoModal extends React.Component {
 		const { post } = this.props;
 		const { works } = post;
 		const {
-			urls: { star_image, video_720 }
+			urls: { video_720 }
 		} = works[0];
 
 		window.embedpano({
@@ -61,8 +64,7 @@ class PanoModal extends React.Component {
 			xml: videopano,
 			target: 'pano',
 			initvars: {
-				videourl: video_720,
-				posterurl: star_image
+				videourl: video_720
 			},
 			html5: 'auto',
 			mobilescale: 1.0,
@@ -116,11 +118,32 @@ class PanoModal extends React.Component {
 
 	onPlayButtonClick = () => {
 		if (this.isPaused()) {
-			window.krpano.call('plugin[video].play()');
+			const { isMuted } = this.state;
+
+			const video = window.krpano.get('plugin[video]');
+
+			if (isMuted) {
+				video.muted = true;
+			}
+
+			video.play();
+
 			this.setState({ isPlaying: true });
 		} else {
 			window.krpano.call('plugin[video].pause()');
 			this.setState({ isPlaying: false });
+		}
+	};
+
+	onMuteButtonClick = () => {
+		const video = window.krpano.get('plugin[video]');
+
+		if (video.muted) {
+			video.muted = false;
+			this.setState({ isMuted: false });
+		} else {
+			video.muted = true;
+			this.setState({ isMuted: true });
 		}
 	};
 
@@ -165,7 +188,13 @@ class PanoModal extends React.Component {
 	};
 
 	render() {
-		const { loading, isPlaying, currentViewTypeIndex, viewTypes } = this.state;
+		const {
+			loading,
+			isPlaying,
+			isMuted,
+			currentViewTypeIndex,
+			viewTypes
+		} = this.state;
 		const currentViewType = viewTypes[currentViewTypeIndex];
 
 		return (
@@ -191,12 +220,20 @@ class PanoModal extends React.Component {
 				</Button>
 
 				{this.isVideo() && (
-					<img
-						alt="Play Button"
-						src={isPlaying ? PauseIcon : PlayIcon}
-						className="pano-video-play-button"
-						onClick={this.onPlayButtonClick}
-					/>
+					<React.Fragment>
+						<img
+							alt="Play Button"
+							src={isPlaying ? PauseIcon : PlayIcon}
+							className="pano-video-play-button"
+							onClick={this.onPlayButtonClick}
+						/>
+						<img
+							alt="Mute Button"
+							src={isMuted ? MuteIcon : UnmuteIcon}
+							className="pano-video-mute-button"
+							onClick={this.onMuteButtonClick}
+						/>
+					</React.Fragment>
 				)}
 
 				<div id="pano" />

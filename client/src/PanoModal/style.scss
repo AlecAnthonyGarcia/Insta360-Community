@@ -45,4 +45,13 @@
 		bottom: 10px;
 		left: 10px;
 	}
+
+	.pano-video-mute-button {
+		position: absolute;
+		align-self: center;
+		cursor: pointer;
+		z-index: 1;
+		bottom: 10px;
+		left: 80px;
+	}
 }

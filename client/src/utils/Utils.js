@@ -17,6 +17,12 @@ export function isVideo(type) {
 	return type === 'single_video' || type === 'single_video2d';
 }
 
+export function shouldMuteAutoPlayVideo() {
+	const isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+	const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+	return isSafari || iOS;
+}
+
 export function getFeedImageSrc(post) {
 	const { cover, app_thumb, type } = post;
 
