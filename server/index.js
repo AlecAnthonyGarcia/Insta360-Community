@@ -10,7 +10,6 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 const filePath = path.resolve(__dirname, '../client/build', 'index.html');
-const logoPath = path.resolve(__dirname, '../client/build', 'logo.png');
 
 app.get('/user/*', function(req, res) {
 	fs.readFile(filePath, 'utf8', async function(err, fileData) {
@@ -140,7 +139,7 @@ function replaceWithDefaultMetaTags(data) {
 	const title = 'Insta360 Community';
 	const description =
 		'Discover 360° photos and videos shared by the Insta360 community.';
-	const image = logoPath;
+	const image = '/logo.png';
 
 	data = replaceMetaTags(data, title, description, image);
 
