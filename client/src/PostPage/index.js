@@ -1,5 +1,14 @@
 import React from 'react';
 
+import {
+	setFollowed,
+	setFollowsMap,
+	setLikesMap,
+	extractAccountsFromPosts
+} from '../HomePage/homeActions';
+
+import { connect } from 'react-redux';
+
 import Header from '../Header/index.js';
 import FeedCard from '../FeedCard/index.js';
 
@@ -18,13 +27,28 @@ class PostPage extends React.Component {
 	}
 
 	getPost = async () => {
-		const { postId } = this.props.match.params;
+		const {
+			match: { params },
+			setFollowsMap,
+			setLikesMap
+		} = this.props;
+		const { postId } = params;
+
 		const response = await Api.getPost(postId);
 
 		const { data } = response;
 		const { share: post } = data || {};
 
 		this.setState({ post, loading: false });
+
+		if (!post) {
+			return;
+		}
+
+		const posts = [post];
+
+		setFollowsMap(extractAccountsFromPosts(posts));
+		setLikesMap({ shares: posts });
 	};
 
 	render() {
@@ -50,4 +74,9 @@ class PostPage extends React.Component {
 	}
 }
 
-export default PostPage;
+export default connect(null, {
+	setFollowed,
+	setFollowsMap,
+	setLikesMap,
+	extractAccountsFromPosts
+})(PostPage);
