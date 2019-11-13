@@ -68,6 +68,7 @@ class FeedVideo extends React.Component {
 						className="feed-card-video"
 						src={source}
 						controls={isVideoPlaying}
+						playsInline
 						preload="metadata"
 						poster={getFeedImageSrc(post)}
 						onClick={this.onVideoClick}
