@@ -1,4 +1,5 @@
 import axios from 'axios';
+import md5 from 'blueimp-md5';
 
 import {
 	BASE_API,
@@ -302,7 +303,7 @@ async function resetPassword({ email, password, verificationCode }) {
 		},
 		data: JSON.stringify({
 			username: email,
-			password,
+			password: md5(password),
 			captcha: verificationCode
 		})
 	});
