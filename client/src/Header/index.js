@@ -27,6 +27,7 @@ import {
 	setForgotPasswordModalVisibility
 } from '../AuthModal/authActions';
 
+import UserAvatar from '../UserAvatar/index.js';
 import LoginModal from '../AuthModal/LoginModal/index.js';
 import SearchModal from '../SearchModal/index.js';
 import SignupModal from '../AuthModal/SignupModal';
@@ -189,7 +190,7 @@ class Header extends React.Component {
 
 							{auth ? (
 								<Dropdown overlay={headerMenu} trigger={['click']}>
-									<Avatar className="header-avatar" src={avatar} />
+									<UserAvatar className="header-avatar" src={avatar} />
 								</Dropdown>
 							) : (
 								<div>

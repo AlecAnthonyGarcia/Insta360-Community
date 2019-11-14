@@ -7,7 +7,7 @@ import { Avatar } from 'antd';
 function UserAvatar(props) {
 	let { src } = props;
 
-	if (src === '') {
+	if (src === '' || src === undefined) {
 		src = defaultAvatar;
 	}
 
