@@ -13,8 +13,19 @@ import {
 
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Card, List, Avatar, Button, Divider, Icon } from 'antd';
+import {
+	Card,
+	List,
+	Avatar,
+	Button,
+	Divider,
+	Dropdown,
+	Icon,
+	Menu,
+	message
+} from 'antd';
 import moment from 'moment';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import FeedImage from './FeedImage.js';
 import FeedVideo from './FeedVideo.js';
@@ -199,6 +210,85 @@ class FeedCard extends React.Component {
 		);
 	};
 
+	renderShareButton = post => {
+		const { id: postId, type } = post;
+
+		const postUrl = `https://Insta360.community/post/${postId}`;
+		const socialShareWindowOptions =
+			'toolbar=0,status=0,resizable=1,width=626,height=436';
+
+		const handleMenuClick = ({ key }) => {
+			switch (key) {
+				case 'open':
+					window.open(postUrl, '_blank');
+					break;
+				case 'facebook':
+					shareToFacebook();
+					break;
+				case 'twitter':
+					shareToTwitter();
+					break;
+			}
+		};
+
+		const shareToFacebook = () => {
+			const url = `https://facebook.com/sharer.php?display=popup&u=${postUrl}`;
+			window.open(url, 'sharer', socialShareWindowOptions);
+		};
+
+		const shareToTwitter = () => {
+			const { account } = post;
+			const { nickname } = account || {};
+
+			const panoType = is360Pano(type) ? ' 360°' : '';
+			const postType = isVideo(type) ? 'video' : 'photo';
+			const authorString = nickname ? ` by ${nickname}` : '';
+
+			const shareText = `Check out this${panoType} ${postType}${authorString} on the Insta360 Community`;
+
+			const url = `http://twitter.com/intent/tweet?text=${shareText}&url=${postUrl}`;
+
+			window.open(url, 'sharer', socialShareWindowOptions);
+		};
+
+		const onLinkCopied = () => {
+			message.success('Post link has been copied.');
+		};
+
+		const shareMenu = (
+			<Menu onClick={handleMenuClick}>
+				<Menu.Item key="open">
+					<Icon type="link" /> Open link
+				</Menu.Item>
+				<Menu.Item key="copy">
+					<CopyToClipboard text={postUrl} onCopy={onLinkCopied}>
+						<div>
+							<Icon type="copy" /> Copy link
+						</div>
+					</CopyToClipboard>
+				</Menu.Item>
+				<Menu.Item key="facebook">
+					<Icon type="facebook" /> Share to Facebook
+				</Menu.Item>
+				<Menu.Item key="twitter">
+					<Icon type="twitter" /> Share to Twitter
+				</Menu.Item>
+			</Menu>
+		);
+
+		return (
+			<Dropdown overlay={shareMenu} trigger={['click']}>
+				<Button
+					className="feed-card-action-button"
+					shape="round"
+					icon="share-alt"
+				>
+					Share
+				</Button>
+			</Dropdown>
+		);
+	};
+
 	render() {
 		const {
 			isPanoModalOpen,
@@ -301,16 +391,7 @@ class FeedCard extends React.Component {
 								<span>{comment_count}</span>
 							</Button>
 
-							<Link to={`/post/${postId}`}>
-								<Button
-									className="feed-card-action-button"
-									shape="round"
-									icon="share-alt"
-									onClick={this.showCommentListModal}
-								>
-									Share
-								</Button>
-							</Link>
+							{this.renderShareButton(post)}
 
 							{this.renderShareSourceIcon()}
 						</div>
@@ -392,7 +473,10 @@ function mapStateToProps(state) {
 	};
 }
 
-export default connect(
-	mapStateToProps,
-	{ followUser, unfollowUser, likePost, unlikePost, setLoginModalVisibility }
-)(FeedCard);
+export default connect(mapStateToProps, {
+	followUser,
+	unfollowUser,
+	likePost,
+	unlikePost,
+	setLoginModalVisibility
+})(FeedCard);
