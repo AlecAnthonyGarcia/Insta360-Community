@@ -27,8 +27,13 @@ class PostPage extends React.Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		const { auth } = this.props;
-		if (prevProps.auth !== auth) {
+		const {
+			match: { params },
+			auth
+		} = this.props;
+		const { postId } = params;
+		const { postId: previousPostId } = prevProps.match.params;
+		if (postId !== previousPostId || prevProps.auth !== auth) {
 			this.getPost();
 		}
 	}
