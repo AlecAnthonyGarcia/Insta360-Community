@@ -1,4 +1,5 @@
 import Api from '../utils/Api';
+import { TIMELINE_ACTIONS } from '../utils/Constants';
 
 export const SET_CURRENT_TAB_KEY = 'SET_CURRENT_TAB_KEY';
 export const SET_TIMELINE_POSTS_RESPONSE = 'SET_TIMELINE_POSTS_RESPONSE';
@@ -16,8 +17,19 @@ export function getTimelinePosts(lastTimestamp) {
 		const { data } = response;
 		const { list: shares } = data;
 
+		let posts = [];
+
+		shares.forEach(post => {
+			const { action, target } = post;
+
+			if (action === TIMELINE_ACTIONS.PUBLISH) {
+				const { share } = target;
+				posts.push(share);
+			}
+		});
+
 		dispatch(setTimelinePostsResponse(data));
-		dispatch(setLikesMap({ shares }));
+		dispatch(setLikesMap({ shares: posts }));
 
 		return response;
 	};
