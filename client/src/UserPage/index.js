@@ -64,9 +64,13 @@ class UserPage extends React.Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		const { userId } = this.props.match.params;
+		const {
+			match: { params },
+			auth
+		} = this.props;
+		const { userId } = params;
 		const { userId: previousUserId } = prevProps.match.params;
-		if (userId !== previousUserId) {
+		if (userId !== previousUserId || prevProps.auth !== auth) {
 			this.loadUserData();
 		}
 	}
@@ -308,7 +312,17 @@ class UserPage extends React.Component {
 	}
 }
 
-export default connect(
-	null,
-	{ setFollowed, setFollowsMap, setLikesMap, extractAccountsFromPosts }
-)(UserPage);
+function mapStateToProps(state) {
+	const { authReducer } = state;
+	const { isAuthenticated } = authReducer;
+	return {
+		auth: isAuthenticated
+	};
+}
+
+export default connect(mapStateToProps, {
+	setFollowed,
+	setFollowsMap,
+	setLikesMap,
+	extractAccountsFromPosts
+})(UserPage);

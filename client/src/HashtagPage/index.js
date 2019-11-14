@@ -68,9 +68,13 @@ class HashtagPage extends React.Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		const { tag } = this.props.match.params;
+		const {
+			match: { params },
+			auth
+		} = this.props;
+		const { tag } = params;
 		const { tag: previousTag } = prevProps.match.params;
-		if (tag !== previousTag) {
+		if (tag !== previousTag || prevProps.auth !== auth) {
 			this.loadHashtagData();
 		}
 	}
@@ -252,7 +256,17 @@ class HashtagPage extends React.Component {
 	}
 }
 
-export default connect(
-	null,
-	{ setFollowed, setFollowsMap, setLikesMap, extractAccountsFromPosts }
-)(HashtagPage);
+function mapStateToProps(state) {
+	const { authReducer } = state;
+	const { isAuthenticated } = authReducer;
+	return {
+		auth: isAuthenticated
+	};
+}
+
+export default connect(mapStateToProps, {
+	setFollowed,
+	setFollowsMap,
+	setLikesMap,
+	extractAccountsFromPosts
+})(HashtagPage);

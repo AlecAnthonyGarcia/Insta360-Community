@@ -26,6 +26,13 @@ class PostPage extends React.Component {
 		this.getPost();
 	}
 
+	componentDidUpdate(prevProps) {
+		const { auth } = this.props;
+		if (prevProps.auth !== auth) {
+			this.getPost();
+		}
+	}
+
 	getPost = async () => {
 		const {
 			match: { params },
@@ -74,7 +81,15 @@ class PostPage extends React.Component {
 	}
 }
 
-export default connect(null, {
+function mapStateToProps(state) {
+	const { authReducer } = state;
+	const { isAuthenticated } = authReducer;
+	return {
+		auth: isAuthenticated
+	};
+}
+
+export default connect(mapStateToProps, {
 	setFollowed,
 	setFollowsMap,
 	setLikesMap,
