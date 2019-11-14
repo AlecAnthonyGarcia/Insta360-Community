@@ -40,12 +40,14 @@ export default (state = DEFAULT_STATE, action) => {
 
 			const lastPost = list[list.length - 1];
 
+			const { feed_time } = lastPost || {};
+
 			return {
 				...state,
 				timelinePostsResponse: {
 					...action.response,
 					list: previousTimelinePosts.concat(list),
-					lastTimestamp: lastPost.feed_time
+					lastTimestamp: feed_time
 				}
 			};
 		case SET_FEATURED_POSTS_RESPONSE: {
@@ -56,12 +58,14 @@ export default (state = DEFAULT_STATE, action) => {
 			const { shares } = response;
 			const lastPost = shares[shares.length - 1];
 
+			const { id: lastPostId } = lastPost || {};
+
 			return {
 				...state,
 				featuredPostsResponse: {
 					...action.response,
 					shares: previousFeaturedPosts.concat(shares),
-					postIdCursor: lastPost.id
+					postIdCursor: lastPostId
 				}
 			};
 		}
@@ -73,13 +77,15 @@ export default (state = DEFAULT_STATE, action) => {
 			const { shares, queue } = response;
 			const lastPost = shares[shares.length - 1];
 
+			const { id: lastPostId } = lastPost || {};
+
 			return {
 				...state,
 				recentPostsResponse: {
 					...action.response,
 					shares: previousRecentPosts.concat(shares),
 					queue,
-					postIdCursor: lastPost.id
+					postIdCursor: lastPostId
 				}
 			};
 		}
