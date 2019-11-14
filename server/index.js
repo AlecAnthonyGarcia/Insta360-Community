@@ -98,9 +98,13 @@ app.get('/tag/*', function(req, res) {
 		}
 
 		const { value: hashtag } = tagInfo;
-		const {
-			content: { cover: image }
-		} = campaignTag;
+		const { content } = campaignTag || {};
+		const { cover } = content || {};
+		let { image } = cover || {};
+
+		if (!image) {
+			image = '/logo.png';
+		}
 
 		const title = 'Insta360 Community';
 		const description = `#${hashtag} hashtag on Insta360 • 360° Photos and Videos`;
