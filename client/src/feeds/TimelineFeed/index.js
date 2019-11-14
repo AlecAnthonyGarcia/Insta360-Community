@@ -13,8 +13,9 @@ import moment from 'moment';
 import FeedCard from '../../FeedCard/index.js';
 
 import { FEED_CARD_PARENTS, TIMELINE_ACTIONS } from '../../utils/Constants.js';
-import { renderPostThumbnail } from '../../utils/Utils.js';
+import { renderPostThumbnail, isVideo } from '../../utils/Utils.js';
 import UserNickname from '../../UserNickname';
+import UserAvatar from '../../UserAvatar';
 
 class TimelineFeed extends React.Component {
 	state = {
@@ -61,14 +62,43 @@ class TimelineFeed extends React.Component {
 
 				return (
 					<FeedCard
-						id={post.id}
 						post={share}
 						parent={FEED_CARD_PARENTS.TIMELINE}
 						action={action}
 					/>
 				);
 			}
-			case TIMELINE_ACTIONS.LIKE: {
+			case TIMELINE_ACTIONS.LIKE_POST: {
+				const [account] = subject;
+				const { avatar } = account;
+				const { share } = target;
+				const { type, account: targetAccount } = share;
+
+				const postType = isVideo(type) ? 'video' : 'photo';
+
+				return (
+					<Card
+						className="timeline-like-feed-card"
+						title={
+							<span>
+								<UserAvatar src={avatar} />
+								<span className="timeline-like-feed-card-title">
+									<UserNickname user={account} /> liked{' '}
+									<UserNickname user={targetAccount} />
+									's {postType}
+								</span>
+							</span>
+						}
+					>
+						<FeedCard
+							post={share}
+							parent={FEED_CARD_PARENTS.TIMELINE}
+							action={action}
+						/>
+					</Card>
+				);
+			}
+			case TIMELINE_ACTIONS.LIKE_POSTS: {
 				const [account] = subject;
 				const { id: userId, avatar } = account;
 				const { shares } = target;
@@ -151,7 +181,4 @@ function mapStateToProps(state) {
 	};
 }
 
-export default connect(
-	mapStateToProps,
-	{ getTimelinePosts }
-)(TimelineFeed);
+export default connect(mapStateToProps, { getTimelinePosts })(TimelineFeed);
