@@ -228,6 +228,7 @@ class FeedCard extends React.Component {
 				case 'twitter':
 					shareToTwitter();
 					break;
+				default:
 			}
 		};
 

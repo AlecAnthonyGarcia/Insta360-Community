@@ -7,17 +7,7 @@ import MediaQuery from 'react-responsive';
 
 import logo from '../static/img/logo.png';
 
-import {
-	Avatar,
-	Col,
-	Row,
-	Tabs,
-	Button,
-	Menu,
-	Dropdown,
-	Icon,
-	Badge
-} from 'antd';
+import { Col, Row, Tabs, Button, Menu, Dropdown, Icon, Badge } from 'antd';
 
 import { setCurrentTabKey } from '../HomePage/homeActions';
 import {
@@ -270,14 +260,11 @@ function mapStateToProps(state) {
 }
 
 export default withRouter(
-	connect(
-		mapStateToProps,
-		{
-			logout,
-			setCurrentTabKey,
-			setLoginModalVisibility,
-			setSignupModalVisibility,
-			setForgotPasswordModalVisibility
-		}
-	)(Header)
+	connect(mapStateToProps, {
+		logout,
+		setCurrentTabKey,
+		setLoginModalVisibility,
+		setSignupModalVisibility,
+		setForgotPasswordModalVisibility
+	})(Header)
 );

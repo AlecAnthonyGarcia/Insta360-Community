@@ -18,7 +18,7 @@ export function isVideo(type) {
 }
 
 export function shouldMuteAutoPlayVideo() {
-	const isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+	const isSafari = !!navigator.userAgent.match(/Version\/[\d]+.*Safari/);
 	const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 	return isSafari || iOS;
 }
