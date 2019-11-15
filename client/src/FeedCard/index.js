@@ -213,7 +213,7 @@ class FeedCard extends React.Component {
 	renderShareButton = post => {
 		const { id: postId, type } = post;
 
-		const postUrl = `https://Insta360.community/post/${postId}`;
+		const postUrl = `https://www.Insta360.community/post/${postId}`;
 		const socialShareWindowOptions =
 			'toolbar=0,status=0,resizable=1,width=626,height=436';
 
