@@ -17,7 +17,6 @@ const SWF_PATH =
 
 class PanoModal extends React.Component {
 	state = {
-		loading: true,
 		isPlaying: false,
 		isMuted: shouldMuteAutoPlayVideo(),
 		currentViewTypeIndex: 0,
@@ -35,16 +34,22 @@ class PanoModal extends React.Component {
 	embedImagePano = () => {
 		const { post } = this.props;
 		const { works } = post;
-		const {
-			app_urls: { source }
-		} = works[0];
+
+		const { firework_param: fireworkParam } = works[0];
+		const { level, tilesize } = JSON.parse(fireworkParam);
+
+		const tileLevel = level.find(item => item.tiledimagewidth === tilesize);
+		const tileUrl = tileLevel.cube.url.replace('../', '');
+
+		const BASE_URL = 'https://static.insta360.com/share/public/media/jpg/';
+		const imageurl = `${BASE_URL}${tileUrl}`;
 
 		window.embedpano({
 			swf: SWF_PATH,
 			xml: imagepano,
 			target: 'pano',
 			initvars: {
-				imageurl: source
+				imageurl
 			},
 			passQueryParameters: true,
 			onready: this.onKrpanoReady,
@@ -104,7 +109,6 @@ class PanoModal extends React.Component {
 
 	onLoadComplete = () => {
 		this.props.onLoadComplete();
-		this.setState({ loading: false });
 
 		if (this.isVideo()) {
 			this.onPlayButtonClick();
@@ -188,20 +192,11 @@ class PanoModal extends React.Component {
 	};
 
 	render() {
-		const {
-			loading,
-			isPlaying,
-			isMuted,
-			currentViewTypeIndex,
-			viewTypes
-		} = this.state;
+		const { isPlaying, isMuted, currentViewTypeIndex, viewTypes } = this.state;
 		const currentViewType = viewTypes[currentViewTypeIndex];
 
 		return (
-			<div
-				className="pano-modal"
-				style={{ display: loading ? 'none' : 'flex' }}
-			>
+			<div className="pano-modal">
 				<Button
 					className="pano-modal-view-type-button"
 					type="link"
