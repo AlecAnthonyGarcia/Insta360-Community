@@ -1,9 +1,0 @@
-<krpano>
-    <image tilesize="512" type="CUBE" multires="true" prealign="0|0.0|0">
-        <level tiledimagewidth="512" tiledimageheight="512">
-            <cube url="%$imageurl%" />
-        </level>
-    </image>
-    <view fov="get:fisheyeFov" fovmin="70" fovmax="140" fovtype="MFOV" fisheyeFov="calc: fisheyeFov" vlookat="0" hlookat="0" limitview="auto" maxpixelzoom="0.8" />
-    <events name="scene" onloadcomplete="onLoadComplete()" />
-</krpano>

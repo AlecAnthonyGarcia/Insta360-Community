@@ -5,7 +5,6 @@ import MuteIcon from '../static/img/icon_mute.png';
 import UnmuteIcon from '../static/img/icon_unmute.png';
 import PlayIcon from '../static/img/icon_play.png';
 import PauseIcon from '../static/img/icon_pause.png';
-import imagepano from '../static/xml/imagepano.xml';
 import videopano from '../static/xml/videopano.xml';
 
 import { Button } from 'antd';
@@ -20,7 +19,8 @@ class PanoModal extends React.Component {
 		isPlaying: false,
 		isMuted: shouldMuteAutoPlayVideo(),
 		currentViewTypeIndex: 0,
-		viewTypes: ['Fisheye', 'Normal', 'Tiny Planet']
+		viewTypes: ['Fisheye', 'Normal', 'Tiny Planet'],
+		pano: {}
 	};
 
 	componentDidMount() {
@@ -36,25 +36,52 @@ class PanoModal extends React.Component {
 		const { works } = post;
 
 		const { firework_param: fireworkParam } = works[0];
-		const { level, tilesize } = JSON.parse(fireworkParam);
+		let { level, tilesize } = JSON.parse(fireworkParam);
 
-		const tileLevel = level.find(item => item.tiledimagewidth === tilesize);
-		const tileUrl = tileLevel.cube.url.replace('../', '');
+		if (Array.isArray(level)) {
+			let tileLevel = level.find(item => item.tiledimagewidth === tilesize);
+			// if tile with size can't be found, use last tile in the array
+			level = tileLevel ? tileLevel : level[level.length - 1];
+		}
+
+		const { tiledimagewidth, cube } = level;
+
+		const tileUrl = cube.url.replace('../', '');
 
 		const BASE_URL = 'https://static.insta360.com/share/public/media/jpg/';
 		const imageurl = `${BASE_URL}${tileUrl}`;
 
-		window.embedpano({
-			swf: SWF_PATH,
-			xml: imagepano,
-			target: 'pano',
-			initvars: {
-				imageurl
-			},
-			passQueryParameters: true,
-			onready: this.onKrpanoReady,
-			onloadcomplete: this.onLoadComplete
+		const pano = { imageurl, tilesize, tiledimagewidth };
+
+		this.setState({ pano }, () => {
+			window.embedpano({
+				swf: SWF_PATH,
+				xml: null,
+				target: 'pano',
+				passQueryParameters: true,
+				onready: this.onKrpanoReady,
+				onloadcomplete: this.onLoadComplete
+			});
 		});
+	};
+
+	loadImagePano = () => {
+		const { pano } = this.state;
+		const { imageurl, tilesize, tiledimagewidth } = pano;
+
+		const panoXml = `<krpano>
+			<image tilesize="${tilesize}" type="CUBE" multires="true" prealign="0|0.0|0">
+			<level tiledimagewidth="${tiledimagewidth}" tiledimageheight="${tiledimagewidth}">
+			<cube url="${imageurl}"/>
+			</level>
+			</image>
+			<view fov="get:fisheyeFov" fovmin="70" fovmax="140" fovtype="MFOV" fisheyeFov="calc: fisheyeFov" vlookat="0" hlookat="0" limitview="auto" maxpixelzoom="0.8" />
+			<events name="scene" onloadcomplete="onLoadComplete()" />
+			</krpano>`;
+
+		window.krpano.call(
+			'loadxml(' + escape(panoXml) + ', null, MERGE, BLEND(0.5));'
+		);
 	};
 
 	embedVideoPano = () => {
@@ -105,6 +132,10 @@ class PanoModal extends React.Component {
 	onKrpanoReady = instance => {
 		instance.set('onloadcomplete', this.onLoadComplete);
 		window.krpano = instance;
+
+		if (!this.isVideo()) {
+			this.loadImagePano();
+		}
 	};
 
 	onLoadComplete = () => {
