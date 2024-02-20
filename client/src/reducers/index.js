@@ -6,7 +6,7 @@ import { RESET_STATE } from '../AuthModal/authActions';
 
 const appReducer = combineReducers({
 	authReducer,
-	homeReducer
+	homeReducer,
 });
 
 const rootReducer = (state, action) => {

@@ -7,7 +7,7 @@ import { followUser, unfollowUser } from '../HomePage/homeActions';
 
 import { Button } from 'antd';
 
-const FollowButton = props => {
+const FollowButton = (props) => {
 	const { userId, followsMap, authedUser } = props;
 
 	const followed = followsMap[userId];
@@ -39,7 +39,7 @@ const FollowButton = props => {
 			shape="round"
 			type={followed ? 'link' : 'primary'}
 			icon={followed ? 'check-circle' : 'user-add'}
-			onClick={e => onFollowButtonClick(e, userId)}
+			onClick={(e) => onFollowButtonClick(e, userId)}
 		>
 			{followed ? 'Following' : 'Follow'}
 		</Button>
@@ -53,11 +53,12 @@ function mapStateToProps(state) {
 	return {
 		auth: isAuthenticated,
 		authedUser: user,
-		followsMap
+		followsMap,
 	};
 }
 
-export default connect(
-	mapStateToProps,
-	{ followUser, unfollowUser, setLoginModalVisibility }
-)(FollowButton);
+export default connect(mapStateToProps, {
+	followUser,
+	unfollowUser,
+	setLoginModalVisibility,
+})(FollowButton);

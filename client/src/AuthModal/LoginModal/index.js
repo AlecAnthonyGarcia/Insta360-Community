@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import {
 	login,
 	setSignupModalVisibility,
-	setForgotPasswordModalVisibility
+	setForgotPasswordModalVisibility,
 } from '../authActions';
 
 import { Modal, Form, Input, Button, Icon, Alert } from 'antd';
@@ -18,11 +18,11 @@ class LoginModal extends React.Component {
 	getInitialState = () => {
 		return {
 			loading: false,
-			errorMessageText: null
+			errorMessageText: null,
 		};
 	};
 
-	handleSubmit = e => {
+	handleSubmit = (e) => {
 		const { form, login } = this.props;
 
 		e.preventDefault();
@@ -31,7 +31,7 @@ class LoginModal extends React.Component {
 			if (!err) {
 				this.setState({ loading: true });
 
-				login(values).then(response => {
+				login(values).then((response) => {
 					const { error, code } = response;
 
 					if (!error) {
@@ -45,11 +45,11 @@ class LoginModal extends React.Component {
 		});
 	};
 
-	handleError = code => {
+	handleError = (code) => {
 		switch (code) {
 			case 1001:
 				this.setState({
-					errorMessageText: "The account doesn't exist."
+					errorMessageText: "The account doesn't exist.",
 				});
 				break;
 			case 1002:
@@ -58,12 +58,12 @@ class LoginModal extends React.Component {
 			case 1008:
 			case 1009:
 				this.setState({
-					errorMessageText: 'This account is already bound'
+					errorMessageText: 'This account is already bound',
 				});
 				break;
 			default:
 				this.setState({
-					errorMessageText: 'There was an unknown error.'
+					errorMessageText: 'There was an unknown error.',
 				});
 		}
 	};
@@ -123,13 +123,13 @@ class LoginModal extends React.Component {
 							rules: [
 								{
 									type: 'email',
-									message: 'Incorrect email address format.'
+									message: 'Incorrect email address format.',
 								},
 								{
 									required: true,
-									message: 'Email address cannot be empty,'
-								}
-							]
+									message: 'Email address cannot be empty,',
+								},
+							],
 						})(
 							<Input
 								prefix={
@@ -146,13 +146,13 @@ class LoginModal extends React.Component {
 							rules: [
 								{
 									required: true,
-									message: 'Password cannot be empty.'
+									message: 'Password cannot be empty.',
 								},
 								{
 									min: 8,
-									message: 'Password must contain 8 characters at least.'
-								}
-							]
+									message: 'Password must contain 8 characters at least.',
+								},
+							],
 						})(
 							<Input
 								prefix={
@@ -196,7 +196,8 @@ class LoginModal extends React.Component {
 
 const WrappedForm = Form.create({ name: 'login' })(LoginModal);
 
-export default connect(
-	null,
-	{ login, setSignupModalVisibility, setForgotPasswordModalVisibility }
-)(WrappedForm);
+export default connect(null, {
+	login,
+	setSignupModalVisibility,
+	setForgotPasswordModalVisibility,
+})(WrappedForm);

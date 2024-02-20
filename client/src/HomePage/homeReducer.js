@@ -6,22 +6,22 @@ import {
 	SET_LIKE_COUNT,
 	SET_FOLLOWED,
 	SET_FOLLOWS_MAP,
-	SET_LIKES_MAP
+	SET_LIKES_MAP,
 } from './homeActions';
 
 const DEFAULT_STATE = {
 	currentTabKey: 'featured',
 	timelinePostsResponse: {
-		list: []
+		list: [],
 	},
 	featuredPostsResponse: {
-		shares: []
+		shares: [],
 	},
 	recentPostsResponse: {
-		shares: []
+		shares: [],
 	},
 	likesMap: {},
-	followsMap: {}
+	followsMap: {},
 };
 
 export default (state = DEFAULT_STATE, action) => {
@@ -29,7 +29,7 @@ export default (state = DEFAULT_STATE, action) => {
 		case SET_CURRENT_TAB_KEY:
 			return {
 				...state,
-				currentTabKey: action.tabKey
+				currentTabKey: action.tabKey,
 			};
 		case SET_TIMELINE_POSTS_RESPONSE:
 			const { timelinePostsResponse } = state;
@@ -47,8 +47,8 @@ export default (state = DEFAULT_STATE, action) => {
 				timelinePostsResponse: {
 					...action.response,
 					list: previousTimelinePosts.concat(list),
-					lastTimestamp: feed_time
-				}
+					lastTimestamp: feed_time,
+				},
 			};
 		case SET_FEATURED_POSTS_RESPONSE: {
 			const { featuredPostsResponse } = state;
@@ -65,8 +65,8 @@ export default (state = DEFAULT_STATE, action) => {
 				featuredPostsResponse: {
 					...action.response,
 					shares: previousFeaturedPosts.concat(shares),
-					postIdCursor: lastPostId
-				}
+					postIdCursor: lastPostId,
+				},
 			};
 		}
 		case SET_RECENT_POSTS_RESPONSE: {
@@ -85,8 +85,8 @@ export default (state = DEFAULT_STATE, action) => {
 					...action.response,
 					shares: previousRecentPosts.concat(shares),
 					queue,
-					postIdCursor: lastPostId
-				}
+					postIdCursor: lastPostId,
+				},
 			};
 		}
 		case SET_LIKE_COUNT: {
@@ -99,9 +99,9 @@ export default (state = DEFAULT_STATE, action) => {
 					...likesMap,
 					[postId]: {
 						like,
-						likeCount
-					}
-				}
+						likeCount,
+					},
+				},
 			};
 		}
 		case SET_FOLLOWS_MAP: {
@@ -112,8 +112,8 @@ export default (state = DEFAULT_STATE, action) => {
 				...state,
 				followsMap: {
 					...followsMap,
-					...newFollowsMap
-				}
+					...newFollowsMap,
+				},
 			};
 		}
 		case SET_FOLLOWED: {
@@ -124,8 +124,8 @@ export default (state = DEFAULT_STATE, action) => {
 				...state,
 				followsMap: {
 					...followsMap,
-					[userId]: followed
-				}
+					[userId]: followed,
+				},
 			};
 		}
 		case SET_LIKES_MAP: {
@@ -136,8 +136,8 @@ export default (state = DEFAULT_STATE, action) => {
 				...state,
 				likesMap: {
 					...likesMap,
-					...newLikesMap
-				}
+					...newLikesMap,
+				},
 			};
 		}
 		default:

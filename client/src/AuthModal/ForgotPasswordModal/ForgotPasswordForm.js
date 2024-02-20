@@ -14,11 +14,11 @@ class ForgotPasswordForm extends React.Component {
 	getInitialState = () => {
 		return {
 			loading: false,
-			errorMessageText: null
+			errorMessageText: null,
 		};
 	};
 
-	handleSubmit = e => {
+	handleSubmit = (e) => {
 		const { form, onPasswordResetEmailSent } = this.props;
 
 		e.preventDefault();
@@ -29,7 +29,7 @@ class ForgotPasswordForm extends React.Component {
 
 				const { email } = values;
 
-				Api.sendVerificationCode(email).then(response => {
+				Api.sendVerificationCode(email).then((response) => {
 					const { error, code } = response;
 
 					if (!error) {
@@ -44,16 +44,16 @@ class ForgotPasswordForm extends React.Component {
 		});
 	};
 
-	handleError = code => {
+	handleError = (code) => {
 		switch (code) {
 			case 1001:
 				this.setState({
-					errorMessageText: "The email can't be found."
+					errorMessageText: "The email can't be found.",
 				});
 				break;
 			default:
 				this.setState({
-					errorMessageText: 'There was an unknown error.'
+					errorMessageText: 'There was an unknown error.',
 				});
 		}
 	};
@@ -100,13 +100,13 @@ class ForgotPasswordForm extends React.Component {
 						rules: [
 							{
 								type: 'email',
-								message: 'Incorrect email address format.'
+								message: 'Incorrect email address format.',
 							},
 							{
 								required: true,
-								message: 'Email address cannot be empty,'
-							}
-						]
+								message: 'Email address cannot be empty,',
+							},
+						],
 					})(
 						<Input
 							prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}

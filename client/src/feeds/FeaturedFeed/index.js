@@ -16,7 +16,7 @@ class FeaturedFeed extends React.Component {
 	state = {
 		isFirstLoad: true,
 		loading: true,
-		hasMore: true
+		hasMore: true,
 	};
 
 	componentDidMount() {
@@ -36,7 +36,7 @@ class FeaturedFeed extends React.Component {
 			this.setState({
 				loading: false,
 				isFirstLoad: false,
-				hasMore: featuredPosts && featuredPosts.length > 0
+				hasMore: featuredPosts && featuredPosts.length > 0,
 			});
 		}
 	}
@@ -63,7 +63,7 @@ class FeaturedFeed extends React.Component {
 					<List
 						dataSource={featuredPosts}
 						loading={loading}
-						renderItem={item => (
+						renderItem={(item) => (
 							<FeedCard
 								key={item.id}
 								post={item}
@@ -87,11 +87,8 @@ function mapStateToProps(state) {
 	const { homeReducer } = state;
 	const { featuredPostsResponse } = homeReducer;
 	return {
-		featuredPostsResponse
+		featuredPostsResponse,
 	};
 }
 
-export default connect(
-	mapStateToProps,
-	{ getFeaturedPosts }
-)(FeaturedFeed);
+export default connect(mapStateToProps, { getFeaturedPosts })(FeaturedFeed);

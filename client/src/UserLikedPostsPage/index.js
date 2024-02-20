@@ -4,7 +4,7 @@ import {
 	setFollowed,
 	setFollowsMap,
 	setLikesMap,
-	extractAccountsFromPosts
+	extractAccountsFromPosts,
 } from '../HomePage/homeActions';
 
 import { connect } from 'react-redux';
@@ -29,7 +29,7 @@ class UserLikedPostsPage extends React.Component {
 		hasMore: true,
 		currentPage: 1,
 		totalPages: 1,
-		totalCount: null
+		totalCount: null,
 	};
 
 	componentDidMount() {
@@ -48,7 +48,7 @@ class UserLikedPostsPage extends React.Component {
 	getUser = async () => {
 		const {
 			match: { params },
-			setFollowed
+			setFollowed,
 		} = this.props;
 		const { userId } = params;
 
@@ -76,7 +76,7 @@ class UserLikedPostsPage extends React.Component {
 		const {
 			match: { params },
 			setFollowsMap,
-			setLikesMap
+			setLikesMap,
 		} = this.props;
 		const { userId } = params;
 
@@ -93,7 +93,7 @@ class UserLikedPostsPage extends React.Component {
 			isFirstLoad: false,
 			posts: posts.concat(list),
 			totalPages,
-			totalCount
+			totalCount,
 		});
 	};
 
@@ -104,10 +104,10 @@ class UserLikedPostsPage extends React.Component {
 			currentPage = currentPage + 1;
 
 			this.setState(
-				prevState => ({
+				(prevState) => ({
 					loading: true,
 					hasMore: currentPage < totalPages,
-					currentPage: prevState.currentPage + 1
+					currentPage: prevState.currentPage + 1,
 				}),
 				() => {
 					this.getLikedPosts();
@@ -139,7 +139,7 @@ class UserLikedPostsPage extends React.Component {
 				<PageHeader
 					style={{
 						border: '1px solid rgb(235, 237, 240)',
-						background: 'white'
+						background: 'white',
 					}}
 					onBack={this.onBack}
 					title={
@@ -180,7 +180,7 @@ class UserLikedPostsPage extends React.Component {
 							<List
 								dataSource={posts}
 								loading={loading}
-								renderItem={item => <FeedCard key={item.id} post={item} />}
+								renderItem={(item) => <FeedCard key={item.id} post={item} />}
 							>
 								{loading && !isFirstLoad && hasMore && (
 									<div className="loading-container">
@@ -196,7 +196,9 @@ class UserLikedPostsPage extends React.Component {
 	}
 }
 
-export default connect(
-	null,
-	{ setFollowed, setFollowsMap, setLikesMap, extractAccountsFromPosts }
-)(UserLikedPostsPage);
+export default connect(null, {
+	setFollowed,
+	setFollowsMap,
+	setLikesMap,
+	extractAccountsFromPosts,
+})(UserLikedPostsPage);

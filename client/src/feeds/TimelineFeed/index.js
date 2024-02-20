@@ -21,7 +21,7 @@ class TimelineFeed extends React.Component {
 	state = {
 		isFirstLoad: true,
 		loading: true,
-		hasMore: true
+		hasMore: true,
 	};
 
 	componentDidMount() {
@@ -43,7 +43,7 @@ class TimelineFeed extends React.Component {
 			this.setState({
 				loading: false,
 				isFirstLoad: false,
-				hasMore: timelinePosts && timelinePosts.length > 0
+				hasMore: timelinePosts && timelinePosts.length > 0,
 			});
 		}
 	}
@@ -128,7 +128,7 @@ class TimelineFeed extends React.Component {
 						<List
 							grid={{ gutter: 16, column: 3 }}
 							dataSource={shares}
-							renderItem={item => {
+							renderItem={(item) => {
 								return <List.Item>{renderPostThumbnail(item)}</List.Item>;
 							}}
 						/>
@@ -157,7 +157,7 @@ class TimelineFeed extends React.Component {
 					<List
 						dataSource={timelinePosts}
 						loading={loading}
-						renderItem={item => this.renderTimelineFeedCard(item)}
+						renderItem={(item) => this.renderTimelineFeedCard(item)}
 					>
 						{loading && !isFirstLoad && hasMore && (
 							<div className="loading-container">
@@ -177,7 +177,7 @@ function mapStateToProps(state) {
 	const { timelinePostsResponse } = homeReducer;
 	return {
 		auth: isAuthenticated,
-		timelinePostsResponse
+		timelinePostsResponse,
 	};
 }
 

@@ -10,16 +10,16 @@ export const AUTH_API = `${BASE_API}auth/${API_VERSION}/`;
 export const FEED_CARD_PARENTS = {
 	FEATURED: 'FEATURED_FEED',
 	RECENT: 'RECENT_FEED',
-	TIMELINE: 'TIMELINE_FEED'
+	TIMELINE: 'TIMELINE_FEED',
 };
 
 export const TIMELINE_ACTIONS = {
 	LIKE_POST: 'like_post',
 	LIKE_POSTS: 'like_post_set',
-	PUBLISH: 'publish_post'
+	PUBLISH: 'publish_post',
 };
 
 export const NOTIFICATION_ACTIONS = {
 	LIKE: 'like_post',
-	FOLLOW: 'follow_user'
+	FOLLOW: 'follow_user',
 };

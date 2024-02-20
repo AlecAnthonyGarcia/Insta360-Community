@@ -11,8 +11,8 @@ const port = process.env.PORT || 5000;
 
 const filePath = path.resolve(__dirname, '../client/build', 'index.html');
 
-app.get('/user/*', function(req, res) {
-	fs.readFile(filePath, 'utf8', async function(err, fileData) {
+app.get('/user/*', function (req, res) {
+	fs.readFile(filePath, 'utf8', async function (err, fileData) {
 		if (err) {
 			return console.log(err);
 		}
@@ -45,8 +45,8 @@ app.get('/user/*', function(req, res) {
 	});
 });
 
-app.get('/post/*', function(req, res) {
-	fs.readFile(filePath, 'utf8', async function(err, fileData) {
+app.get('/post/*', function (req, res) {
+	fs.readFile(filePath, 'utf8', async function (err, fileData) {
 		if (err) {
 			return console.log(err);
 		}
@@ -77,8 +77,8 @@ app.get('/post/*', function(req, res) {
 	});
 });
 
-app.get('/tag/*', function(req, res) {
-	fs.readFile(filePath, 'utf8', async function(err, fileData) {
+app.get('/tag/*', function (req, res) {
+	fs.readFile(filePath, 'utf8', async function (err, fileData) {
 		if (err) {
 			return console.log(err);
 		}
@@ -115,20 +115,20 @@ app.get('/tag/*', function(req, res) {
 	});
 });
 
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
 	handleDefaultRoute(res);
 });
 
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 
-app.get('*', function(req, res) {
+app.get('*', function (req, res) {
 	handleDefaultRoute(res);
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
 function handleDefaultRoute(response) {
-	fs.readFile(filePath, 'utf8', async function(err, fileData) {
+	fs.readFile(filePath, 'utf8', async function (err, fileData) {
 		if (err) {
 			return console.log(err);
 		}

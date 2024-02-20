@@ -4,7 +4,7 @@ import {
 	setFollowed,
 	setFollowsMap,
 	setLikesMap,
-	extractAccountsFromPosts
+	extractAccountsFromPosts,
 } from '../HomePage/homeActions';
 
 import { connect } from 'react-redux';
@@ -19,7 +19,7 @@ import { Skeleton } from 'antd';
 class PostPage extends React.Component {
 	state = {
 		loading: true,
-		post: {}
+		post: {},
 	};
 
 	componentDidMount() {
@@ -29,7 +29,7 @@ class PostPage extends React.Component {
 	componentDidUpdate(prevProps) {
 		const {
 			match: { params },
-			auth
+			auth,
 		} = this.props;
 		const { postId } = params;
 		const { postId: previousPostId } = prevProps.match.params;
@@ -42,7 +42,7 @@ class PostPage extends React.Component {
 		const {
 			match: { params },
 			setFollowsMap,
-			setLikesMap
+			setLikesMap,
 		} = this.props;
 		const { postId } = params;
 
@@ -90,7 +90,7 @@ function mapStateToProps(state) {
 	const { authReducer } = state;
 	const { isAuthenticated } = authReducer;
 	return {
-		auth: isAuthenticated
+		auth: isAuthenticated,
 	};
 }
 
@@ -98,5 +98,5 @@ export default connect(mapStateToProps, {
 	setFollowed,
 	setFollowsMap,
 	setLikesMap,
-	extractAccountsFromPosts
+	extractAccountsFromPosts,
 })(PostPage);

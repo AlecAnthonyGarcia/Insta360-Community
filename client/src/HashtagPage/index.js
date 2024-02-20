@@ -5,7 +5,7 @@ import {
 	setFollowed,
 	setFollowsMap,
 	setLikesMap,
-	extractAccountsFromPosts
+	extractAccountsFromPosts,
 } from '../HomePage/homeActions';
 
 import { Link } from 'react-router-dom';
@@ -19,7 +19,7 @@ import {
 	List,
 	Avatar,
 	Divider,
-	Skeleton
+	Skeleton,
 } from 'antd';
 
 import InfiniteScroll from 'react-infinite-scroller';
@@ -48,7 +48,7 @@ class HashtagPage extends React.Component {
 			isFirstLoad: true,
 			loading: true,
 			hasMore: true,
-			postIdCursor: null
+			postIdCursor: null,
 		};
 	};
 
@@ -70,7 +70,7 @@ class HashtagPage extends React.Component {
 	componentDidUpdate(prevProps) {
 		const {
 			match: { params },
-			auth
+			auth,
 		} = this.props;
 		const { tag } = params;
 		const { tag: previousTag } = prevProps.match.params;
@@ -96,7 +96,7 @@ class HashtagPage extends React.Component {
 		const {
 			match: { params },
 			setFollowsMap,
-			setLikesMap
+			setLikesMap,
 		} = this.props;
 		const { tag } = params;
 
@@ -117,7 +117,7 @@ class HashtagPage extends React.Component {
 			isFirstLoad: false,
 			posts: posts.concat(shares),
 			hasMore: shares && shares.length > 0,
-			postIdCursor: lastPostId
+			postIdCursor: lastPostId,
 		});
 	};
 
@@ -145,7 +145,7 @@ class HashtagPage extends React.Component {
 				header={<div>Popular</div>}
 				grid={{ gutter: 16, column: 3 }}
 				dataSource={popularPosts}
-				renderItem={item => {
+				renderItem={(item) => {
 					return <List.Item>{renderPostThumbnail(item)}</List.Item>;
 				}}
 			/>
@@ -175,7 +175,7 @@ class HashtagPage extends React.Component {
 					header={renderHeader()}
 					dataSource={posts}
 					loading={loading}
-					renderItem={item => <FeedCard key={item.id} post={item} />}
+					renderItem={(item) => <FeedCard key={item.id} post={item} />}
 				>
 					{loading && !isFirstLoad && hasMore && (
 						<div className="loading-container">
@@ -260,7 +260,7 @@ function mapStateToProps(state) {
 	const { authReducer } = state;
 	const { isAuthenticated } = authReducer;
 	return {
-		auth: isAuthenticated
+		auth: isAuthenticated,
 	};
 }
 
@@ -268,5 +268,5 @@ export default connect(mapStateToProps, {
 	setFollowed,
 	setFollowsMap,
 	setLikesMap,
-	extractAccountsFromPosts
+	extractAccountsFromPosts,
 })(HashtagPage);

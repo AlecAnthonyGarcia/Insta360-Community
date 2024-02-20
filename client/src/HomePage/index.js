@@ -10,7 +10,7 @@ import RecentFeed from '../feeds/RecentFeed/index.js';
 
 class HomePage extends React.Component {
 	state = {
-		currentFeedComponent: null
+		currentFeedComponent: null,
 	};
 
 	componentDidMount() {
@@ -29,7 +29,7 @@ class HomePage extends React.Component {
 		}
 	}
 
-	updateFeedComponent = currentTabKey => {
+	updateFeedComponent = (currentTabKey) => {
 		switch (currentTabKey) {
 			case 'timeline':
 				this.setCurrentFeedComponent(<TimelineFeed />);
@@ -44,7 +44,7 @@ class HomePage extends React.Component {
 		}
 	};
 
-	setCurrentFeedComponent = component => {
+	setCurrentFeedComponent = (component) => {
 		this.setState({ currentFeedComponent: component });
 	};
 
@@ -80,11 +80,8 @@ function mapStateToProps(state) {
 	const { currentTabKey } = homeReducer;
 	return {
 		currentTabKey,
-		auth: isAuthenticated
+		auth: isAuthenticated,
 	};
 }
 
-export default connect(
-	mapStateToProps,
-	null
-)(HomePage);
+export default connect(mapStateToProps, null)(HomePage);

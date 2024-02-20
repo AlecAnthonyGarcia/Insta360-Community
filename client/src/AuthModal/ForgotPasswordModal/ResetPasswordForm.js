@@ -9,10 +9,10 @@ class ResetPasswordForm extends React.Component {
 	state = {
 		loading: false,
 		errorMessageText: null,
-		isPasswordResetSuccessful: false
+		isPasswordResetSuccessful: false,
 	};
 
-	handleSubmit = e => {
+	handleSubmit = (e) => {
 		const { form, email } = this.props;
 
 		e.preventDefault();
@@ -21,7 +21,7 @@ class ResetPasswordForm extends React.Component {
 			if (!err) {
 				this.setState({ loading: true });
 
-				Api.resetPassword({ email, ...values }).then(response => {
+				Api.resetPassword({ email, ...values }).then((response) => {
 					const { error, code } = response;
 
 					if (!error) {
@@ -35,16 +35,16 @@ class ResetPasswordForm extends React.Component {
 		});
 	};
 
-	handleError = code => {
+	handleError = (code) => {
 		switch (code) {
 			case 1011:
 				this.setState({
-					errorMessageText: 'The verification code is invalid.'
+					errorMessageText: 'The verification code is invalid.',
 				});
 				break;
 			default:
 				this.setState({
-					errorMessageText: 'There was an unknown error.'
+					errorMessageText: 'There was an unknown error.',
 				});
 		}
 	};
@@ -82,9 +82,9 @@ class ResetPasswordForm extends React.Component {
 								rules: [
 									{
 										required: true,
-										message: 'Verification code cannot be empty.'
-									}
-								]
+										message: 'Verification code cannot be empty.',
+									},
+								],
 							})(
 								<Input
 									prefix={
@@ -101,13 +101,13 @@ class ResetPasswordForm extends React.Component {
 								rules: [
 									{
 										required: true,
-										message: 'Password cannot be empty.'
+										message: 'Password cannot be empty.',
 									},
 									{
 										min: 8,
-										message: 'Password must contain 8 characters at least.'
-									}
-								]
+										message: 'Password must contain 8 characters at least.',
+									},
+								],
 							})(
 								<Input
 									prefix={

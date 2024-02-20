@@ -27,7 +27,7 @@ class NotificationListModal extends React.Component {
 			loading: true,
 			hasMore: true,
 			totalPages: 1,
-			totalCount: null
+			totalCount: null,
 		};
 	}
 
@@ -50,7 +50,7 @@ class NotificationListModal extends React.Component {
 		if (lastPost) {
 			let accounts = [];
 
-			notices.forEach(notification => {
+			notices.forEach((notification) => {
 				const { action, data } = notification;
 
 				if (action === NOTIFICATION_ACTIONS.FOLLOW) {
@@ -69,11 +69,11 @@ class NotificationListModal extends React.Component {
 			hasMore: notices && notices.length > 0,
 			lastTimestamp: lastPostTimestamp,
 			totalPages,
-			totalCount
+			totalCount,
 		});
 	};
 
-	getActionLabel = action => {
+	getActionLabel = (action) => {
 		switch (action) {
 			case NOTIFICATION_ACTIONS.LIKE:
 				return 'liked your post';
@@ -121,13 +121,8 @@ class NotificationListModal extends React.Component {
 
 	render() {
 		const { title } = this.props;
-		const {
-			isFirstLoad,
-			loading,
-			hasMore,
-			totalCount,
-			notifications
-		} = this.state;
+		const { isFirstLoad, loading, hasMore, totalCount, notifications } =
+			this.state;
 
 		return (
 			<Modal
@@ -149,7 +144,7 @@ class NotificationListModal extends React.Component {
 					<List
 						dataSource={notifications}
 						loading={loading}
-						renderItem={item => {
+						renderItem={(item) => {
 							const { id, action, data, create_time } = item;
 							const { account } = data;
 							const { id: userId, avatar } = account;
@@ -192,7 +187,4 @@ class NotificationListModal extends React.Component {
 	}
 }
 
-export default connect(
-	null,
-	{ setFollowsMap }
-)(NotificationListModal);
+export default connect(null, { setFollowsMap })(NotificationListModal);

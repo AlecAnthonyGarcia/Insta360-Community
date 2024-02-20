@@ -22,7 +22,7 @@ class SearchModal extends React.Component {
 		this.state = {
 			...this.getInitialState(),
 			recommendedSearchTags: [],
-			recommendedSearchUsers: []
+			recommendedSearchUsers: [],
 		};
 	}
 
@@ -35,7 +35,7 @@ class SearchModal extends React.Component {
 		return {
 			tags: [],
 			users: [],
-			activeTabKey: '1'
+			activeTabKey: '1',
 		};
 	};
 
@@ -51,15 +51,15 @@ class SearchModal extends React.Component {
 		this.setState({ recommendedSearchUsers, users: recommendedSearchUsers });
 	};
 
-	searchTags = async query => {
+	searchTags = async (query) => {
 		const response = await Api.searchTags(query);
 		this.setState({ tags: response.data.tags });
 	};
 
-	searchUsers = async query => {
+	searchUsers = async (query) => {
 		const response = await Api.searchUsers(query);
 		const {
-			data: { accounts: users }
+			data: { accounts: users },
 		} = response;
 
 		setFollowsMap(users);
@@ -67,7 +67,7 @@ class SearchModal extends React.Component {
 		this.setState({ users });
 	};
 
-	onSearch = query => {
+	onSearch = (query) => {
 		const { activeTabKey } = this.state;
 		switch (activeTabKey) {
 			case '1':
@@ -80,7 +80,7 @@ class SearchModal extends React.Component {
 		}
 	};
 
-	onTabChange = activeTabKey => {
+	onTabChange = (activeTabKey) => {
 		this.setState({ activeTabKey });
 	};
 
@@ -104,13 +104,13 @@ class SearchModal extends React.Component {
 		this.setState({
 			...this.getInitialState(),
 			tags: recommendedSearchTags,
-			users: recommendedSearchUsers
+			users: recommendedSearchUsers,
 		});
 
 		const {
 			current: {
-				input: { state: searchBarState }
-			}
+				input: { state: searchBarState },
+			},
 		} = this.searchRef;
 
 		searchBarState.value = '';
@@ -148,7 +148,7 @@ class SearchModal extends React.Component {
 						<List
 							itemLayout="horizontal"
 							dataSource={tags}
-							renderItem={item => (
+							renderItem={(item) => (
 								<Link to={`/tag/${item.value}`} onClick={this.onListItemClick}>
 									<List.Item key={item.id}>
 										<List.Item.Meta
@@ -165,7 +165,7 @@ class SearchModal extends React.Component {
 						<List
 							itemLayout="horizontal"
 							dataSource={users}
-							renderItem={item => (
+							renderItem={(item) => (
 								<Link to={`/user/${item.id}`} onClick={this.onListItemClick}>
 									<List.Item key={item.id}>
 										<List.Item.Meta
@@ -186,7 +186,4 @@ class SearchModal extends React.Component {
 	}
 }
 
-export default connect(
-	null,
-	{ setFollowsMap }
-)(SearchModal);
+export default connect(null, { setFollowsMap })(SearchModal);

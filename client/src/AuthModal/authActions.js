@@ -19,7 +19,7 @@ export function setAuthorizationToken(token) {
 }
 
 export function login({ email, password }) {
-	return async dispatch => {
+	return async (dispatch) => {
 		const response = await Api.login(email, md5(password));
 
 		const { data, error } = response;
@@ -38,7 +38,7 @@ export function login({ email, password }) {
 }
 
 export function signup({ email, password }) {
-	return async dispatch => {
+	return async (dispatch) => {
 		const response = await Api.signup(email, md5(password));
 
 		const { data, error } = response;
@@ -57,7 +57,7 @@ export function signup({ email, password }) {
 }
 
 export function logout() {
-	return dispatch => {
+	return (dispatch) => {
 		localStorage.removeItem('user');
 		localStorage.removeItem('jwtToken');
 		setAuthorizationToken(false);
@@ -67,34 +67,34 @@ export function logout() {
 
 export function resetState() {
 	return {
-		type: RESET_STATE
+		type: RESET_STATE,
 	};
 }
 
 export function setCurrentUser(user) {
 	return {
 		type: SET_CURRENT_USER,
-		user
+		user,
 	};
 }
 
 export function setLoginModalVisibility(visible) {
 	return {
 		type: SET_LOGIN_MODAL_VISIBILITY,
-		visible
+		visible,
 	};
 }
 
 export function setSignupModalVisibility(visible) {
 	return {
 		type: SET_SIGNUP_MODAL_VISIBILITY,
-		visible
+		visible,
 	};
 }
 
 export function setForgotPasswordModalVisibility(visible) {
 	return {
 		type: SET_FORGOT_PASSWORD_MODAL_VISIBILITY,
-		visible
+		visible,
 	};
 }

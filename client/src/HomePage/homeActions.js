@@ -11,7 +11,7 @@ export const SET_FOLLOWS_MAP = 'SET_FOLLOWS_MAP';
 export const SET_LIKES_MAP = 'SET_LIKES_MAP';
 
 export function getTimelinePosts(lastTimestamp) {
-	return async dispatch => {
+	return async (dispatch) => {
 		const response = await Api.getTimelinePosts(lastTimestamp);
 
 		const { data } = response;
@@ -19,7 +19,7 @@ export function getTimelinePosts(lastTimestamp) {
 
 		let posts = [];
 
-		shares.forEach(post => {
+		shares.forEach((post) => {
 			const { action, target } = post;
 
 			if (action === TIMELINE_ACTIONS.PUBLISH) {
@@ -36,7 +36,7 @@ export function getTimelinePosts(lastTimestamp) {
 }
 
 export function getFeaturedPosts(postIdCursor) {
-	return async dispatch => {
+	return async (dispatch) => {
 		const response = await Api.getFeaturedPosts(postIdCursor);
 
 		const { data } = response;
@@ -51,7 +51,7 @@ export function getFeaturedPosts(postIdCursor) {
 }
 
 export function getRecentPosts(postIdCursor, queue) {
-	return async dispatch => {
+	return async (dispatch) => {
 		const response = await Api.getRecentPosts(postIdCursor, queue);
 
 		const { data } = response;
@@ -66,11 +66,11 @@ export function getRecentPosts(postIdCursor, queue) {
 }
 
 export function likePost(postId) {
-	return async dispatch => {
+	return async (dispatch) => {
 		const response = await Api.likePost(postId);
 
 		const {
-			data: { count }
+			data: { count },
 		} = response;
 
 		dispatch(setLikeCount(postId, count, true));
@@ -80,11 +80,11 @@ export function likePost(postId) {
 }
 
 export function unlikePost(postId) {
-	return async dispatch => {
+	return async (dispatch) => {
 		const response = await Api.unlikePost(postId);
 
 		const {
-			data: { count }
+			data: { count },
 		} = response;
 
 		dispatch(setLikeCount(postId, count, false));
@@ -94,7 +94,7 @@ export function unlikePost(postId) {
 }
 
 export function followUser(userId) {
-	return async dispatch => {
+	return async (dispatch) => {
 		const response = await Api.followUser(userId);
 
 		dispatch(setFollowed(userId, true));
@@ -104,7 +104,7 @@ export function followUser(userId) {
 }
 
 export function unfollowUser(userId) {
-	return async dispatch => {
+	return async (dispatch) => {
 		const response = await Api.unfollowUser(userId);
 
 		dispatch(setFollowed(userId, false));
@@ -116,28 +116,28 @@ export function unfollowUser(userId) {
 export function setCurrentTabKey(tabKey) {
 	return {
 		type: SET_CURRENT_TAB_KEY,
-		tabKey
+		tabKey,
 	};
 }
 
 export function setTimelinePostsResponse(response) {
 	return {
 		type: SET_TIMELINE_POSTS_RESPONSE,
-		response
+		response,
 	};
 }
 
 export function setFeaturedPostsResponse(response) {
 	return {
 		type: SET_FEATURED_POSTS_RESPONSE,
-		response
+		response,
 	};
 }
 
 export function setFollowsMap(accounts) {
 	let followsMap = {};
 
-	accounts.forEach(account => {
+	accounts.forEach((account) => {
 		const { id: userId, followed } = account || {};
 
 		if (userId) {
@@ -148,8 +148,8 @@ export function setFollowsMap(accounts) {
 	return {
 		type: SET_FOLLOWS_MAP,
 		payload: {
-			followsMap
-		}
+			followsMap,
+		},
 	};
 }
 
@@ -158,26 +158,26 @@ export function setLikesMap(response) {
 
 	let likesMap = {};
 
-	shares.forEach(post => {
+	shares.forEach((post) => {
 		const { id: postId, like, like_count: likeCount } = post;
 		likesMap[postId] = {
 			like,
-			likeCount
+			likeCount,
 		};
 	});
 
 	return {
 		type: SET_LIKES_MAP,
 		payload: {
-			likesMap
-		}
+			likesMap,
+		},
 	};
 }
 
 export function setRecentPostsResponse(response) {
 	return {
 		type: SET_RECENT_POSTS_RESPONSE,
-		response
+		response,
 	};
 }
 
@@ -187,8 +187,8 @@ export function setLikeCount(postId, count, like) {
 		payload: {
 			postId,
 			count,
-			like
-		}
+			like,
+		},
 	};
 }
 
@@ -197,13 +197,13 @@ export function setFollowed(userId, followed) {
 		type: SET_FOLLOWED,
 		payload: {
 			userId,
-			followed
-		}
+			followed,
+		},
 	};
 }
 
 export function extractAccountsFromPosts(posts) {
-	return posts.map(post => {
+	return posts.map((post) => {
 		const { account } = post;
 		return account;
 	});

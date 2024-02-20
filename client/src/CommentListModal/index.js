@@ -23,7 +23,7 @@ class CommentListModal extends React.Component {
 			hasMore: true,
 			currentPage: 1,
 			totalPages: 1,
-			totalCount: null
+			totalCount: null,
 		};
 	}
 
@@ -45,7 +45,7 @@ class CommentListModal extends React.Component {
 			isFirstLoad: false,
 			comments: comments.concat(list),
 			totalPages,
-			totalCount
+			totalCount,
 		});
 	};
 
@@ -56,10 +56,10 @@ class CommentListModal extends React.Component {
 			currentPage = currentPage + 1;
 
 			this.setState(
-				prevState => ({
+				(prevState) => ({
 					loading: true,
 					hasMore: currentPage < totalPages,
-					currentPage: prevState.currentPage + 1
+					currentPage: prevState.currentPage + 1,
 				}),
 				() => {
 					this.getComments();
@@ -100,7 +100,7 @@ class CommentListModal extends React.Component {
 					<List
 						dataSource={comments}
 						loading={loading}
-						renderItem={item => {
+						renderItem={(item) => {
 							const { account, content, create_time } = item;
 							const { id: userId, avatar } = account;
 

@@ -42,7 +42,7 @@ export function kFormatter(num) {
 export function renderPostThumbnail(post) {
 	const { id: postId, cover, popular_flag: isPopular, recommend, type } = post;
 
-	const renderPostMediaTypeIcon = type => {
+	const renderPostMediaTypeIcon = (type) => {
 		if (is360Pano(type) && !isVideo(type)) {
 			return (
 				<img
@@ -74,7 +74,7 @@ export function renderPostThumbnail(post) {
 		}
 	};
 
-	const onError = e => {
+	const onError = (e) => {
 		const { target } = e;
 		target.src = defaultImage;
 	};

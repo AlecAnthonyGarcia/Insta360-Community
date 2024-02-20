@@ -25,7 +25,7 @@ async function getTag(tag) {
 const Api = {
 	getUser,
 	getPost,
-	getTag
+	getTag,
 };
 
 module.exports = Api;

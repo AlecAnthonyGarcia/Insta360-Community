@@ -2,7 +2,7 @@ import {
 	SET_CURRENT_USER,
 	SET_LOGIN_MODAL_VISIBILITY,
 	SET_SIGNUP_MODAL_VISIBILITY,
-	SET_FORGOT_PASSWORD_MODAL_VISIBILITY
+	SET_FORGOT_PASSWORD_MODAL_VISIBILITY,
 } from './authActions';
 
 const DEFAULT_STATE = {
@@ -10,7 +10,7 @@ const DEFAULT_STATE = {
 	isLoginModalOpen: false,
 	isSignupModalOpen: false,
 	isForgotPasswordModalOpen: false,
-	user: {}
+	user: {},
 };
 
 export default (state = DEFAULT_STATE, action) => {
@@ -19,22 +19,22 @@ export default (state = DEFAULT_STATE, action) => {
 			return {
 				...state,
 				isAuthenticated: !!Object.keys(action.user).length,
-				user: action.user
+				user: action.user,
 			};
 		case SET_LOGIN_MODAL_VISIBILITY:
 			return {
 				...state,
-				isLoginModalOpen: action.visible
+				isLoginModalOpen: action.visible,
 			};
 		case SET_SIGNUP_MODAL_VISIBILITY:
 			return {
 				...state,
-				isSignupModalOpen: action.visible
+				isSignupModalOpen: action.visible,
 			};
 		case SET_FORGOT_PASSWORD_MODAL_VISIBILITY:
 			return {
 				...state,
-				isForgotPasswordModalOpen: action.visible
+				isForgotPasswordModalOpen: action.visible,
 			};
 		default:
 			return state;

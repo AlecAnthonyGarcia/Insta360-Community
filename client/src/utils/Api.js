@@ -8,7 +8,7 @@ import {
 	FOLLOW_API,
 	SHARE_API,
 	NOTICE_API,
-	AUTH_API
+	AUTH_API,
 } from './Constants';
 
 async function login(email, password) {
@@ -17,9 +17,9 @@ async function login(email, password) {
 		url: `${ACCOUNT_API}signin`,
 		headers: {
 			Accept: 'application/json',
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
 		},
-		data: JSON.stringify({ username: email, password })
+		data: JSON.stringify({ username: email, password }),
 	});
 	const { data } = response;
 	return data;
@@ -31,14 +31,14 @@ async function signup(email, password) {
 		url: `${ACCOUNT_API}signup`,
 		headers: {
 			Accept: 'application/json',
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
 		},
 		data: JSON.stringify({
 			username: email,
 			password,
 			source: 'account_center',
-			subscribed: false
-		})
+			subscribed: false,
+		}),
 	});
 	const { data } = response;
 	return data;
@@ -187,8 +187,8 @@ async function followUser(userId) {
 		method: 'post',
 		url: `${FOLLOW_API}doFollow`,
 		data: {
-			user_id: userId
-		}
+			user_id: userId,
+		},
 	});
 	const { data } = response;
 	return data;
@@ -199,8 +199,8 @@ async function unfollowUser(userId) {
 		method: 'post',
 		url: `${FOLLOW_API}undoFollow`,
 		data: {
-			user_id: userId
-		}
+			user_id: userId,
+		},
 	});
 	const { data } = response;
 	return data;
@@ -268,9 +268,9 @@ async function setNotificationsRead() {
 		url: `${NOTICE_API}setRead`,
 		headers: {
 			Accept: 'application/json',
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
 		},
-		data: JSON.stringify({ notice_ids: 'all' })
+		data: JSON.stringify({ notice_ids: 'all' }),
 	});
 	const { data } = response;
 	return data;
@@ -282,12 +282,12 @@ async function sendVerificationCode(email) {
 		url: `${AUTH_API}captcha/send`,
 		headers: {
 			Accept: 'application/json',
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
 		},
 		data: JSON.stringify({
 			email,
-			type: 'forgetAccountPassword'
-		})
+			type: 'forgetAccountPassword',
+		}),
 	});
 	const { data } = response;
 	return data;
@@ -299,13 +299,13 @@ async function resetPassword({ email, password, verificationCode }) {
 		url: `${ACCOUNT_API}resetPassword`,
 		headers: {
 			Accept: 'application/json',
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
 		},
 		data: JSON.stringify({
 			username: email,
 			password: md5(password),
-			captcha: verificationCode
-		})
+			captcha: verificationCode,
+		}),
 	});
 	const { data } = response;
 	return data;
@@ -340,7 +340,7 @@ const Api = {
 	getUnreadNotificationsCount,
 	setNotificationsRead,
 	sendVerificationCode,
-	resetPassword
+	resetPassword,
 };
 
 export default Api;

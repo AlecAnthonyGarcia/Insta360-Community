@@ -20,7 +20,7 @@ class PanoModal extends React.Component {
 		isMuted: shouldMuteAutoPlayVideo(),
 		currentViewTypeIndex: 0,
 		viewTypes: ['Fisheye', 'Normal', 'Tiny Planet'],
-		pano: {}
+		pano: {},
 	};
 
 	componentDidMount() {
@@ -39,7 +39,7 @@ class PanoModal extends React.Component {
 		let { level, tilesize } = JSON.parse(fireworkParam);
 
 		if (Array.isArray(level)) {
-			let tileLevel = level.find(item => item.tiledimagewidth === tilesize);
+			let tileLevel = level.find((item) => item.tiledimagewidth === tilesize);
 			// if tile with size can't be found, use last tile in the array
 			level = tileLevel ? tileLevel : level[level.length - 1];
 		}
@@ -60,7 +60,7 @@ class PanoModal extends React.Component {
 				target: 'pano',
 				passQueryParameters: true,
 				onready: this.onKrpanoReady,
-				onloadcomplete: this.onLoadComplete
+				onloadcomplete: this.onLoadComplete,
 			});
 		});
 	};
@@ -88,7 +88,7 @@ class PanoModal extends React.Component {
 		const { post } = this.props;
 		const { works } = post;
 		const {
-			urls: { video_720 }
+			urls: { video_720 },
 		} = works[0];
 
 		window.embedpano({
@@ -96,12 +96,12 @@ class PanoModal extends React.Component {
 			xml: videopano,
 			target: 'pano',
 			initvars: {
-				videourl: video_720
+				videourl: video_720,
 			},
 			html5: 'auto',
 			mobilescale: 1.0,
 			passQueryParameters: true,
-			onready: this.onKrpanoReady
+			onready: this.onKrpanoReady,
 		});
 	};
 
@@ -129,7 +129,7 @@ class PanoModal extends React.Component {
 		);
 	};
 
-	onKrpanoReady = instance => {
+	onKrpanoReady = (instance) => {
 		instance.set('onloadcomplete', this.onLoadComplete);
 		window.krpano = instance;
 

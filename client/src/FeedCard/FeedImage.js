@@ -12,14 +12,14 @@ import { is360Pano, isVideo } from '../utils/Utils.js';
 class FeedImage extends React.Component {
 	state = {
 		isPanoLoading: false,
-		isImageLoaded: false
+		isImageLoaded: false,
 	};
 
 	onImageLoaded = () => {
 		this.setState({ isImageLoaded: true });
 	};
 
-	onImageError = e => {
+	onImageError = (e) => {
 		const { target } = e;
 		target.src = defaultImage;
 		this.setState({ isImageLoaded: true });

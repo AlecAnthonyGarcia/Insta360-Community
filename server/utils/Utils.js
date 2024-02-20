@@ -17,5 +17,5 @@ function getFeedImageSrc(post) {
 }
 
 module.exports = {
-	getFeedImageSrc
+	getFeedImageSrc,
 };

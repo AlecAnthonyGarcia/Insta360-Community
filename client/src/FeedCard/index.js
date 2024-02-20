@@ -8,7 +8,7 @@ import {
 	followUser,
 	unfollowUser,
 	likePost,
-	unlikePost
+	unlikePost,
 } from '../HomePage/homeActions';
 
 import { Link } from 'react-router-dom';
@@ -22,7 +22,7 @@ import {
 	Dropdown,
 	Icon,
 	Menu,
-	message
+	message,
 } from 'antd';
 import moment from 'moment';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -42,7 +42,7 @@ class FeedCard extends React.Component {
 		isCommentListModalOpen: false,
 		isPanoModalOpen: false,
 		isPanoLoading: false,
-		isVideoLoaded: false
+		isVideoLoaded: false,
 	};
 
 	onPostClick = () => {
@@ -52,7 +52,7 @@ class FeedCard extends React.Component {
 		if (is360Pano(type)) {
 			this.setState({
 				isPanoLoading: true,
-				isPanoModalOpen: true
+				isPanoModalOpen: true,
 			});
 		}
 	};
@@ -64,7 +64,7 @@ class FeedCard extends React.Component {
 			likesMap,
 			likePost,
 			unlikePost,
-			setLoginModalVisibility
+			setLoginModalVisibility,
 		} = this.props;
 		const { id: postId } = post;
 
@@ -81,7 +81,7 @@ class FeedCard extends React.Component {
 		}
 	};
 
-	replaceHashtagsWithLinks = text => {
+	replaceHashtagsWithLinks = (text) => {
 		return text.replace(/#([^\b#.,， ]*)/gi, `<a href="/tag/$1/">#$1</a>`);
 	};
 
@@ -144,7 +144,7 @@ class FeedCard extends React.Component {
 		);
 	};
 
-	renderAction = action => {
+	renderAction = (action) => {
 		const { post } = this.props;
 		const { type } = post;
 
@@ -210,7 +210,7 @@ class FeedCard extends React.Component {
 		);
 	};
 
-	renderShareButton = post => {
+	renderShareButton = (post) => {
 		const { id: postId, type } = post;
 
 		const postUrl = `https://www.Insta360.community/post/${postId}`;
@@ -291,11 +291,8 @@ class FeedCard extends React.Component {
 	};
 
 	render() {
-		const {
-			isPanoModalOpen,
-			isCommentListModalOpen,
-			isPanoLoading
-		} = this.state;
+		const { isPanoModalOpen, isCommentListModalOpen, isPanoLoading } =
+			this.state;
 		const { post, parent, likesMap } = this.props || {};
 
 		const {
@@ -306,7 +303,7 @@ class FeedCard extends React.Component {
 			comment_count,
 			type,
 			works = [],
-			id: postId
+			id: postId,
 		} = post;
 
 		const { create_time } = works[0] || {};
@@ -356,7 +353,7 @@ class FeedCard extends React.Component {
 					<div
 						className="feed-card-media-container"
 						style={{
-							cursor: is360Pano(type) || isVideo(type) ? 'pointer' : 'default'
+							cursor: is360Pano(type) || isVideo(type) ? 'pointer' : 'default',
 						}}
 					>
 						{isVideo(type) && !is360Pano(type) ? (
@@ -411,7 +408,7 @@ class FeedCard extends React.Component {
 								<Divider />
 
 								<div className="feed-card-comments-container">
-									{comments.map(comment => {
+									{comments.map((comment) => {
 										const { id: commentId, account, content } = comment;
 
 										return (
@@ -470,7 +467,7 @@ function mapStateToProps(state) {
 	return {
 		auth: isAuthenticated,
 		followsMap,
-		likesMap
+		likesMap,
 	};
 }
 
@@ -479,5 +476,5 @@ export default connect(mapStateToProps, {
 	unfollowUser,
 	likePost,
 	unlikePost,
-	setLoginModalVisibility
+	setLoginModalVisibility,
 })(FeedCard);

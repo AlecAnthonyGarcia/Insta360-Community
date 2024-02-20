@@ -14,7 +14,7 @@ import {
 	logout,
 	setLoginModalVisibility,
 	setSignupModalVisibility,
-	setForgotPasswordModalVisibility
+	setForgotPasswordModalVisibility,
 } from '../AuthModal/authActions';
 
 import UserAvatar from '../UserAvatar/index.js';
@@ -32,7 +32,7 @@ class Header extends React.Component {
 	state = {
 		isSearchModalOpen: false,
 		isNotificationsModalOpen: false,
-		unreadNotificationsCount: 0
+		unreadNotificationsCount: 0,
 	};
 
 	componentDidMount() {
@@ -58,7 +58,7 @@ class Header extends React.Component {
 		Api.setNotificationsRead();
 		this.setState({
 			isNotificationsModalOpen: true,
-			unreadNotificationsCount: 0
+			unreadNotificationsCount: 0,
 		});
 	};
 
@@ -91,7 +91,7 @@ class Header extends React.Component {
 		setForgotPasswordModalVisibility(false);
 	};
 
-	onTabChange = activeTabKey => {
+	onTabChange = (activeTabKey) => {
 		const { setCurrentTabKey } = this.props;
 		setCurrentTabKey(activeTabKey);
 	};
@@ -120,12 +120,12 @@ class Header extends React.Component {
 			logout,
 			isLoginModalOpen,
 			isSignupModalOpen,
-			isForgotPasswordModalOpen
+			isForgotPasswordModalOpen,
 		} = this.props;
 		const {
 			isSearchModalOpen,
 			isNotificationsModalOpen,
-			unreadNotificationsCount
+			unreadNotificationsCount,
 		} = this.state;
 		const { avatar } = user;
 
@@ -248,14 +248,14 @@ function mapStateToProps(state) {
 		isLoginModalOpen,
 		isSignupModalOpen,
 		isForgotPasswordModalOpen,
-		user
+		user,
 	} = authReducer;
 	return {
 		auth: isAuthenticated,
 		user,
 		isLoginModalOpen,
 		isSignupModalOpen,
-		isForgotPasswordModalOpen
+		isForgotPasswordModalOpen,
 	};
 }
 
@@ -265,6 +265,6 @@ export default withRouter(
 		setCurrentTabKey,
 		setLoginModalVisibility,
 		setSignupModalVisibility,
-		setForgotPasswordModalVisibility
+		setForgotPasswordModalVisibility,
 	})(Header)
 );

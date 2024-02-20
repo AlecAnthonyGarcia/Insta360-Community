@@ -12,7 +12,7 @@ import ResetPasswordForm from './ResetPasswordForm.js';
 class ForgotPasswordModal extends React.Component {
 	state = {
 		currentFormComponent: null,
-		modalTitle: ''
+		modalTitle: '',
 	};
 
 	componentDidUpdate(prevProps) {
@@ -36,7 +36,7 @@ class ForgotPasswordModal extends React.Component {
 	};
 
 	setForgotPasswordForm() {
-		const onPasswordResetEmailSent = email => {
+		const onPasswordResetEmailSent = (email) => {
 			this.setResetPasswordForm(email);
 		};
 
@@ -92,7 +92,4 @@ const WrappedForm = Form.create({ name: 'forgotPassword' })(
 	ForgotPasswordModal
 );
 
-export default connect(
-	null,
-	{ signup, setLoginModalVisibility }
-)(WrappedForm);
+export default connect(null, { signup, setLoginModalVisibility })(WrappedForm);

@@ -5,7 +5,7 @@ import {
 	setFollowed,
 	setFollowsMap,
 	setLikesMap,
-	extractAccountsFromPosts
+	extractAccountsFromPosts,
 } from '../HomePage/homeActions';
 
 import { Link } from 'react-router-dom';
@@ -44,7 +44,7 @@ class UserPage extends React.Component {
 			totalPages: 1,
 			totalCount: null,
 			userListType: null,
-			isUserListModalOpen: false
+			isUserListModalOpen: false,
 		};
 	};
 
@@ -66,7 +66,7 @@ class UserPage extends React.Component {
 	componentDidUpdate(prevProps) {
 		const {
 			match: { params },
-			auth
+			auth,
 		} = this.props;
 		const { userId } = params;
 		const { userId: previousUserId } = prevProps.match.params;
@@ -78,7 +78,7 @@ class UserPage extends React.Component {
 	getUser = async () => {
 		const {
 			match: { params },
-			setFollowed
+			setFollowed,
 		} = this.props;
 		const { userId } = params;
 
@@ -105,7 +105,7 @@ class UserPage extends React.Component {
 		const {
 			match: { params },
 			setFollowsMap,
-			setLikesMap
+			setLikesMap,
 		} = this.props;
 		const { userId } = params;
 
@@ -121,14 +121,14 @@ class UserPage extends React.Component {
 			isFirstLoad: false,
 			posts: posts.concat(list),
 			totalPages,
-			totalCount
+			totalCount,
 		});
 	};
 
 	getUserPopularPosts = async () => {
 		const {
 			match: { params },
-			setFollowsMap
+			setFollowsMap,
 		} = this.props;
 		const { userId } = params;
 
@@ -148,10 +148,10 @@ class UserPage extends React.Component {
 			currentPage = currentPage + 1;
 
 			this.setState(
-				prevState => ({
+				(prevState) => ({
 					loading: true,
 					hasMore: currentPage < totalPages,
-					currentPage: prevState.currentPage + 1
+					currentPage: prevState.currentPage + 1,
 				}),
 				() => {
 					this.getUserPosts();
@@ -160,7 +160,7 @@ class UserPage extends React.Component {
 		}
 	};
 
-	showUserListModal = type => {
+	showUserListModal = (type) => {
 		this.setState({ isUserListModalOpen: true, userListType: type });
 	};
 
@@ -181,7 +181,7 @@ class UserPage extends React.Component {
 				header={<div>Popular</div>}
 				grid={{ gutter: 16, column: 3 }}
 				dataSource={popularPosts}
-				renderItem={item => {
+				renderItem={(item) => {
 					return <List.Item>{renderPostThumbnail(item)}</List.Item>;
 				}}
 			/>
@@ -211,7 +211,7 @@ class UserPage extends React.Component {
 					header={renderHeader()}
 					dataSource={posts}
 					loading={loading}
-					renderItem={item => <FeedCard key={item.id} post={item} />}
+					renderItem={(item) => <FeedCard key={item.id} post={item} />}
 				>
 					{loading && !isFirstLoad && hasMore && (
 						<div className="loading-container">
@@ -316,7 +316,7 @@ function mapStateToProps(state) {
 	const { authReducer } = state;
 	const { isAuthenticated } = authReducer;
 	return {
-		auth: isAuthenticated
+		auth: isAuthenticated,
 	};
 }
 
@@ -324,5 +324,5 @@ export default connect(mapStateToProps, {
 	setFollowed,
 	setFollowsMap,
 	setLikesMap,
-	extractAccountsFromPosts
+	extractAccountsFromPosts,
 })(UserPage);

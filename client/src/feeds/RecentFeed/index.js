@@ -16,7 +16,7 @@ class RecentFeed extends React.Component {
 	state = {
 		isFirstLoad: true,
 		loading: true,
-		hasMore: true
+		hasMore: true,
 	};
 
 	componentDidMount() {
@@ -36,7 +36,7 @@ class RecentFeed extends React.Component {
 			this.setState({
 				loading: false,
 				isFirstLoad: false,
-				hasMore: recentPosts && recentPosts.length > 0
+				hasMore: recentPosts && recentPosts.length > 0,
 			});
 		}
 	}
@@ -63,7 +63,7 @@ class RecentFeed extends React.Component {
 					<List
 						dataSource={recentPosts}
 						loading={loading}
-						renderItem={item => (
+						renderItem={(item) => (
 							<FeedCard
 								key={item.id}
 								post={item}
@@ -87,11 +87,8 @@ function mapStateToProps(state) {
 	const { homeReducer } = state;
 	const { recentPostsResponse } = homeReducer;
 	return {
-		recentPostsResponse
+		recentPostsResponse,
 	};
 }
 
-export default connect(
-	mapStateToProps,
-	{ getRecentPosts }
-)(RecentFeed);
+export default connect(mapStateToProps, { getRecentPosts })(RecentFeed);

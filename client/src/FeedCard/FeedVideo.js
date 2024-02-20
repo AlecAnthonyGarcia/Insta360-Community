@@ -14,11 +14,11 @@ class FeedVideo extends React.Component {
 		this.videoRef = React.createRef();
 		this.state = {
 			isPanoLoading: false,
-			isVideoPlaying: false
+			isVideoPlaying: false,
 		};
 	}
 
-	onVideoClick = e => {
+	onVideoClick = (e) => {
 		e.preventDefault();
 		const { isVideoPlaying } = this.state;
 
@@ -47,7 +47,7 @@ class FeedVideo extends React.Component {
 		this.setState({ isVideoPlaying: false });
 	};
 
-	onVideoInViewChange = inView => {
+	onVideoInViewChange = (inView) => {
 		if (!inView) {
 			this.onPause();
 		}

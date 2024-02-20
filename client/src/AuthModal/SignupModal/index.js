@@ -15,11 +15,11 @@ class SignupModal extends React.Component {
 	getInitialState = () => {
 		return {
 			loading: false,
-			errorMessageText: null
+			errorMessageText: null,
 		};
 	};
 
-	handleSubmit = e => {
+	handleSubmit = (e) => {
 		const { form, signup } = this.props;
 
 		e.preventDefault();
@@ -28,7 +28,7 @@ class SignupModal extends React.Component {
 			if (!err) {
 				this.setState({ loading: true });
 
-				signup(values).then(response => {
+				signup(values).then((response) => {
 					const { error, code } = response;
 
 					if (!error) {
@@ -42,16 +42,16 @@ class SignupModal extends React.Component {
 		});
 	};
 
-	handleError = code => {
+	handleError = (code) => {
 		switch (code) {
 			case 1000:
 				this.setState({
-					errorMessageText: 'The email was used.'
+					errorMessageText: 'The email was used.',
 				});
 				break;
 			default:
 				this.setState({
-					errorMessageText: 'There was an unknown error.'
+					errorMessageText: 'There was an unknown error.',
 				});
 		}
 	};
@@ -105,13 +105,13 @@ class SignupModal extends React.Component {
 							rules: [
 								{
 									type: 'email',
-									message: 'Incorrect email address format.'
+									message: 'Incorrect email address format.',
 								},
 								{
 									required: true,
-									message: 'Email address cannot be empty,'
-								}
-							]
+									message: 'Email address cannot be empty,',
+								},
+							],
 						})(
 							<Input
 								prefix={
@@ -128,13 +128,13 @@ class SignupModal extends React.Component {
 							rules: [
 								{
 									required: true,
-									message: 'Password cannot be empty.'
+									message: 'Password cannot be empty.',
 								},
 								{
 									min: 8,
-									message: 'Password must contain 8 characters at least.'
-								}
-							]
+									message: 'Password must contain 8 characters at least.',
+								},
+							],
 						})(
 							<Input
 								prefix={
@@ -173,7 +173,4 @@ class SignupModal extends React.Component {
 
 const WrappedForm = Form.create({ name: 'signup' })(SignupModal);
 
-export default connect(
-	null,
-	{ signup, setLoginModalVisibility }
-)(WrappedForm);
+export default connect(null, { signup, setLoginModalVisibility })(WrappedForm);

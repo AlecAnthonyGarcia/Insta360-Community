@@ -5,7 +5,7 @@ const SHARE_API = `${BASE_API}share/${API_VERSION}/`;
 
 const Constants = {
 	ACCOUNT_API,
-	SHARE_API
+	SHARE_API,
 };
 
 module.exports = Constants;
