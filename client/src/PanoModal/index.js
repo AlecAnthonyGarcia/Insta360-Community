@@ -88,7 +88,7 @@ class PanoModal extends React.Component {
 		const { post } = this.props;
 		const { works } = post;
 		const {
-			urls: { video_720 },
+			app_urls: { source },
 		} = works[0];
 
 		window.embedpano({
@@ -96,7 +96,7 @@ class PanoModal extends React.Component {
 			xml: videopano,
 			target: 'pano',
 			initvars: {
-				videourl: video_720,
+				videourl: source,
 			},
 			html5: 'auto',
 			mobilescale: 1.0,
