@@ -103,7 +103,10 @@ class TimelineFeed extends React.Component {
 			case TIMELINE_ACTIONS.LIKE_POSTS: {
 				const [account] = subject;
 				const { id: userId, avatar } = account;
-				const { shares } = target;
+				let { shares, share } = target;
+				if (!shares) {
+					shares = [share];
+				}
 
 				return (
 					<Card
