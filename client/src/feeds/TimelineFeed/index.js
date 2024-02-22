@@ -70,9 +70,9 @@ class TimelineFeed extends React.Component {
 			}
 			case TIMELINE_ACTIONS.LIKE_POST: {
 				const [account] = subject;
-				const { avatar } = account;
-				const { share } = target;
-				const { type, account: targetAccount } = share;
+				const { avatar } = account || {};
+				const { share } = target || {};
+				const { type, account: targetAccount } = share || {};
 
 				const postType = isVideo(type) ? 'video' : 'photo';
 
@@ -80,14 +80,16 @@ class TimelineFeed extends React.Component {
 					<Card
 						className="timeline-like-feed-card"
 						title={
-							<span>
-								<UserAvatar src={avatar} />
-								<span className="timeline-like-feed-card-title">
-									<UserNickname user={account} /> liked{' '}
-									<UserNickname user={targetAccount} />
-									's {postType}
+							account && (
+								<span>
+									<UserAvatar src={avatar} />
+									<span className="timeline-like-feed-card-title">
+										<UserNickname user={account} /> liked{' '}
+										<UserNickname user={targetAccount} />
+										's {postType}
+									</span>
 								</span>
-							</span>
+							)
 						}
 					>
 						<FeedCard
