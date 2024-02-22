@@ -18,13 +18,13 @@ app.use(bodyParser.json()); // support json encoded bodies
 // Include internal API routes
 app.use(api);
 
-app.get('/user/*', function (req, res) {
+app.get('/user/:userId', function (req, res) {
 	fs.readFile(filePath, 'utf8', async function (err, fileData) {
 		if (err) {
 			return console.log(err);
 		}
 
-		const userId = req.params[0];
+		const { userId } = req.params;
 
 		const response = await Insta360Api.getUser(userId);
 
@@ -52,13 +52,13 @@ app.get('/user/*', function (req, res) {
 	});
 });
 
-app.get('/post/*', function (req, res) {
+app.get('/post/:postId', function (req, res) {
 	fs.readFile(filePath, 'utf8', async function (err, fileData) {
 		if (err) {
 			return console.log(err);
 		}
 
-		const postId = req.params[0];
+		const { postId } = req.params;
 
 		const response = await Insta360Api.getPost(postId);
 
@@ -84,13 +84,13 @@ app.get('/post/*', function (req, res) {
 	});
 });
 
-app.get('/tag/*', function (req, res) {
+app.get('/tag/:tag', function (req, res) {
 	fs.readFile(filePath, 'utf8', async function (err, fileData) {
 		if (err) {
 			return console.log(err);
 		}
 
-		const tag = req.params[0];
+		const { tag } = req.params;
 
 		const response = await Insta360Api.getTag(tag);
 
