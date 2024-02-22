@@ -36,7 +36,10 @@ class Header extends React.Component {
 	};
 
 	componentDidMount() {
-		this.getUnreadNotificationsCount();
+		const { auth } = this.props;
+		if (auth) {
+			this.getUnreadNotificationsCount();
+		}
 	}
 
 	getUnreadNotificationsCount = async () => {
