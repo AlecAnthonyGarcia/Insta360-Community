@@ -6,6 +6,7 @@ import {
 	setSignupModalVisibility,
 	setForgotPasswordModalVisibility,
 } from '../authActions';
+import { RESPONSE_CODE_SUCCESS } from '../../utils/Constants';
 
 import { Modal, Form, Input, Button, Icon, Alert } from 'antd';
 
@@ -32,9 +33,9 @@ class LoginModal extends React.Component {
 				this.setState({ loading: true });
 
 				login(values).then((response) => {
-					const { error, code } = response;
+					const { code } = response;
 
-					if (!error) {
+					if (RESPONSE_CODE_SUCCESS === code) {
 						this.onCancel();
 					} else {
 						this.setState({ loading: false });

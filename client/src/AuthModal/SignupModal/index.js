@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { signup, setLoginModalVisibility } from '../authActions';
 
 import { Modal, Form, Input, Button, Icon, Alert } from 'antd';
+import { RESPONSE_CODE_SUCCESS } from '../../utils/Constants';
 
 class SignupModal extends React.Component {
 	constructor(props) {
@@ -29,9 +30,9 @@ class SignupModal extends React.Component {
 				this.setState({ loading: true });
 
 				signup(values).then((response) => {
-					const { error, code } = response;
+					const { code } = response;
 
-					if (!error) {
+					if (RESPONSE_CODE_SUCCESS === code) {
 						this.onCancel();
 					} else {
 						this.setState({ loading: false });

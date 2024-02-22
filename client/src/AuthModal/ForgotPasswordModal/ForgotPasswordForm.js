@@ -4,6 +4,7 @@ import '../style.scss';
 import { Form, Input, Button, Icon, Alert } from 'antd';
 
 import Api from '../../utils/Api';
+import { RESPONSE_CODE_SUCCESS } from '../../utils/Constants';
 
 class ForgotPasswordForm extends React.Component {
 	constructor(props) {
@@ -30,9 +31,9 @@ class ForgotPasswordForm extends React.Component {
 				const { email } = values;
 
 				Api.sendVerificationCode(email).then((response) => {
-					const { error, code } = response;
+					const { code } = response;
 
-					if (!error) {
+					if (RESPONSE_CODE_SUCCESS === code) {
 						this.setState({ loading: false });
 						onPasswordResetEmailSent(email);
 					} else {

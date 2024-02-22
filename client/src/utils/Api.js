@@ -1,313 +1,188 @@
 import axios from 'axios';
 import md5 from 'blueimp-md5';
 
-import {
-	BASE_API,
-	ACCOUNT_API,
-	COMMUNITY_API,
-	FOLLOW_API,
-	SHARE_API,
-	NOTICE_API,
-	AUTH_API,
-} from './Constants';
-
 async function login(email, password) {
-	const response = await axios({
-		method: 'POST',
-		url: `${ACCOUNT_API}signin`,
-		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
-		},
-		data: JSON.stringify({ username: email, password }),
+	const { data } = await axios.post(`/api/login`, {
+		username: email,
+		password,
 	});
-	const { data } = response;
 	return data;
 }
 
 async function signup(email, password) {
-	const response = await axios({
-		method: 'POST',
-		url: `${ACCOUNT_API}signup`,
-		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
-		},
-		data: JSON.stringify({
-			username: email,
-			password,
-			source: 'account_center',
-			subscribed: false,
-		}),
+	const { data } = await axios.post(`/api/signup`, {
+		username: email,
+		password,
 	});
-	const { data } = response;
 	return data;
 }
 
 async function getUser(userId) {
-	const response = await axios.get(
-		`${ACCOUNT_API}getProfile?user_id=${userId}`
-	);
-	const { data } = response;
+	const { data } = await axios.get(`/api/getUser?userId=${userId}`);
 	return data;
 }
 
 async function getUserPosts(userId, pageNumber) {
-	const pageSize = 20;
-	const response = await axios.get(
-		`${SHARE_API}listUserShare?page_number=${pageNumber}&page_size=${pageSize}&user_id=${userId}`
+	const { data } = await axios.get(
+		`/api/getUserPosts?pageNumber=${pageNumber}&userId=${userId}`
 	);
-	const { data } = response;
 	return data;
 }
 
 async function getUserPopularPosts(userId) {
-	const response = await axios.get(
-		`${SHARE_API}getUserPopularShare?user_id=${userId}`
-	);
-	const { data } = response;
+	const { data } = await axios.get(`/api/getUserPopularPosts?userId=${userId}`);
 	return data;
 }
 
 async function getPost(postId) {
-	const response = await axios.get(`${SHARE_API}info/${postId}`);
-	const { data } = response;
+	const { data } = await axios.get(`/api/getPost?postId=${postId}`);
 	return data;
 }
 
 async function getTimelinePosts(lastTimestamp) {
-	const pageSize = 20;
-	let url = `${COMMUNITY_API}timeline?page_size=${pageSize}`;
+	let url = `/api/getTimelinePosts`;
 	if (lastTimestamp) {
-		url = `${url}&last_timestamp=${lastTimestamp}`;
+		url = `${url}?lastTimestamp=${lastTimestamp}`;
 	}
-	const response = await axios.get(url);
-	const { data } = response;
+	const { data } = await axios.get(url);
 	return data;
 }
 
 async function getFeaturedPosts(postIdCursor) {
-	const pageSize = 20;
-	let url = `${BASE_API}community/content/feature?page_size=${pageSize}`;
+	let url = `/api/getFeaturedPosts`;
 	if (postIdCursor) {
-		url = `${url}&post_id=${postIdCursor}`;
+		url = `${url}?cursor=${postIdCursor}`;
 	}
-	const response = await axios.get(url);
-	const { data } = response;
+	const { data } = await axios.get(url);
 	return data;
 }
 
 async function getRecentPosts(postIdCursor, queue) {
-	const pageSize = 20;
-	const queueIndex = 1;
-	let url = `${COMMUNITY_API}content/recent?page_size=${pageSize}`;
+	let url = `/api/getRecentPosts`;
 	if (postIdCursor) {
-		url = `${url}&post_id=${postIdCursor}&queue=${queue}`;
-	} else {
-		url = `${url}&queue_index=${queueIndex}`;
+		url = `${url}?cursor=${postIdCursor}&queue=${queue}`;
 	}
-	const response = await axios.get(url);
-	const { data } = response;
+	const { data } = await axios.get(url);
 	return data;
 }
 
 async function getTag(tag) {
-	const response = await axios.get(`${SHARE_API}tag/info?tag=${tag}`);
-	const { data } = response;
+	const { data } = await axios.get(`/api/getTag?tag=${tag}`);
 	return data;
 }
 
 async function getTagPosts(tag, postIdCursor) {
-	const pageSize = 20;
-	let url = `${SHARE_API}tag/posts/recent?page_size=${pageSize}&tag=${tag}`;
+	let url = `/api/getTagPosts?tag=${tag}`;
 	if (postIdCursor) {
-		url = `${url}&post_id=${postIdCursor}`;
+		url = `${url}&cursor=${postIdCursor}`;
 	}
-	const response = await axios.get(url);
-	const { data } = response;
+	const { data } = await axios.get(url);
 	return data;
 }
 
 async function getTagPopularPosts(tag) {
-	const pageSize = 6;
-	const response = await axios.get(
-		`${SHARE_API}tag/posts/popular?page_size=${pageSize}&tag=${tag}`
-	);
-	const { data } = response;
+	const { data } = await axios.get(`/api/getTagPopularPosts?tag=${tag}`);
 	return data;
 }
 
 async function getComments(postId, pageNumber) {
-	const pageSize = 20;
-	const response = await axios.get(
-		`${SHARE_API}comment/getComments?page_number=${pageNumber}&page_size=${pageSize}&post_id=${postId}`
+	const { data } = await axios.get(
+		`/api/getComments?pageNumber=${pageNumber}&postId=${postId}`
 	);
-	const { data } = response;
 	return data;
 }
 
 async function getRecommendedSearchTags() {
-	const size = 100;
-	const response = await axios.get(
-		`${SHARE_API}tag/search/getRecommend?size=${size}`
-	);
-	const { data } = response;
+	const { data } = await axios.get(`/api/getRecommendedSearchTags`);
 	return data;
 }
 
 async function getRecommendedSearchUsers() {
-	const size = 100;
-	const response = await axios.get(
-		`${ACCOUNT_API}search/getRecommend?size=${size}`
-	);
-	const { data } = response;
+	const { data } = await axios.get(`/api/getRecommendedSearchUsers`);
 	return data;
 }
 
 async function searchTags(query) {
-	const size = 100;
-	const response = await axios.get(
-		`${SHARE_API}tag/search?size=${size}&value=${query}`
-	);
-	const { data } = response;
+	const { data } = await axios.get(`/api/searchTags?query=${query}`);
 	return data;
 }
 
 async function searchUsers(query) {
-	const size = 100;
-	const response = await axios.get(
-		`${ACCOUNT_API}search?size=${size}&value=${query}`
-	);
-	const { data } = response;
+	const { data } = await axios.get(`/api/searchUsers?query=${query}`);
 	return data;
 }
 
 async function followUser(userId) {
-	const response = await axios({
-		method: 'post',
-		url: `${FOLLOW_API}doFollow`,
-		data: {
-			user_id: userId,
-		},
-	});
-	const { data } = response;
+	const { data } = await axios.post(`/api/followUser`, { userId });
 	return data;
 }
 
 async function unfollowUser(userId) {
-	const response = await axios({
-		method: 'post',
-		url: `${FOLLOW_API}undoFollow`,
-		data: {
-			user_id: userId,
-		},
-	});
-	const { data } = response;
+	const { data } = await axios.post(`/api/unfollowUser`, { userId });
 	return data;
 }
 
 async function getFollowing(userId, pageNumber) {
-	const pageSize = 20;
-	const response = await axios.get(
-		`${FOLLOW_API}getUserFollows?page_number=${pageNumber}&page_size=${pageSize}&user_id=${userId}`
+	const { data } = await axios.get(
+		`/api/getFollowing?pageNumber=${pageNumber}&userId=${userId}`
 	);
-	const { data } = response;
 	return data;
 }
 
 async function getFollowers(userId, pageNumber) {
-	const pageSize = 20;
-	const response = await axios.get(
-		`${FOLLOW_API}getUserFollower?page_number=${pageNumber}&page_size=${pageSize}&user_id=${userId}`
+	const { data } = await axios.get(
+		`/api/getFollowers?pageNumber=${pageNumber}&userId=${userId}`
 	);
-	const { data } = response;
 	return data;
 }
 
 async function getLikedPosts(userId, pageNumber) {
-	const pageSize = 20;
-	const response = await axios.get(
-		`${SHARE_API}listUserLikeShare?page_number=${pageNumber}&page_size=${pageSize}&user_id=${userId}`
+	const { data } = await axios.get(
+		`/api/getLikedPosts?pageNumber=${pageNumber}&userId=${userId}`
 	);
-	const { data } = response;
 	return data;
 }
 
 async function likePost(postId) {
-	const response = await axios.get(`${SHARE_API}like/doLike/${postId}`);
-	const { data } = response;
+	const { data } = await axios.get(`/api/likePost?postId=${postId}`);
 	return data;
 }
 
 async function unlikePost(postId) {
-	const response = await axios.get(`${SHARE_API}like/undoLike/${postId}`);
-	const { data } = response;
+	const { data } = await axios.get(`/api/unlikePost?postId=${postId}`);
 	return data;
 }
 
 async function getNotifications(timestamp) {
-	const pageSize = 20;
-	let url = `${NOTICE_API}listUserNotice?page_size=${pageSize}`;
+	let url = `/api/getNotifications`;
 	if (timestamp) {
 		url = `${url}&timestamp=${timestamp}`;
 	}
-	const response = await axios.get(url);
-	const { data } = response;
+	const { data } = await axios.get(url);
 	return data;
 }
 
 async function getUnreadNotificationsCount() {
-	const response = await axios.get(`${NOTICE_API}getUnreadCount`);
-	const { data } = response;
+	const { data } = await axios.get(`/api/getUnreadNotificationsCount`);
 	return data;
 }
 
 async function setNotificationsRead() {
-	const response = await axios({
-		method: 'POST',
-		url: `${NOTICE_API}setRead`,
-		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
-		},
-		data: JSON.stringify({ notice_ids: 'all' }),
-	});
-	const { data } = response;
+	const { data } = await axios.post(`/api/setNotificationsRead`, {});
 	return data;
 }
 
 async function sendVerificationCode(email) {
-	const response = await axios({
-		method: 'POST',
-		url: `${AUTH_API}captcha/send`,
-		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
-		},
-		data: JSON.stringify({
-			email,
-			type: 'forgetAccountPassword',
-		}),
-	});
-	const { data } = response;
+	const { data } = await axios.post(`/api/sendVerificationCode`, { email });
 	return data;
 }
 
 async function resetPassword({ email, password, verificationCode }) {
-	const response = await axios({
-		method: 'POST',
-		url: `${ACCOUNT_API}resetPassword`,
-		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
-		},
-		data: JSON.stringify({
-			username: email,
-			password: md5(password),
-			captcha: verificationCode,
-		}),
+	const { data } = await axios.post(`/api/resetPassword`, {
+		email,
+		password: md5(password),
+		verificationCode,
 	});
-	const { data } = response;
 	return data;
 }
 

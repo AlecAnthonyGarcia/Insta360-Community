@@ -7,6 +7,8 @@ export const SHARE_API = `${BASE_API}share/${API_VERSION}/`;
 export const NOTICE_API = `${BASE_API}notice/${API_VERSION}/`;
 export const AUTH_API = `${BASE_API}auth/${API_VERSION}/`;
 
+export const RESPONSE_CODE_SUCCESS = 0;
+
 export const FEED_CARD_PARENTS = {
 	FEATURED: 'FEATURED_FEED',
 	RECENT: 'RECENT_FEED',

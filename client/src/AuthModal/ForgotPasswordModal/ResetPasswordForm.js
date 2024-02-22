@@ -4,6 +4,7 @@ import '../style.scss';
 import { Form, Input, Button, Icon, Alert } from 'antd';
 
 import Api from '../../utils/Api';
+import { RESPONSE_CODE_SUCCESS } from '../../utils/Constants';
 
 class ResetPasswordForm extends React.Component {
 	state = {
@@ -22,9 +23,9 @@ class ResetPasswordForm extends React.Component {
 				this.setState({ loading: true });
 
 				Api.resetPassword({ email, ...values }).then((response) => {
-					const { error, code } = response;
+					const { code } = response;
 
-					if (!error) {
+					if (RESPONSE_CODE_SUCCESS === code) {
 						this.setState({ loading: false, isPasswordResetSuccessful: true });
 					} else {
 						this.setState({ loading: false });

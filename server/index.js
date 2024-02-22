@@ -1,15 +1,22 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const bodyParser = require('body-parser');
 const moment = require('moment');
 
+const api = require('./api');
+const Insta360Api = require('./utils/Api');
 const { getFeedImageSrc } = require('./utils/Utils');
-const Api = require('./utils/Api');
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3001;
 
 const filePath = path.resolve(__dirname, '../client/build', 'index.html');
+
+app.use(bodyParser.json()); // support json encoded bodies
+
+// Include internal API routes
+app.use(api);
 
 app.get('/user/*', function (req, res) {
 	fs.readFile(filePath, 'utf8', async function (err, fileData) {
@@ -19,7 +26,7 @@ app.get('/user/*', function (req, res) {
 
 		const userId = req.params[0];
 
-		const response = await Api.getUser(userId);
+		const response = await Insta360Api.getUser(userId);
 
 		const { data: user } = response;
 
@@ -53,7 +60,7 @@ app.get('/post/*', function (req, res) {
 
 		const postId = req.params[0];
 
-		const response = await Api.getPost(postId);
+		const response = await Insta360Api.getPost(postId);
 
 		const { data } = response;
 
@@ -85,7 +92,7 @@ app.get('/tag/*', function (req, res) {
 
 		const tag = req.params[0];
 
-		const response = await Api.getTag(tag);
+		const response = await Insta360Api.getTag(tag);
 
 		const { data } = response;
 

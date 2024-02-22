@@ -2,6 +2,7 @@ import axios from 'axios';
 import md5 from 'blueimp-md5';
 
 import Api from '../utils/Api';
+import { RESPONSE_CODE_SUCCESS } from '../utils/Constants';
 
 export const RESET_STATE = 'RESET_STATE';
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
@@ -22,10 +23,10 @@ export function login({ email, password }) {
 	return async (dispatch) => {
 		const response = await Api.login(email, md5(password));
 
-		const { data, error } = response;
+		const { data, code } = response;
 		const { token, account } = data || {};
 
-		if (!error) {
+		if (code === RESPONSE_CODE_SUCCESS) {
 			localStorage.setItem('user', JSON.stringify(account));
 			localStorage.setItem('jwtToken', token);
 			setAuthorizationToken(token);
@@ -41,10 +42,10 @@ export function signup({ email, password }) {
 	return async (dispatch) => {
 		const response = await Api.signup(email, md5(password));
 
-		const { data, error } = response;
+		const { data, code } = response;
 		const { token, account } = data || {};
 
-		if (!error) {
+		if (code === RESPONSE_CODE_SUCCESS) {
 			localStorage.setItem('user', JSON.stringify(account));
 			localStorage.setItem('jwtToken', token);
 			setAuthorizationToken(token);
