@@ -117,13 +117,12 @@ class SearchModal extends React.Component {
 	};
 
 	render() {
-		const { isOpen } = this.props;
 		const { activeTabKey, tags, users } = this.state;
 
 		return (
 			<Modal
 				className="search-modal"
-				visible={isOpen}
+				visible
 				title="Search"
 				centered
 				footer={null}

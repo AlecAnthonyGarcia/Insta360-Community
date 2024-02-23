@@ -207,10 +207,7 @@ class Header extends React.Component {
 
 				<MediaQuery maxWidth={992}>{this.renderTabs()}</MediaQuery>
 
-				<SearchModal
-					isOpen={isSearchModalOpen}
-					onClose={this.onSearchModalClose}
-				/>
+				{isSearchModalOpen && <SearchModal onClose={this.onSearchModalClose} />}
 
 				{isNotificationsModalOpen && (
 					<NotificationListModal
