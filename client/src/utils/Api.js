@@ -2,7 +2,7 @@ import axios from 'axios';
 import md5 from 'blueimp-md5';
 
 async function login(email, password) {
-	const { data } = await axios.post(`/api/login`, {
+	const { data } = await axios.post('/api/login', {
 		username: email,
 		password,
 	});
@@ -10,7 +10,7 @@ async function login(email, password) {
 }
 
 async function signup(email, password) {
-	const { data } = await axios.post(`/api/signup`, {
+	const { data } = await axios.post('/api/signup', {
 		username: email,
 		password,
 	});
@@ -18,167 +18,197 @@ async function signup(email, password) {
 }
 
 async function getUser(userId) {
-	const { data } = await axios.get(`/api/getUser?userId=${userId}`);
+	const url = '/api/getUser';
+	const params = { userId };
+	const { data } = await axios.get(url, { params });
 	return data;
 }
 
 async function getUserPosts(userId, pageNumber) {
-	const { data } = await axios.get(
-		`/api/getUserPosts?pageNumber=${pageNumber}&userId=${userId}`
-	);
+	const url = '/api/getUserPosts';
+	const params = { pageNumber, userId };
+	const { data } = await axios.get(url, { params });
 	return data;
 }
 
 async function getUserPopularPosts(userId) {
-	const { data } = await axios.get(`/api/getUserPopularPosts?userId=${userId}`);
+	const url = '/api/getUserPopularPosts';
+	const params = { userId };
+	const { data } = await axios.get(url, { params });
 	return data;
 }
 
 async function getPost(postId) {
-	const { data } = await axios.get(`/api/getPost?postId=${postId}`);
+	const url = '/api/getPost';
+	const params = { postId };
+	const { data } = await axios.get(url, { params });
 	return data;
 }
 
 async function getTimelinePosts(lastTimestamp) {
-	let url = `/api/getTimelinePosts`;
-	if (lastTimestamp) {
-		url = `${url}?lastTimestamp=${lastTimestamp}`;
-	}
-	const { data } = await axios.get(url);
+	const url = '/api/getTimelinePosts';
+	const params = {
+		...(lastTimestamp && {
+			lastTimestamp,
+		}),
+	};
+	const { data } = await axios.get(url, { params });
 	return data;
 }
 
 async function getFeaturedPosts(postIdCursor) {
-	let url = `/api/getFeaturedPosts`;
-	if (postIdCursor) {
-		url = `${url}?cursor=${postIdCursor}`;
-	}
-	const { data } = await axios.get(url);
+	const url = '/api/getFeaturedPosts';
+	const params = {
+		...(postIdCursor && {
+			cursor: postIdCursor,
+		}),
+	};
+	const { data } = await axios.get(url, { params });
 	return data;
 }
 
 async function getRecentPosts(postIdCursor, queue) {
-	let url = `/api/getRecentPosts`;
-	if (postIdCursor) {
-		url = `${url}?cursor=${postIdCursor}&queue=${queue}`;
-	}
-	const { data } = await axios.get(url);
+	const url = '/api/getRecentPosts';
+	const params = {
+		...(postIdCursor && {
+			cursor: postIdCursor,
+			queue,
+		}),
+	};
+	const { data } = await axios.get(url, { params });
 	return data;
 }
 
 async function getTag(tag) {
-	const { data } = await axios.get(`/api/getTag?tag=${tag}`);
+	const url = '/api/getTag';
+	const params = { tag };
+	const { data } = await axios.get(url, { params });
 	return data;
 }
 
 async function getTagPosts(tag, postIdCursor) {
-	let url = `/api/getTagPosts?tag=${tag}`;
-	if (postIdCursor) {
-		url = `${url}&cursor=${postIdCursor}`;
-	}
-	const { data } = await axios.get(url);
+	const url = '/api/getTagPosts';
+	const params = {
+		tag,
+		...(postIdCursor && {
+			cursor: postIdCursor,
+		}),
+	};
+	const { data } = await axios.get(url, { params });
 	return data;
 }
 
 async function getTagPopularPosts(tag) {
-	const { data } = await axios.get(`/api/getTagPopularPosts?tag=${tag}`);
+	const url = '/api/getTagPopularPosts';
+	const params = { tag };
+	const { data } = await axios.get(url, { params });
 	return data;
 }
 
 async function getComments(postId, pageNumber) {
-	const { data } = await axios.get(
-		`/api/getComments?pageNumber=${pageNumber}&postId=${postId}`
-	);
+	const url = '/api/getComments';
+	const params = { pageNumber, postId };
+	const { data } = await axios.get(url, { params });
 	return data;
 }
 
 async function getRecommendedSearchTags() {
-	const { data } = await axios.get(`/api/getRecommendedSearchTags`);
+	const { data } = await axios.get('/api/getRecommendedSearchTags');
 	return data;
 }
 
 async function getRecommendedSearchUsers() {
-	const { data } = await axios.get(`/api/getRecommendedSearchUsers`);
+	const { data } = await axios.get('/api/getRecommendedSearchUsers');
 	return data;
 }
 
 async function searchTags(query) {
-	const { data } = await axios.get(`/api/searchTags?query=${query}`);
+	const url = '/api/searchTags';
+	const params = { query };
+	const { data } = await axios.get(url, { params });
 	return data;
 }
 
 async function searchUsers(query) {
-	const { data } = await axios.get(`/api/searchUsers?query=${query}`);
+	const url = '/api/searchUsers';
+	const params = { query };
+	const { data } = await axios.get(url, { params });
 	return data;
 }
 
 async function followUser(userId) {
-	const { data } = await axios.post(`/api/followUser`, { userId });
+	const { data } = await axios.post('/api/followUser', { userId });
 	return data;
 }
 
 async function unfollowUser(userId) {
-	const { data } = await axios.post(`/api/unfollowUser`, { userId });
+	const { data } = await axios.post('/api/unfollowUser', { userId });
 	return data;
 }
 
 async function getFollowing(userId, pageNumber) {
-	const { data } = await axios.get(
-		`/api/getFollowing?pageNumber=${pageNumber}&userId=${userId}`
-	);
+	const url = '/api/getFollowing';
+	const params = { pageNumber, userId };
+	const { data } = await axios.get(url, { params });
 	return data;
 }
 
 async function getFollowers(userId, pageNumber) {
-	const { data } = await axios.get(
-		`/api/getFollowers?pageNumber=${pageNumber}&userId=${userId}`
-	);
+	const url = '/api/getFollowers';
+	const params = { pageNumber, userId };
+	const { data } = await axios.get(url, { params });
 	return data;
 }
 
 async function getLikedPosts(userId, pageNumber) {
-	const { data } = await axios.get(
-		`/api/getLikedPosts?pageNumber=${pageNumber}&userId=${userId}`
-	);
+	const url = '/api/getLikedPosts';
+	const params = { pageNumber, userId };
+	const { data } = await axios.get(url, { params });
 	return data;
 }
 
 async function likePost(postId) {
-	const { data } = await axios.get(`/api/likePost?postId=${postId}`);
+	const url = '/api/likePost';
+	const params = { postId };
+	const { data } = await axios.get(url, { params });
 	return data;
 }
 
 async function unlikePost(postId) {
-	const { data } = await axios.get(`/api/unlikePost?postId=${postId}`);
+	const url = '/api/unlikePost';
+	const params = { postId };
+	const { data } = await axios.get(url, { params });
 	return data;
 }
 
 async function getNotifications(timestamp) {
-	let url = `/api/getNotifications`;
-	if (timestamp) {
-		url = `${url}&timestamp=${timestamp}`;
-	}
-	const { data } = await axios.get(url);
+	const url = '/api/getNotifications';
+	const params = {
+		...(timestamp && {
+			timestamp,
+		}),
+	};
+	const { data } = await axios.get(url, { params });
 	return data;
 }
 
 async function getUnreadNotificationsCount() {
-	const { data } = await axios.get(`/api/getUnreadNotificationsCount`);
+	const { data } = await axios.get('/api/getUnreadNotificationsCount');
 	return data;
 }
 
 async function setNotificationsRead() {
-	const { data } = await axios.post(`/api/setNotificationsRead`, {});
+	const { data } = await axios.post('/api/setNotificationsRead', {});
 	return data;
 }
 
 async function sendVerificationCode(email) {
-	const { data } = await axios.post(`/api/sendVerificationCode`, { email });
+	const { data } = await axios.post('/api/sendVerificationCode', { email });
 	return data;
 }
 
 async function resetPassword({ email, password, verificationCode }) {
-	const { data } = await axios.post(`/api/resetPassword`, {
+	const { data } = await axios.post('/api/resetPassword', {
 		email,
 		password: md5(password),
 		verificationCode,
