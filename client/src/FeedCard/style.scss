@@ -32,7 +32,6 @@
 	.share-source-icon {
 		float: right;
 		height: 32px;
-		margin-top: -2px;
 	}
 }
 
@@ -69,6 +68,11 @@
 
 .feed-card-action-button {
 	margin-right: 10px;
+}
+
+.feed-card-options-button {
+	float: right;
+	margin-left: 5px;
 }
 
 .feed-card-caption-container {

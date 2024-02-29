@@ -3,12 +3,13 @@ import './style.scss';
 
 import LocationIcon from '../static/img/icon_location.png';
 
-import { setLoginModalVisibility } from '../AuthModal/authActions';
+import { setLoginModalVisibility, isMe } from '../AuthModal/authActions';
 import {
 	followUser,
 	unfollowUser,
 	likePost,
 	unlikePost,
+	setPostPrivacy,
 } from '../HomePage/homeActions';
 
 import { Link } from 'react-router-dom';
@@ -303,6 +304,45 @@ class FeedCard extends React.Component {
 		);
 	};
 
+	renderOptionsButton = (post) => {
+		const { setPostPrivacy, isMe } = this.props;
+		const { id: postId, account, public: isPublic } = post;
+		const { id: authorId } = account;
+
+		const handleMenuClick = ({ key }) => {
+			switch (key) {
+				case 'setPublic':
+					setPostPrivacy(postId, true);
+					break;
+				case 'setPrivate':
+					setPostPrivacy(postId, false);
+					break;
+				default:
+			}
+		};
+
+		const optionsMenu = (
+			<Menu onClick={handleMenuClick}>
+				{!isPublic && (
+					<Menu.Item key="setPublic">
+						<Icon type="unlock" /> Set Public
+					</Menu.Item>
+				)}
+				{isPublic && (
+					<Menu.Item key="setPrivate">
+						<Icon type="lock" /> Set Private
+					</Menu.Item>
+				)}
+			</Menu>
+		);
+
+		return isMe(authorId) ? (
+			<Dropdown overlay={optionsMenu} trigger={['click']}>
+				<Button className="feed-card-options-button" icon="ellipsis" />
+			</Dropdown>
+		) : null;
+	};
+
 	render() {
 		const { isPanoModalOpen, isCommentListModalOpen, isPanoLoading } =
 			this.state;
@@ -404,6 +444,8 @@ class FeedCard extends React.Component {
 
 							{this.renderShareButton(post)}
 
+							{this.renderOptionsButton(post)}
+
 							{this.renderShareSourceIcon()}
 						</div>
 
@@ -485,9 +527,11 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
+	isMe,
 	followUser,
 	unfollowUser,
 	likePost,
 	unlikePost,
+	setPostPrivacy,
 	setLoginModalVisibility,
 })(FeedCard);

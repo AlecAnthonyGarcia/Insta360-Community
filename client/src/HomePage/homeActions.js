@@ -113,6 +113,10 @@ export function unfollowUser(userId) {
 	};
 }
 
+export function setPostPrivacy(postId, isPublic) {
+	return async () => await Api.setPostPrivacy(postId, isPublic);
+}
+
 export function setCurrentTabKey(tabKey) {
 	return {
 		type: SET_CURRENT_TAB_KEY,

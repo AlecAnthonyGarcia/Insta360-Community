@@ -188,6 +188,14 @@ async function unlikePost(postId) {
 	return data;
 }
 
+async function setPostPrivacy(postId, isPublic) {
+	const { data } = await axios.post('/api/setPostPrivacy', {
+		postId,
+		isPublic,
+	});
+	return data;
+}
+
 async function getNotifications(timestamp) {
 	const url = '/api/getNotifications';
 	const params = {
@@ -249,6 +257,7 @@ const Api = {
 	getLikedPosts,
 	likePost,
 	unlikePost,
+	setPostPrivacy,
 	getNotifications,
 	getUnreadNotificationsCount,
 	setNotificationsRead,

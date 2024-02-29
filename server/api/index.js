@@ -240,6 +240,14 @@ api.get('/api/unlikePost', async function (req, res) {
 	res.send(response);
 });
 
+api.post('/api/setPostPrivacy', async function (req, res) {
+	const { postId, isPublic } = req.body;
+
+	const response = await Insta360Api.setPostPrivacy(postId, isPublic);
+
+	res.send(response);
+});
+
 api.post('/api/followUser', async function (req, res) {
 	const { userId } = req.body;
 

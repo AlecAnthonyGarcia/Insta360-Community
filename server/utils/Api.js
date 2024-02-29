@@ -284,6 +284,17 @@ async function unlikePost(postId) {
 	return data;
 }
 
+async function setPostPrivacy(postId, isPublic) {
+	const { data } = await axios.post(
+		`${SHARE_API}setPublic`,
+		new URLSearchParams({
+			post_id: postId,
+			public: isPublic,
+		})
+	);
+	return data;
+}
+
 async function followUser(userId) {
 	const { data } = await axios.post(`${FOLLOW_API}doFollow`, {
 		user_id: userId,
@@ -327,6 +338,7 @@ const Api = {
 	searchUsers,
 	likePost,
 	unlikePost,
+	setPostPrivacy,
 	followUser,
 	unfollowUser,
 };
