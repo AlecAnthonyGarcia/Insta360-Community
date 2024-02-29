@@ -168,21 +168,34 @@ class FeedCard extends React.Component {
 		let affiliateLink;
 
 		switch (share_source) {
+			case 'insta360 ace pro':
+			case 'acepro_android':
+				affiliateLink = 'https://www.insta360.com/sal/ace-pro?utm_term=INRIICZ';
+				break;
+			case 'insta360 x3':
+			case 'x3_android':
+				affiliateLink = 'https://www.insta360.com/sal/x3?utm_term=INRIICZ';
+				break;
+			case 'insta360 one x2':
+			case 'onex2_android':
+				affiliateLink = 'https://www.insta360.com/sal/one_x2?utm_term=INRIICZ';
+				break;
+			case 'insta360 one rs':
+			case 'oner':
+			case 'oner_android':
+				affiliateLink = 'https://www.insta360.com/sal/one_rs?utm_term=INRIICZ';
+				break;
+			case 'insta360 go 3':
+			case 'go3_android':
+				affiliateLink = 'https://www.insta360.com/sal/go-3?utm_term=INRIICZ';
+				break;
+			case 'insta360 go 2':
+			case 'go2_android':
+				affiliateLink = 'https://www.insta360.com/sal/go_2?utm_term=INRIICZ';
+				break;
 			case 'onex':
 			case 'onex_android':
-				affiliateLink = 'https://www.insta360.com/sal/one_x?insrc=INRIICZ';
-				break;
-			case 'one':
-			case 'one_android':
-				affiliateLink = 'https://www.insta360.com/sal/one?insrc=INRIICZ';
-				break;
-			case 'nano':
-			case 'nano_android':
-				affiliateLink = 'https://www.insta360.com/sal/nanos?insrc=INRIICZ';
-				break;
-			case 'evo':
-			case 'evo_android':
-				affiliateLink = 'https://www.insta360.com/sal/evo?insrc=INRIICZ';
+				affiliateLink = 'https://www.insta360.com/sal/one_x?utm_term=INRIICZ';
 				break;
 			default:
 		}
