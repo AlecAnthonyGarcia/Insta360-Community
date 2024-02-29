@@ -100,6 +100,14 @@ api.get('/api/getFollowers', async function (req, res) {
 	res.send(response);
 });
 
+api.get('/api/getMyPosts', async function (req, res) {
+	const { pageNumber } = req.query;
+
+	const response = await Insta360Api.getMyPosts(pageNumber);
+
+	res.send(response);
+});
+
 api.get('/api/getLikedPosts', async function (req, res) {
 	const { userId, pageNumber } = req.query;
 

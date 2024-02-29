@@ -1,6 +1,7 @@
 import React from 'react';
 import './style.scss';
 
+import { isMe } from '../AuthModal/authActions';
 import {
 	setFollowed,
 	setFollowsMap,
@@ -103,13 +104,16 @@ class UserPage extends React.Component {
 	getUserPosts = async () => {
 		const { posts, currentPage } = this.state;
 		const {
+			isMe,
 			match: { params },
 			setFollowsMap,
 			setLikesMap,
 		} = this.props;
 		const { userId } = params;
 
-		const response = await Api.getUserPosts(userId, currentPage);
+		const response = isMe(userId)
+			? await Api.getMyPosts(currentPage)
+			: await Api.getUserPosts(userId, currentPage);
 		const { data } = response;
 		const { list, total_page: totalPages, total_count: totalCount } = data;
 
@@ -321,6 +325,7 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
+	isMe,
 	setFollowed,
 	setFollowsMap,
 	setLikesMap,

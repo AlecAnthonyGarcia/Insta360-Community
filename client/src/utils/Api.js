@@ -38,6 +38,13 @@ async function getUserPopularPosts(userId) {
 	return data;
 }
 
+async function getMyPosts(pageNumber) {
+	const url = '/api/getMyPosts';
+	const params = { pageNumber };
+	const { data } = await axios.get(url, { params });
+	return data;
+}
+
 async function getPost(postId) {
 	const url = '/api/getPost';
 	const params = { postId };
@@ -222,6 +229,7 @@ const Api = {
 	getUser,
 	getUserPosts,
 	getUserPopularPosts,
+	getMyPosts,
 	getPost,
 	getTimelinePosts,
 	getFeaturedPosts,

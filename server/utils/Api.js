@@ -101,6 +101,17 @@ async function getFollowers(userId, pageNumber) {
 	return data;
 }
 
+async function getMyPosts(pageNumber) {
+	const pageSize = 20;
+	const url = `${SHARE_API}listMyShare`;
+	const params = {
+		page_number: pageNumber,
+		page_size: pageSize,
+	};
+	const { data } = await axios.get(url, { params });
+	return data;
+}
+
 async function getLikedPosts(userId, pageNumber) {
 	const pageSize = 20;
 	const url = `${SHARE_API}listUserLikeShare`;
@@ -298,6 +309,7 @@ const Api = {
 	getUser,
 	getFollowing,
 	getFollowers,
+	getMyPosts,
 	getLikedPosts,
 	getUserPopularPosts,
 	getUserPosts,

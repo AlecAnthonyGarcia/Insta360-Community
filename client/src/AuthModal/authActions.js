@@ -66,6 +66,17 @@ export function logout() {
 	};
 }
 
+export function isMe(userId) {
+	return (dispatch, getState) => {
+		const {
+			authReducer: {
+				user: { id: authUserId },
+			},
+		} = getState();
+		return `${authUserId}` === `${userId}`;
+	};
+}
+
 export function resetState() {
 	return {
 		type: RESET_STATE,
